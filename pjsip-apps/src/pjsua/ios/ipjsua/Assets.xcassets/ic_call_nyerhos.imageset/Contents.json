@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_call_nyerhos.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

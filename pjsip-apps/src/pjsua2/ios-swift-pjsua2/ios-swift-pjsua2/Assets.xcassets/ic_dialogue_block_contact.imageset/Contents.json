@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_dialogue_block_contact.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

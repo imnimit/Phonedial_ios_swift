@@ -1,0 +1,257 @@
+PODS:
+  - Alamofire (5.6.3)
+  - CountryPickerView (3.3.0)
+  - Firebase (10.2.0):
+    - Firebase/Core (= 10.2.0)
+  - Firebase/Core (10.2.0):
+    - Firebase/CoreOnly
+    - FirebaseAnalytics (~> 10.2.0)
+  - Firebase/CoreOnly (10.2.0):
+    - FirebaseCore (= 10.2.0)
+  - Firebase/Crashlytics (10.2.0):
+    - Firebase/CoreOnly
+    - FirebaseCrashlytics (~> 10.2.0)
+  - Firebase/Messaging (10.2.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 10.2.0)
+  - FirebaseAnalytics (10.2.0):
+    - FirebaseAnalytics/AdIdSupport (= 10.2.0)
+    - FirebaseCore (~> 10.0)
+    - FirebaseInstallations (~> 10.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/MethodSwizzler (~> 7.8)
+    - GoogleUtilities/Network (~> 7.8)
+    - "GoogleUtilities/NSData+zlib (~> 7.8)"
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FirebaseAnalytics/AdIdSupport (10.2.0):
+    - FirebaseCore (~> 10.0)
+    - FirebaseInstallations (~> 10.0)
+    - GoogleAppMeasurement (= 10.2.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/MethodSwizzler (~> 7.8)
+    - GoogleUtilities/Network (~> 7.8)
+    - "GoogleUtilities/NSData+zlib (~> 7.8)"
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FirebaseCore (10.2.0):
+    - FirebaseCoreInternal (~> 10.0)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/Logger (~> 7.8)
+  - FirebaseCoreInternal (10.2.0):
+    - "GoogleUtilities/NSData+zlib (~> 7.8)"
+  - FirebaseCrashlytics (10.2.0):
+    - FirebaseCore (~> 10.0)
+    - FirebaseInstallations (~> 10.0)
+    - GoogleDataTransport (~> 9.2)
+    - GoogleUtilities/Environment (~> 7.8)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+    - PromisesObjC (~> 2.1)
+  - FirebaseInstallations (10.2.0):
+    - FirebaseCore (~> 10.0)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/UserDefaults (~> 7.8)
+    - PromisesObjC (~> 2.1)
+  - FirebaseMessaging (10.2.0):
+    - FirebaseCore (~> 10.0)
+    - FirebaseInstallations (~> 10.0)
+    - GoogleDataTransport (~> 9.2)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/Reachability (~> 7.8)
+    - GoogleUtilities/UserDefaults (~> 7.8)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - GoogleAppMeasurement (10.2.0):
+    - GoogleAppMeasurement/AdIdSupport (= 10.2.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/MethodSwizzler (~> 7.8)
+    - GoogleUtilities/Network (~> 7.8)
+    - "GoogleUtilities/NSData+zlib (~> 7.8)"
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - GoogleAppMeasurement/AdIdSupport (10.2.0):
+    - GoogleAppMeasurement/WithoutAdIdSupport (= 10.2.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/MethodSwizzler (~> 7.8)
+    - GoogleUtilities/Network (~> 7.8)
+    - "GoogleUtilities/NSData+zlib (~> 7.8)"
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - GoogleAppMeasurement/WithoutAdIdSupport (10.2.0):
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/MethodSwizzler (~> 7.8)
+    - GoogleUtilities/Network (~> 7.8)
+    - "GoogleUtilities/NSData+zlib (~> 7.8)"
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - GoogleDataTransport (9.2.0):
+    - GoogleUtilities/Environment (~> 7.7)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/AppDelegateSwizzler (7.10.0):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Network
+  - GoogleUtilities/Environment (7.10.0):
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/Logger (7.10.0):
+    - GoogleUtilities/Environment
+  - GoogleUtilities/MethodSwizzler (7.10.0):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/Network (7.10.0):
+    - GoogleUtilities/Logger
+    - "GoogleUtilities/NSData+zlib"
+    - GoogleUtilities/Reachability
+  - "GoogleUtilities/NSData+zlib (7.10.0)"
+  - GoogleUtilities/Reachability (7.10.0):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (7.10.0):
+    - GoogleUtilities/Logger
+  - GradientProgress (1.0)
+  - GraphQLite (1.2.5)
+  - ImageViewer.swift (3.3.8)
+  - ImageViewer.swift/Fetcher (3.3.8):
+    - SDWebImage
+  - InputBarAccessoryView (5.5.0):
+    - InputBarAccessoryView/Core (= 5.5.0)
+  - InputBarAccessoryView/Core (5.5.0)
+  - IQKeyboardManagerSwift (6.5.10)
+  - KDCircularProgress (1.5.4)
+  - KNContacts (1.3.0)
+  - lottie-ios (3.5.0)
+  - MessageKit (3.8.0):
+    - InputBarAccessoryView (~> 5.5.0)
+  - nanopb (2.30909.0):
+    - nanopb/decode (= 2.30909.0)
+    - nanopb/encode (= 2.30909.0)
+  - nanopb/decode (2.30909.0)
+  - nanopb/encode (2.30909.0)
+  - NexmoClient (5.0.1)
+  - NKVPhonePicker (2.1.1)
+  - OpenTok (2.24.0):
+    - VonageWebRTC (= 99.2.39)
+  - PagingKit (1.18.1)
+  - ProgressHUD (13.6)
+  - PromisesObjC (2.1.1)
+  - Realm (10.32.3):
+    - Realm/Headers (= 10.32.3)
+  - Realm/Headers (10.32.3)
+  - RealmSwift (10.32.3):
+    - Realm (= 10.32.3)
+  - SDWebImage (5.14.2):
+    - SDWebImage/Core (= 5.14.2)
+  - SDWebImage/Core (5.14.2)
+  - Socket.IO-Client-Swift (16.0.1):
+    - Starscream (~> 4.0)
+  - Starscream (4.0.4)
+  - SwiftySound (1.2.0)
+  - Toast-Swift (5.0.1)
+  - TTTAttributedLabel (2.0.0)
+  - VonageWebRTC (99.2.39)
+
+DEPENDENCIES:
+  - Alamofire
+  - CountryPickerView
+  - Firebase
+  - Firebase/Crashlytics
+  - Firebase/Messaging
+  - FirebaseAnalytics
+  - GradientProgress
+  - GraphQLite
+  - ImageViewer.swift
+  - ImageViewer.swift/Fetcher
+  - InputBarAccessoryView
+  - IQKeyboardManagerSwift
+  - KDCircularProgress
+  - KNContacts
+  - lottie-ios
+  - MessageKit
+  - NexmoClient
+  - NKVPhonePicker
+  - OpenTok
+  - PagingKit
+  - ProgressHUD
+  - RealmSwift
+  - SDWebImage
+  - Socket.IO-Client-Swift
+  - SwiftySound
+  - Toast-Swift
+  - TTTAttributedLabel
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - CountryPickerView
+    - Firebase
+    - FirebaseAnalytics
+    - FirebaseCore
+    - FirebaseCoreInternal
+    - FirebaseCrashlytics
+    - FirebaseInstallations
+    - FirebaseMessaging
+    - GoogleAppMeasurement
+    - GoogleDataTransport
+    - GoogleUtilities
+    - GradientProgress
+    - GraphQLite
+    - ImageViewer.swift
+    - InputBarAccessoryView
+    - IQKeyboardManagerSwift
+    - KDCircularProgress
+    - KNContacts
+    - lottie-ios
+    - MessageKit
+    - nanopb
+    - NexmoClient
+    - NKVPhonePicker
+    - OpenTok
+    - PagingKit
+    - ProgressHUD
+    - PromisesObjC
+    - Realm
+    - RealmSwift
+    - SDWebImage
+    - Socket.IO-Client-Swift
+    - Starscream
+    - SwiftySound
+    - Toast-Swift
+    - TTTAttributedLabel
+    - VonageWebRTC
+
+SPEC CHECKSUMS:
+  Alamofire: 8b7a946e9db6f76e93eaa0d4c84e3751633959c9
+  CountryPickerView: 6322ada32a80b0cd721b0267282a5c24f406f263
+  Firebase: a3ea7eba4382afd83808376edb99acdaff078dcf
+  FirebaseAnalytics: 24a15e58e505abcedc3017b6f7c206fbfa964580
+  FirebaseCore: 813838072b797b64f529f3c2ee35e696e5641dd1
+  FirebaseCoreInternal: 091bde13e47bb1c5e9fe397634f3593dc390430f
+  FirebaseCrashlytics: df7406152189d48346deafb716806d7bd9ebb573
+  FirebaseInstallations: 004915af170935e3a583faefd5f8bc851afc220f
+  FirebaseMessaging: cc9f40f5b7494680f3844d08e517e92aa4e8d9f7
+  GoogleAppMeasurement: 3bc3a6484b7bb20dd8489242c4dd3c92a3e5107b
+  GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
+  GoogleUtilities: bad72cb363809015b1f7f19beb1f1cd23c589f95
+  GradientProgress: ee9c47443c80059b0367467d267b2dd9572de5e2
+  GraphQLite: 11c37995c8b4b8ad1a150bd68b1e759d0c73e132
+  ImageViewer.swift: 284cd8127d31af8e5938674fb9f8e695a4cdf6c6
+  InputBarAccessoryView: 1d7b0a672b36e370f01f264b3907ef39d03328e3
+  IQKeyboardManagerSwift: 52962c76ab33532f15ad9f3ff4e5715eda5335bb
+  KDCircularProgress: 98200c6b8e85d22bc04eb644721d3b1e12b0686b
+  KNContacts: fe17103f78bbee643de03f892ba5f1a6d02d9393
+  lottie-ios: c55158d67d0629a260625cc2ded2052b829e3c3e
+  MessageKit: a1ba0c69ebead94029867853eb44dd05b9b3f453
+  nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
+  NexmoClient: 90aaff8b9cf8b3c2eae5a14bca264f3a52a5ed57
+  NKVPhonePicker: c71b3e8e53ce74e0b4e4d5c5adf54cbb3dd16fd8
+  OpenTok: 6995850a6a7a37464ffece03ae0b8563b0f5445d
+  PagingKit: 0e7ec4e3791ab55887e129b27f7486a91b761129
+  ProgressHUD: 4bdaa0d2ddf676b23324b199f9facffb5c3a1620
+  PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
+  Realm: fdf6732924dc5e69e30e0db2c11e869f92b53f3d
+  RealmSwift: 7c181da8fa1c2fe613656a77c198d6a3dc3879a1
+  SDWebImage: b9a731e1d6307f44ca703b3976d18c24ca561e84
+  Socket.IO-Client-Swift: c116d6dc9fd6be9c259bacfe143f8725bce7d79e
+  Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
+  SwiftySound: 9eb28bb14edb601b40027e44319e0ef8383f88bf
+  Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
+  TTTAttributedLabel: 8cffe8e127e4e82ff3af1e5386d4cd0ad000b656
+  VonageWebRTC: 4b57187170ef4ea435006e932600646a0521d6b0
+
+PODFILE CHECKSUM: ee5bc838e88a1f67f0ea76b4aa8d07763e9dc877
+
+COCOAPODS: 1.11.3

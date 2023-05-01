@@ -1,0 +1,20 @@
+{
+  "images" : [
+    {
+      "filename" : "Ic_DubleTic.png",
+      "idiom" : "universal"
+    },
+    {
+      "idiom" : "universal",
+      "locale" : "en"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "localizable" : true,
+    "template-rendering-intent" : "template"
+  }
+}

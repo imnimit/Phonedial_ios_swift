@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="vo2-bF-5si">
+            <objects>
+                <viewController id="Ofn-5b-R86" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="gh9-MZ-PLf"/>
+                        <viewControllerLayoutGuide type="bottom" id="lIn-3w-oKt"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Mnt-TP-vuP">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XrB-aN-Q1S">
+                                <rect key="frame" x="169.5" y="821" width="75" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.16644299030000001" green="0.24235296249999999" blue="0.61748194690000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="home_splash" translatesAutoresizingMaskIntoConstraints="NO" id="j0g-Fc-aVM">
+                                <rect key="frame" x="57" y="335.5" width="300" height="225"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="JnO-6l-BxY"/>
+                                    <constraint firstAttribute="height" constant="225" id="L6z-1X-Na6"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="XE1-qY-mWT"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="lIn-3w-oKt" firstAttribute="top" secondItem="XrB-aN-Q1S" secondAttribute="bottom" constant="20" id="OSi-Dx-aWs"/>
+                            <constraint firstItem="j0g-Fc-aVM" firstAttribute="centerY" secondItem="Mnt-TP-vuP" secondAttribute="centerY" id="Py4-NO-FVa"/>
+                            <constraint firstItem="j0g-Fc-aVM" firstAttribute="centerX" secondItem="Mnt-TP-vuP" secondAttribute="centerX" id="dMl-eQ-Op9"/>
+                            <constraint firstItem="XrB-aN-Q1S" firstAttribute="centerX" secondItem="Mnt-TP-vuP" secondAttribute="centerX" id="zOJ-QS-BGC"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="q56-NC-Nub" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="72.799999999999997" y="-170.46476761619192"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="home_splash" width="512" height="384"/>
+    </resources>
+</document>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>756802852317-bu4thhqa4s5l6rqd6ds07va251qt237q.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.756802852317-bu4thhqa4s5l6rqd6ds07va251qt237q</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>756802852317-4vu9qp7tv98if4cise67va6kq3g2ur0v.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBovgmFYuNjHBDQwbGUvihXw3paa1v_9tU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>756802852317</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.phonedial.io</string>
+	<key>PROJECT_ID</key>
+	<string>phonedial-ddcef</string>
+	<key>STORAGE_BUCKET</key>
+	<string>phonedial-ddcef.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:756802852317:ios:901d665581340d5ae1d234</string>
+	<key>DATABASE_URL</key>
+	<string>https://phonedial-ddcef.firebaseio.com</string>
+</dict>
+</plist>

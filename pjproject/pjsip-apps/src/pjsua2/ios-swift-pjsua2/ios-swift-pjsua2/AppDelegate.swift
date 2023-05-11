@@ -352,40 +352,40 @@ extension AppDelegate {
     
     
     func  sipRegistration() {
-        let isONN : Bool = APIsMain.apiCalling.isConnectedToNetwork()
-        if(isONN == false) {
-            return
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
-            if (CPPWrapper().registerStateInfoWrapper() == false) {
-                HelperClassAnimaion.showProgressHud()
-
-                do {
-                    CPPWrapper().createLibWrapper()
-                } catch {
-                    return
-                }
-
-                CPPWrapper().incoming_call_wrapper(incoming_call_swift)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-                    if (CPPWrapper().registerStateInfoWrapper() == false) {
-                        //Register to the user
-                        CPPWrapper().createAccountWrapper(
-                            User.sharedInstance.getContactNumber(),
-                            User.sharedInstance.getsipPassWord(),
-                            Constant.GlobalConstants.SERVERNAME,
-                            Constant.GlobalConstants.PORT)
-
-                        sleep(2)
-                        HelperClassAnimaion.hideProgressHud()
-                        
-                        CPPWrapper.showCodecs()
-
-                    }
-                })
-            }
-        })
+//        let isONN : Bool = APIsMain.apiCalling.isConnectedToNetwork()
+//        if(isONN == false) {
+//            return
+//        }
+//        
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+//            if (CPPWrapper().registerStateInfoWrapper() == false) {
+//                HelperClassAnimaion.showProgressHud()
+//
+//                do {
+//                    CPPWrapper().createLibWrapper()
+//                } catch {
+//                    return
+//                }
+//
+//                CPPWrapper().incoming_call_wrapper(incoming_call_swift)
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+//                    if (CPPWrapper().registerStateInfoWrapper() == false) {
+//                        //Register to the user
+//                        CPPWrapper().createAccountWrapper(
+//                            User.sharedInstance.getContactNumber(),
+//                            User.sharedInstance.getsipPassWord(),
+//                            Constant.GlobalConstants.SERVERNAME,
+//                            Constant.GlobalConstants.PORT)
+//
+//                        sleep(2)
+//                        HelperClassAnimaion.hideProgressHud()
+//                        
+//                        CPPWrapper.showCodecs()
+//
+//                    }
+//                })
+//            }
+//        })
         
         
     }

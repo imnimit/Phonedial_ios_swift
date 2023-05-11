@@ -61,25 +61,16 @@ class dialpadVc: UIViewController, UITextFieldDelegate {
     
     
     
-    func   InitCall(){
+    func InitCall() {
         if contectNumber != "" {
             let filter0 = contectNumber.replacingOccurrences(of: ")", with: "")
             let filter = filter0.replacingOccurrences(of: "(", with: "")
             txtnumber.text = filter
             lblContectName.text  = contectName
         }
-        
         tableView.isHidden = false
         ConteactNoSave()
         textSearchChange(txtnumber)
-        
-        if requestAccess() {
-            self.ConteactNoSave()
-        }
-        else{
-            checkPermissionToDeviceContacts()
-        }
-        
     }
     
     
@@ -121,6 +112,7 @@ class dialpadVc: UIViewController, UITextFieldDelegate {
         CPPWrapper().incoming_call_wrapper(incoming_call_swift)
         txtnumber.delegate = self
         appDelegate.sipRegistration()
+        ConteactNoSave()
         DispatchQueue.main.async {
             self.userBalance()
         }
@@ -154,111 +146,20 @@ class dialpadVc: UIViewController, UITextFieldDelegate {
     }
    
     func ConteactNoSave()  {
-        let keys = [CNContactGivenNameKey, CNContactMiddleNameKey, CNContactFamilyNameKey,
-                    CNContactEmailAddressesKey, CNContactBirthdayKey, CNContactPhoneNumbersKey,CNContactImageDataKey,CNContactImageDataAvailableKey,
-                    CNContactFormatter.descriptorForRequiredKeys(for: .fullName)] as! [CNKeyDescriptor]
+        dataContectInfo = DBManager().getAllContact()
         
-        let requestForContacts = CNContactFetchRequest(keysToFetch: keys)
-        self.hideKeybordTappedAround()
-        
-        // And then perform actions on KNContactBook
-        let randomContacts = contactBook.randomElements(number: 1)
-        let randomElements = contactBook.randomElements(number: 3, except: randomContacts)
-        
-        do {
-            try CNContactStore().enumerateContacts(with: requestForContacts) { (cnContact, _) in
-                let knContact = KNContact(cnContact)
-                self.contactBook.add(knContact)
+        if dataContectInfo.count > 0 {
+            dataContectInfo.sort {
+                (($0 as! Dictionary<String, AnyObject>)["name"] as! String) < (($1 as! Dictionary<String, AnyObject>)["name"] as! String)
             }
-        } catch let error {
-            // Handle error somehow!
-            print(error)
-        }
-        print(contactBook)
-        
-        dataContectInfo.removeAll()
-        tempContectInfo.removeAll()
-        for  i  in contactBook.contacts {
-            print(i.fullName())
-            print(i.getFirstEmailAddress())
-
-            print(i.getFirstPhoneNumber())
-            print(i.info)
-            var data = [String: Any]()
-            if i.fullName() != "" {
-                if i.info.imageDataAvailable as? Bool == true {
-                    data = ["name":i.fullName(),"phone":i.getFirstPhoneNumber().removeWhitespace(),"imageDataAvailable": i.info.imageDataAvailable as? Bool ?? false ,"imageData": i.info.imageData!,"Email":i.getFirstEmailAddress()]
-                }else {
-                    data = ["name":i.fullName(),"phone":i.getFirstPhoneNumber().removeWhitespace(),"imageDataAvailable": i.info.imageDataAvailable as? Bool ?? false ,"imageData":i.info.imageData ?? Data(),"Email":i.getFirstEmailAddress()]
-                }
-                
-                if dataContectInfo.firstIndex(where: {$0["phone"] as! String == i.getFirstPhoneNumber().removeWhitespace() }) != nil {
-                    
-                } else {
-                    dataContectInfo.append(data)
-                }
-            }
+            UserDefaults.standard.removeObject(forKey: Constant.ValueStoreName.ContactNumber)
+            UserDefaults.standard.setValue(dataContectInfo, forKey: Constant.ValueStoreName.ContactNumber)
+            
+            tempContectInfo = dataContectInfo
+            
+            tableView.reloadData()
         }
         
-        dataContectInfo.sort {
-            (($0 as! Dictionary<String, AnyObject>)["name"] as! String) < (($1 as! Dictionary<String, AnyObject>)["name"] as! String)
-        }
-        UserDefaults.standard.removeObject(forKey: Constant.ValueStoreName.ContactNumber)
-        UserDefaults.standard.setValue(dataContectInfo, forKey: Constant.ValueStoreName.ContactNumber)
-        
-        
-        tempContectInfo = dataContectInfo
-        
-        tableView.reloadData()
-
-    }
-    
-    func requestAccess()-> Bool {
-        var allow = false
-        switch CNContactStore.authorizationStatus(for: .contacts) {
-        case .authorized:
-            allow = true
-        case .denied:
-            allow = false
-        case .restricted, .notDetermined:
-            allow = false
-        }
-        return allow
-    }
-    
-    func checkPermissionToDeviceContacts() {
-        
-        let store = CNContactStore()
-        let authorizationStatus = CNContactStore.authorizationStatus(for: .contacts)
-        
-        if authorizationStatus == .notDetermined {
-            // 3
-            store.requestAccess(for: .contacts) { [weak self] didAuthorize,
-                error in
-                if didAuthorize {
-                    //                    self?.retrieveContacts(from: store)
-//                    HelperClassAnimaion.showProgressHud()
-                    self?.ConteactNoSave()
-                }
-            }
-        } else if authorizationStatus == .authorized {
-            //            retrieveContacts(from: store)
-//            HelperClassAnimaion.showProgressHud()
-            self.ConteactNoSave()
-        }  else if authorizationStatus == .denied {
-            let alert = UIAlertController(title: "Can't access contact", message: "Please go to Settings -> MyApp to enable contact permission", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {_ in
-                self.headToSettingsOfPermissions()
-            }))
-            self.present(alert, animated: true, completion: nil)
-        }
-    }
-    
-    func headToSettingsOfPermissions() {
-        if let bundleId = Bundle.main.bundleIdentifier,
-           let url = URL(string: "\(UIApplication.openSettingsURLString)&path=APPNAME/\(bundleId)") {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
     }
     
     

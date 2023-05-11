@@ -15,6 +15,7 @@ class ContactsVc: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var hightTopNavigationBar: NSLayoutConstraint!
+    @IBOutlet weak var contactAllowVW: UIView!
     
     
     var store = CNContactStore()
@@ -51,28 +52,41 @@ class ContactsVc: UIViewController {
             hightTopNavigationBar.constant = 90
         }
         self.title = Constant.ViewControllerTitle.Contacts
-//        NotificationCenter.default.addObserver(self, selector: #selector(callListUpdata), name: Notification.Name("callListUpdata"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(callListUpdata), name: Notification.Name("callListUpdata"), object: nil)
         
         pullControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         pullControl.addTarget(self, action: #selector(refresh(_:)), for: UIControl.Event.valueChanged)
         tableView.addSubview(pullControl)
         
-        self.tableView.sectionIndexColor = #colorLiteral(red: 0.1058823529, green: 0.6903560162, blue: 0.8614253998, alpha: 1)
+        self.tableView.sectionIndexColor = #colorLiteral(red: 0.3333255053, green: 0.4644713998, blue: 0.7242901325, alpha: 1)
 
         callListUpdata()
-        if isFistTimeShowAnimation == true {
-            HelperClassAnimaion.showProgressHud()
-        }
+//        if isFistTimeShowAnimation == true {
+//            HelperClassAnimaion.showProgressHud()
+//        }
+        
+        searchBar.showsCancelButton = false
+        searchBar.delegate = self
+        searchBar.isMultipleTouchEnabled = true
+
+
+        contactAllowVW.layer.cornerRadius = 8
     }
     
     @objc func refresh(_ sender: AnyObject) {
        // Code to refresh table view
-        callListUpdata()
+        DBManager().deleteAllContact()
+//        callListUpdata()
+        Favourite = DBManager().getAllFavorite()
+        contactBook = KNContactBook(id: "allContacts")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+            self.ConteactNoSave()
+        })
     }
     
     @objc func callListUpdata()  {
-        Favourite = DBManager().getAllFavorite()
         
+        Favourite = DBManager().getAllFavorite()
         contactBook = KNContactBook(id: "allContacts")
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
             self.initCall()
@@ -82,7 +96,7 @@ class ContactsVc: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        callListUpdata()
+        callListUpdata()
 
         navigationController?.navigationBar.isHidden = navigationBarnotShow
         
@@ -99,24 +113,56 @@ class ContactsVc: UIViewController {
 
     func initCall() {
         searchBar.placeholder = "Search"
-        if requestAccess() {
-            self.ConteactNoSave()
+//        if requestAccess() {
+            self.contactGetInDataBase()
+//        }
+//        else{
+//            checkPermissionToDeviceContacts()
+//            let  Alert = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ContactsPermitionVC") as? ContactsPermitionVC
+//            Alert?.modalPresentationStyle = .overFullScreen //or .overFullScreen for transparency
+////            Alert?.delegate = self
+//            self.present(Alert!, animated: false, completion: nil)
+//        }
+    }
+    
+    func contactGetInDataBase(){
+        if isShowTopNavigationBar == true {
+            HelperClassAnimaion.showProgressHud()
         }
-        else{
-            checkPermissionToDeviceContacts()
+
+        dataContectInfo = DBManager().getAllContact()
+
+        if dataContectInfo.count > 0 {
+            
+            dataContectInfo.sort {
+                (($0 as! Dictionary<String, AnyObject>)["name"] as! String) < (($1 as! Dictionary<String, AnyObject>)["name"] as! String)
+            }
+            
+            UserDefaults.standard.removeObject(forKey: Constant.ValueStoreName.ContactNumber)
+            UserDefaults.standard.setValue(dataContectInfo, forKey: Constant.ValueStoreName.ContactNumber)
+            
+            
+            groupedUsers.removeAll()
+            groupedUsers = Dictionary(grouping: dataContectInfo, by: firstCharOfFirstName)
+            
+            tempContectInfo = dataContectInfo
+            createNameDictionary()
+        }
+        
+        if isShowTopNavigationBar == true {
+            HelperClassAnimaion.hideProgressHud()
         }
     }
     
     func ConteactNoSave()  {
+        
         let keys = [CNContactGivenNameKey, CNContactMiddleNameKey, CNContactFamilyNameKey,
                     CNContactEmailAddressesKey, CNContactBirthdayKey, CNContactPhoneNumbersKey,CNContactImageDataKey,CNContactImageDataAvailableKey,
                     CNContactFormatter.descriptorForRequiredKeys(for: .fullName)] as! [CNKeyDescriptor]
         
         let requestForContacts = CNContactFetchRequest(keysToFetch: keys)
         self.hideKeybordTappedAround()
-        
         // And then perform actions on KNContactBook
-       
         do {
             try CNContactStore().enumerateContacts(with: requestForContacts) { (cnContact, _) in
                 let knContact = KNContact(cnContact)
@@ -126,32 +172,39 @@ class ContactsVc: UIViewController {
             // Handle error somehow!
             print(error)
         }
-        print(contactBook)
+//        print(contactBook)
         
         groupedUsers.removeAll()
         dataContectInfo.removeAll()
         tempContectInfo.removeAll()
         for  i  in contactBook.contacts {
-//            print(i.fullName())
-//            print(i.getFirstEmailAddress())
-//
-//            print(i.getFirstPhoneNumber())
-//            print(i.info)
             var data = [String: Any]()
             if i.fullName() != "" {
-                if i.info.imageDataAvailable as? Bool == true {
-                    data = ["name":i.fullName(),"phone":i.getFirstPhoneNumber().removeWhitespace(),"imageDataAvailable": i.info.imageDataAvailable as? Bool ?? false ,"imageData": i.info.imageData!,"Email":i.getFirstEmailAddress()]
+                if i.info.imageDataAvailable == true {
+                    data = ["name":i.fullName(),"phone":i.getFirstPhoneNumber().removeWhitespace(),"imageDataAvailable": i.info.imageDataAvailable,"imageData": i.info.imageData!,"Email":i.getFirstEmailAddress()]
                 }else {
-                    data = ["name":i.fullName(),"phone":i.getFirstPhoneNumber().removeWhitespace(),"imageDataAvailable": i.info.imageDataAvailable as? Bool ?? false ,"imageData":i.info.imageData ?? Data(),"Email":i.getFirstEmailAddress()]
+                    data = ["name":i.fullName(),"phone":i.getFirstPhoneNumber().removeWhitespace(),"imageDataAvailable": i.info.imageDataAvailable,"imageData":i.info.imageData ?? Data(),"Email":i.getFirstEmailAddress()]
                 }
                 
-                if dataContectInfo.firstIndex(where: {$0["name"] as! String == i.fullName() }) != nil {
+                if dataContectInfo.firstIndex(where: {$0["name"] as! String == i.fullName()}) != nil {
                 } else {
+                    var strBase64  = ""
+                    if i.info.imageDataAvailable == true {
+                        let img = UIImage(data: i.info.imageData ?? Data())!
+                        let vidoImageData = img.pngData()
+                        strBase64 = vidoImageData!.base64EncodedString()
+                    }
+                    
+                    let dicContactData =  ["name": i.fullName(), "phone": i.getFirstPhoneNumber().removeWhitespace(), "imageDataAvailable": i.info.imageDataAvailable, "imageData64": strBase64, "Email": i.getFirstEmailAddress()] as [String : Any]
+                    DBManager().insertcontact(dicContact: dicContactData)
+                    
                     dataContectInfo.append(data)
                 }
             }
         }
         
+        dataContectInfo.removeAll()
+        dataContectInfo = DBManager().getAllContact()
         dataContectInfo.sort {
             (($0 as! Dictionary<String, AnyObject>)["name"] as! String) < (($1 as! Dictionary<String, AnyObject>)["name"] as! String)
         }
@@ -160,11 +213,9 @@ class ContactsVc: UIViewController {
         UserDefaults.standard.setValue(dataContectInfo, forKey: Constant.ValueStoreName.ContactNumber)
         
         
-        
         groupedUsers.removeAll()
         groupedUsers = Dictionary(grouping: dataContectInfo, by: firstCharOfFirstName)
-        print(groupedUsers)
-      
+        
         tempContectInfo = dataContectInfo
         createNameDictionary()
         
@@ -184,7 +235,6 @@ class ContactsVc: UIViewController {
         
         contactNamesDictionary.removeAll()
         for name in dataContectInfo {
-            
             let firstLetter = (name["name"] as? String)?.first
             let uppercasedLetter = firstLetter?.uppercased()
             
@@ -199,9 +249,9 @@ class ContactsVc: UIViewController {
         indexLettersInContactsArray = [String](contactNamesDictionary.keys)
         indexLettersInContactsArray = indexLettersInContactsArray.sorted()
         
-        DispatchQueue.main.async { [self] in
+//        DispatchQueue.main.async { [self] in
             tableView.reloadData()
-        }
+//        }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) { [self] in // your network call
             if pullControl != nil {
@@ -260,11 +310,11 @@ class ContactsVc: UIViewController {
         }
     }
     
-    func retrieveContacts(from store: CNContactStore) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
-            self.ConteactNoSave()
-        })
-      }
+//    func retrieveContacts(from store: CNContactStore) {
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+//            self.ConteactNoSave()
+//        })
+//      }
     
     //MARK: - btn Click
     @IBAction func btnClickBack(_ sender: UIButton) {
@@ -276,11 +326,23 @@ class ContactsVc: UIViewController {
         
     }
     
+    @IBAction func btnContactAllow(_ sender: UIButton) {
+        let  Alert = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ContactsPermitionVC") as? ContactsPermitionVC
+        Alert?.modalPresentationStyle = .overFullScreen //or .overFullScreen for transparency
+        Alert?.delegate = self
+        self.present(Alert!, animated: false, completion: nil)
+    }
+    
+    
 }
 //MARK: TableView ------------------------------------------------------------------------------
 extension ContactsVc: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
+        tableView.isHidden = false
+        if contactNamesDictionary.keys.count == 0 {
+            tableView.isHidden = true
+        }
         return contactNamesDictionary.keys.count
     }
     
@@ -310,11 +372,12 @@ extension ContactsVc: UITableViewDataSource, UITableViewDelegate {
             cell.lblVW.isHidden = false
             
             let dic =  groupedUsers[Character(letter)]?[indexPath.row]
-            
-            
-            if dic?["imageDataAvailable"] as! Bool == true {
+//
+            if dic?["imageData64"] as! String != "" {
                 cell.lblVW.isHidden = true
-                cell.contactImage.image = UIImage(data: (dic?["imageData"] as! Data))!
+                let dataDecoded:NSData = NSData(base64Encoded: dic?["imageData64"] as! String, options: NSData.Base64DecodingOptions(rawValue: 0))!
+                let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
+                cell.contactImage.image = decodedimage
             }else {
                 cell.contactImage.isHidden = true
                 cell.lblNameLetter.text = findNameFistORMiddleNameFistLetter(name: text)
@@ -339,10 +402,12 @@ extension ContactsVc: UITableViewDataSource, UITableViewDelegate {
         cell.contactNumber.isHidden = !isContectNumberShow
         cell.btnFavorite.setImage(#imageLiteral(resourceName: "ic_fav_uncheck"), for: .normal)
         cell.btnFavorite.tag = 0
+        cell.heightForFavouriteBtn.constant = 0
         
         if Favourite.count > 0 {
             if  Favourite.contains(where: {$0["number"] as? String == cell.contactNumber.text}) {
                 cell.btnFavorite.setImage(#imageLiteral(resourceName: "ic_fav_check"), for: .normal)
+                cell.heightForFavouriteBtn.constant = 25
             }
         }
 
@@ -365,7 +430,7 @@ extension ContactsVc: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.width, height: 50))
         let label = UILabel()
-        label.frame = CGRect.init(x: 25, y: 8, width: headerView.frame.width/2, height: headerView.frame.height/2)
+        label.frame = CGRect.init(x: 22, y: 8, width: headerView.frame.width/2, height: headerView.frame.height/2)
         label.text = indexLettersInContactsArray[section]
         label.font = .boldSystemFont(ofSize: 16)
         label.textColor = .white
@@ -374,22 +439,17 @@ extension ContactsVc: UITableViewDataSource, UITableViewDelegate {
         return headerView
     }
     
-    
-//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        var sectionTitle = String()
-//        sectionTitle = indexLettersInContactsArray[section]
-//        return sectionTitle
-//    }
-    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 40
     }
     
     
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        //        if indexLettersInContactsArray.contains(indexLetters) {
-        //            return indexLetters
-        //        }
+        if #available(iOS 16.0, *) {
+            if indexLettersInContactsArray.contains(indexLetters) {
+                return indexLetters
+            }
+        }
         var output = indexLettersInContactsArray.filter(indexLetters.contains)
         return output
     }
@@ -404,20 +464,20 @@ extension ContactsVc: UITableViewDataSource, UITableViewDelegate {
         let dic =  groupedUsers[Character(letter)]?[indexPath.row]
         
         if isAddToChatView == true {
-            self.tabBarController?.tabBar.isHidden = true
-            let nextVC = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "ChatVc") as! ChatVc
-            let allData = RealmDatabaseeHelper.shared.getAllUserModall()
-            let index = allData.firstIndex(where: {$0.contactNumber.suffix(10) == (dic!["phone"] as? String ?? "" ).suffix(10)})
-            if index  != nil {
-                let dicForData = allData[index!]
-                RealmDatabaseeHelper.shared.readTimeCountChange(phonenumber: dicForData.contactNumber)
-                nextVC.userChatId = dicForData.receiverIdForChat
-                appDelegate.ChatGroupID = dicForData.roomID
-            }
-            nextVC.phoneNumber = (dic!["phone"] as? String ?? "")
-            nextVC.Name = (dic!["name"] as? String ?? "")
-            nextVC.fistTimeUserEentry = true
-            navigationController?.pushViewController(nextVC, animated: false)
+//            self.tabBarController?.tabBar.isHidden = true
+//            let nextVC = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "ChatVc") as! ChatVc
+//            let allData = RealmDatabaseeHelper.shared.getAllUserModall()
+//            let index = allData.firstIndex(where: {$0.contactNumber.suffix(10) == (dic!["phone"] as? String ?? "" ).suffix(10)})
+//            if index  != nil {
+//                let dicForData = allData[index!]
+//                RealmDatabaseeHelper.shared.readTimeCountChange(phonenumber: dicForData.contactNumber)
+//                nextVC.userChatId = dicForData.receiverIdForChat
+//                appDelegate.ChatGroupID = dicForData.roomID
+//            }
+//            nextVC.phoneNumber = (dic!["phone"] as? String ?? "")
+//            nextVC.Name = (dic!["name"] as? String ?? "")
+//            nextVC.fistTimeUserEentry = true
+//            navigationController?.pushViewController(nextVC, animated: false)
         }else{
             let nextVC = UIStoryboard(name: "Setting", bundle: nil).instantiateViewController(withIdentifier: "ContactDetailVc") as! ContactDetailVc
             nextVC.iscallAdd = self.iscallAdd
@@ -428,6 +488,17 @@ extension ContactsVc: UITableViewDataSource, UITableViewDelegate {
             self.present(nextVC, animated: true)
         }
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if tableView.isDragging {
+            cell.transform = CGAffineTransform.init(scaleX: 0.3, y: 0.3)
+            UIView.animate(withDuration: 0.5, animations: {
+                cell.transform = CGAffineTransform.identity
+            })
+        }
+        
+    }
+    
     
     @objc func FavoriteContactAdd(_ sender: UIButton){
         let strIndexPath = sender.title(for: .disabled)
@@ -456,33 +527,74 @@ extension ContactsVc: UITableViewDataSource, UITableViewDelegate {
 
 
 extension ContactsVc : UISearchBarDelegate{
+    
+    
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchActive = true
+       // searchBar.showsCancelButton = true
     }
 
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        searchBar.setShowsCancelButton(true, animated: true)
+        return true
+    }
+    
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchActive = false
+        searchBar.setShowsCancelButton(false, animated: true)
+        searchBar.endEditing(true)
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchActive = false
+        searchBar.setShowsCancelButton(false, animated: true)
+        searchBar.endEditing(true)
     }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchActive = false
+        searchBar.resignFirstResponder()
+    }
+    
+    func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+    }
+    
+    func didPresentSearchController(searchController: UISearchController) {
+        searchBar.showsCancelButton = false
+        searchController.searchBar.becomeFirstResponder()
+        searchController.searchBar.showsCancelButton = true
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if tempContectInfo.count > 0 {
             dataContectInfo = tempContectInfo
         }
-        dataContectInfo = dataContectInfo.filter({($0["name"] as! String).localizedCaseInsensitiveContains(searchBar.text!)})
+        
+        dataContectInfo = dataContectInfo.filter({($0["name"] as! String).lowercased().contains(searchBar.text!.lowercased())})
+        groupedUsers.removeAll()
         if searchBar.text == "" {
             dataContectInfo = tempContectInfo
             searchActive = false
         } else {
             searchActive = true
         }
+        groupedUsers = Dictionary(grouping: dataContectInfo, by: firstCharOfFirstName)
+
         createNameDictionary()
     }
+
+
+    func didDismissSearchController(_ searchController: UISearchController) {
+        searchController.searchBar.showsCancelButton = false
+    }
+    
+
+}
+class CustomSearchBar: UISearchBar {
+
+    override func setShowsCancelButton(_ showsCancelButton: Bool, animated: Bool) {
+        super.setShowsCancelButton(false, animated: false)
+    }
+
 }
 
 extension ContactsVc: MFMessageComposeViewControllerDelegate{
@@ -530,4 +642,15 @@ extension ContactsVc: MFMessageComposeViewControllerDelegate{
         self.dismiss(animated: true, completion: nil)
     }
 }
-
+extension ContactsVc : ContactsPermitionDelegate{
+    func contectPermtion(){
+        HelperClassAnimaion.showProgressHud()
+        dismiss(animated: false, completion: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: { [self] in
+                self.ConteactNoSave()
+             })
+        })
+       
+//        self.properSetPhoneNumber()
+    }
+}

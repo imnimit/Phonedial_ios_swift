@@ -33,60 +33,10 @@ class VoiceMailLogsVc: UIViewController {
     }
     
     func ConteactNoSave()  {
-        let keys = [CNContactGivenNameKey, CNContactMiddleNameKey, CNContactFamilyNameKey,
-                    CNContactEmailAddressesKey, CNContactBirthdayKey, CNContactPhoneNumbersKey,CNContactImageDataKey,CNContactImageDataAvailableKey,
-                    CNContactFormatter.descriptorForRequiredKeys(for: .fullName)] as! [CNKeyDescriptor]
-        
-        let requestForContacts = CNContactFetchRequest(keysToFetch: keys)
-        self.hideKeybordTappedAround()
-        
-        // And then perform actions on KNContactBook
-        let randomContacts = contactBook.randomElements(number: 1)
-        let randomElements = contactBook.randomElements(number: 3, except: randomContacts)
-        
-        do {
-            try CNContactStore().enumerateContacts(with: requestForContacts) { (cnContact, _) in
-                let knContact = KNContact(cnContact)
-                self.contactBook.add(knContact)
-            }
-        } catch let error {
-            // Handle error somehow!
-            print(error)
-        }
-        
-        
-        print(contactBook)
-        
-        
-        
-        dataContectInfo.removeAll()
-        for  i  in contactBook.contacts {
-            print(i.fullName())
-            print(i.getFirstEmailAddress())
-            
-            print(i.getFirstPhoneNumber())
-            print(i.info)
-            var data = [String: Any]()
-
-            if i.fullName() != "" {
-                if i.info.imageDataAvailable as? Bool == true {
-                    data = ["name":i.fullName(),"phone":i.getFirstPhoneNumber(),"imageDataAvailable": i.info.imageDataAvailable as? Bool ?? false ,"imageData": i.info.imageData!,"Email":i.getFirstEmailAddress()]
-                }else {
-                    data = ["name":i.fullName(),"phone":i.getFirstPhoneNumber(),"imageDataAvailable": i.info.imageDataAvailable as? Bool ?? false ,"imageData":i.info.imageData ?? Data(),"Email":i.getFirstEmailAddress()]
-                }
-                
-                if dataContectInfo.firstIndex(where: {$0["phone"] as! String == i.getFirstPhoneNumber() }) != nil {
-                    
-                } else {
-                    dataContectInfo.append(data)
-                }
-            }
-        }
-        
+        dataContectInfo = DBManager().getAllContact()
         dataContectInfo.sort {
             (($0 as! Dictionary<String, AnyObject>)["name"] as! String) < (($1 as! Dictionary<String, AnyObject>)["name"] as! String)
         }
-        
         tableView.reloadData()
     }
     

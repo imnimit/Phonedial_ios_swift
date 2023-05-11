@@ -102,6 +102,7 @@
 		0092AE35294B48EA00D0FA25 /* AddFundsVctr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0092AE34294B48EA00D0FA25 /* AddFundsVctr.swift */; };
 		0092AE39294B51FD00D0FA25 /* CountryPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0092AE37294B51FD00D0FA25 /* CountryPicker.swift */; };
 		0092AE3A294B51FD00D0FA25 /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0092AE38294B51FD00D0FA25 /* Country.swift */; };
+		00960CE52A0CD2C5005283F6 /* ContactsPermitionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00960CE42A0CD2C5005283F6 /* ContactsPermitionVC.swift */; };
 		0096CDE9298D146C0095863F /* ImgeSenderSideCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0096CDE8298D146C0095863F /* ImgeSenderSideCell.swift */; };
 		0098C3EB295B086D0019B714 /* VoiceMailDetailVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0098C3EA295B086D0019B714 /* VoiceMailDetailVc.swift */; };
 		0098CBD0295178C500C8C355 /* RedeemCouponVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0098CBCF295178C500C8C355 /* RedeemCouponVc.swift */; };
@@ -323,6 +324,7 @@
 		0092AE34294B48EA00D0FA25 /* AddFundsVctr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFundsVctr.swift; sourceTree = "<group>"; };
 		0092AE37294B51FD00D0FA25 /* CountryPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryPicker.swift; sourceTree = "<group>"; };
 		0092AE38294B51FD00D0FA25 /* Country.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
+		00960CE42A0CD2C5005283F6 /* ContactsPermitionVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsPermitionVC.swift; sourceTree = "<group>"; };
 		0096CDE8298D146C0095863F /* ImgeSenderSideCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgeSenderSideCell.swift; sourceTree = "<group>"; };
 		0098C3EA295B086D0019B714 /* VoiceMailDetailVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMailDetailVc.swift; sourceTree = "<group>"; };
 		0098CBCF295178C500C8C355 /* RedeemCouponVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedeemCouponVc.swift; sourceTree = "<group>"; };
@@ -759,6 +761,14 @@
 			path = DZCountryPicker;
 			sourceTree = "<group>";
 		};
+		00960CE32A0CD2C5005283F6 /* PermitionVC */ = {
+			isa = PBXGroup;
+			children = (
+				00960CE42A0CD2C5005283F6 /* ContactsPermitionVC.swift */,
+			);
+			path = PermitionVC;
+			sourceTree = "<group>";
+		};
 		0098CBCE2951788C00C8C355 /* RedeemCoupon */ = {
 			isa = PBXGroup;
 			children = (
@@ -1085,6 +1095,7 @@
 		C3B851FD25A5EA6C0037A8AB /* ios-swift-pjsua2 */ = {
 			isa = PBXGroup;
 			children = (
+				00960CE32A0CD2C5005283F6 /* PermitionVC */,
 				00A6EF2C29A89A9000E69CE4 /* InappPerchase */,
 				003A784A2963ED5700212E88 /* Animation */,
 				00697C30295586A400C5C621 /* API Main */,
@@ -1439,6 +1450,7 @@
 				006FBB2329519B7900A3CB6F /* BlockCallsListCell.swift in Sources */,
 				00F9A44329B072F400724DE2 /* PhoneDialerUserListCell.swift in Sources */,
 				009C252829B21C1600F27290 /* VedioCallShowVc.swift in Sources */,
+				00960CE52A0CD2C5005283F6 /* ContactsPermitionVC.swift in Sources */,
 				005F6E342997C6EF00A4C6CC /* Media.swift in Sources */,
 				006FBB2E2951BDCA00A3CB6F /* ContecsInfomationVc.swift in Sources */,
 				0075101029ADD302004545EA /* PurchaseNumberReceiptVc.swift in Sources */,

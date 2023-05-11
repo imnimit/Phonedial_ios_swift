@@ -89,9 +89,11 @@ class RecordingDetailVc: UIViewController {
             }) {
                 let findNumber = dataContectInfo[index]
                 lblName.text = findNumber["name"] as? String
-                if findNumber["imageDataAvailable"] as? Bool == true {
+                if findNumber["imageData64"] as! String != "" {
                     lblNameLetter.isHidden = true
-                    imgLetter.image = UIImage(data: (findNumber["imageData"] as! Data))!
+                    let dataDecoded:NSData = NSData(base64Encoded: findNumber["imageData64"] as! String, options: NSData.Base64DecodingOptions(rawValue: 0))!
+                    let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
+                    imgLetter.image = decodedimage
                 }
             }else{
                 imgLetter.image =  #imageLiteral(resourceName: "call_bg_image")

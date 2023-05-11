@@ -365,9 +365,7 @@ void PJSua2::createAccount(std::string username, std::string password, std::stri
 //    acfg.videoConfig.autoTransmitOutgoing = false;
 //    acfg.videoConfig.defaultCaptureDevice = PJMEDIA_VID_INVALID_DEV  // PJMEDIA_VID_DEFAULT_CAPTURE_DEV;
 //    acfg.videoConfig.defaultRenderDevice = PJMEDIA_VID_INVALID_DEV  //PJMEDIA_VID_DEFAULT_RENDER_DEV;
-    
-    
-    
+        
     //  TODO:: GET ID -1 IS EXPERIMENTAL, NOT SURE THAT, IT IS GOOD WAY TO CHECK ACC IS CREATED. FIX IT!
     if(acc->getId() == -1){
         // Create the account

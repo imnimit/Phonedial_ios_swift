@@ -63,79 +63,41 @@ class FavoriteListVc: UIViewController {
 
     func initCall() {
         searchBar.placeholder = "Search"
-        if requestAccess() {
-            self.ConteactNoSave()
-        }
-        else{
-            checkPermissionToDeviceContacts()
-        }
+        self.ConteactNoSave()
+//        if requestAccess() {
+//            self.ConteactNoSave()
+//        }
+//        else{
+//            checkPermissionToDeviceContacts()
+//        }
     }
     
     func ConteactNoSave()  {
-        let keys = [CNContactGivenNameKey, CNContactMiddleNameKey, CNContactFamilyNameKey,
-                    CNContactEmailAddressesKey, CNContactBirthdayKey, CNContactPhoneNumbersKey,CNContactImageDataKey,CNContactImageDataAvailableKey,
-                    CNContactFormatter.descriptorForRequiredKeys(for: .fullName)] as! [CNKeyDescriptor]
         
-        let requestForContacts = CNContactFetchRequest(keysToFetch: keys)
-        self.hideKeybordTappedAround()
-        
-        // And then perform actions on KNContactBook
-        let randomContacts = contactBook.randomElements(number: 1)
-        let randomElements = contactBook.randomElements(number: 3, except: randomContacts)
-        
-        do {
-            try CNContactStore().enumerateContacts(with: requestForContacts) { (cnContact, _) in
-                let knContact = KNContact(cnContact)
-                self.contactBook.add(knContact)
-            }
-        } catch let error {
-            // Handle error somehow!
-            print(error)
-        }
-        
-        
-        print(contactBook)
-        
-        
-        
-        groupedUsers.removeAll()
-        dataContectInfo.removeAll()
-        for  i  in contactBook.contacts {
-            print(i.fullName())
-            print(i.getFirstEmailAddress())
-            
-            print(i.getFirstPhoneNumber())
-            print(i.info)
-            var data = [String: Any]()
+       dataContectInfo.removeAll()
+       let tempdataContectInfo = DBManager().getAllContact()
 
+        for i in tempdataContectInfo {
             if Favourite.count > 0 {
-                if  Favourite.contains(where: {$0["number"] as? String == i.getFirstPhoneNumber()}) {
-                    if i.fullName() != "" {
-                        if i.info.imageDataAvailable as? Bool == true {
-                            data = ["name":i.fullName(),"phone":i.getFirstPhoneNumber(),"imageDataAvailable": i.info.imageDataAvailable as? Bool ?? false ,"imageData": i.info.imageData!,"Email":i.getFirstEmailAddress()]
-                        }else {
-                            data = ["name":i.fullName(),"phone":i.getFirstPhoneNumber(),"imageDataAvailable": i.info.imageDataAvailable as? Bool ?? false ,"imageData":i.info.imageData ?? Data(),"Email":i.getFirstEmailAddress()]
-                        }
-                        
-                        if dataContectInfo.firstIndex(where: {$0["phone"] as! String == i.getFirstPhoneNumber() }) != nil {
+                if  Favourite.contains(where: {$0["number"] as? String == i["phone"] as? String }) {
+                    if i["name"] as? String != "" {
+                        if dataContectInfo.firstIndex(where: {$0["phone"] as! String == i["phone"] as? String }) != nil {
                             
                         } else {
-                            dataContectInfo.append(data)
+                            dataContectInfo.append(i)
                         }
                     }
                 }
             }
-           
-           
         }
-        
+                
         dataContectInfo.sort {
             (($0 as! Dictionary<String, AnyObject>)["name"] as! String) < (($1 as! Dictionary<String, AnyObject>)["name"] as! String)
         }
         
         groupedUsers.removeAll()
         groupedUsers = Dictionary(grouping: dataContectInfo, by: firstCharOfFirstName)
-        print(groupedUsers)
+       // print(groupedUsers)
       
         tempContectInfo = dataContectInfo
         createNameDictionary()
@@ -172,70 +134,6 @@ class FavoriteListVc: UIViewController {
         tableView.reloadData()
 
     }
-        
-    func requestAccess()-> Bool {
-        var allow = false
-        switch CNContactStore.authorizationStatus(for: .contacts) {
-        case .authorized:
-            allow = true
-        case .denied:
-            allow = false
-        case .restricted, .notDetermined:
-            allow = false
-        }
-        return allow
-    }
-    
-    func checkPermissionToDeviceContacts() {
-
-        let store = CNContactStore()
-        let authorizationStatus = CNContactStore.authorizationStatus(for: .contacts)
-        
-        if authorizationStatus == .notDetermined {
-            // 3
-            store.requestAccess(for: .contacts) { [weak self] didAuthorize,
-                                                              error in
-                if didAuthorize {
-                    self?.retrieveContacts(from: store)
-                }
-            }
-        } else if authorizationStatus == .authorized {
-            retrieveContacts(from: store)
-        }  else if authorizationStatus == .denied {
-            let alert = UIAlertController(title: "Can't access contact", message: "Please go to Settings -> MyApp to enable contact permission", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {_ in
-                self.headToSettingsOfPermissions()
-            }))
-            self.present(alert, animated: true, completion: nil)
-        }
-    }
-    
-    func headToSettingsOfPermissions() {
-        if let bundleId = Bundle.main.bundleIdentifier,
-           let url = URL(string: "\(UIApplication.openSettingsURLString)&path=APPNAME/\(bundleId)")
-        {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
-    }
-    
-    func retrieveContacts(from store: CNContactStore) {
-        let containerId = store.defaultContainerIdentifier()
-        let predicate = CNContact.predicateForContactsInContainer(withIdentifier: containerId)
-        // 4
-        let keysToFetch = [CNContactGivenNameKey as CNKeyDescriptor,
-                           CNContactFamilyNameKey as CNKeyDescriptor,
-                           CNContactImageDataAvailableKey as
-                           CNKeyDescriptor,
-                           CNContactImageDataKey as CNKeyDescriptor]
-
-        let contacts = try! store.unifiedContacts(matching: predicate, keysToFetch: keysToFetch)
-        
-        
-        // 5
-        print(contacts)
-        self.ConteactNoSave()
-      }
-    
 }
 //MARK: TableView ------------------------------------------------------------------------------
 extension FavoriteListVc: UITableViewDataSource, UITableViewDelegate {
@@ -278,10 +176,11 @@ extension FavoriteListVc: UITableViewDataSource, UITableViewDelegate {
             let dic =  groupedUsers[Character(letter)]?[indexPath.row]
             
             
-            if dic?["imageDataAvailable"] as! Bool == true {
-                contactImage =  UIImage(data: (dic?["imageData"] as! Data))!
+            if dic?["imageData64"] as! String != "" {
                 cell.lblVW.isHidden = true
-                cell.contactImage.image = contactImage
+                let dataDecoded:NSData = NSData(base64Encoded: dic?["imageData64"] as! String, options: NSData.Base64DecodingOptions(rawValue: 0))!
+                let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
+                cell.contactImage.image = decodedimage
             }else {
                 contactImage = #imageLiteral(resourceName: "ic_answer_call")
                 cell.contactImage.isHidden = true
@@ -355,12 +254,6 @@ extension FavoriteListVc: UITableViewDataSource, UITableViewDelegate {
         headerView.backgroundColor = #colorLiteral(red: 0.4439517856, green: 0.5258321166, blue: 0.7032657862, alpha: 1)
         return headerView
     }
-    
-//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        var sectionTitle = String()
-//        sectionTitle = indexLettersInContactsArray[section]
-//        return sectionTitle
-//    }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 40

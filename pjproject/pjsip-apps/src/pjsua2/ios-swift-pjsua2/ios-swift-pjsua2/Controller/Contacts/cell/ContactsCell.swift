@@ -18,5 +18,6 @@ class ContactsCell: UITableViewCell {
     @IBOutlet weak var btnInvite: UIButton!
     @IBOutlet weak var btnFavorite: UIButton!
     @IBOutlet weak var PolistionorName: NSLayoutConstraint!
+    @IBOutlet weak var heightForFavouriteBtn: NSLayoutConstraint!
     
 }

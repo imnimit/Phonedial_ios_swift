@@ -34,8 +34,8 @@ class ipjsuaLoginVc: UIViewController ,TTTAttributedLabelDelegate {
         
         viewSIPPort.isHidden = true
         
-        SIPIP.text = Constant.GlobalConstants.SERVERNAME
-        SIPPort.text = Constant.GlobalConstants.PORT
+//        SIPIP.text = Constant.GlobalConstants.SERVERNAME
+//        SIPPort.text = Constant.GlobalConstants.PORT
                 
         self.hideKeybordTappedAround()
         

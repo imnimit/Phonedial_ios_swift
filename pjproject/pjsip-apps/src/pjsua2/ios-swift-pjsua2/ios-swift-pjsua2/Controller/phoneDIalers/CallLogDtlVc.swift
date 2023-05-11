@@ -28,9 +28,11 @@ class CallLogDtlVc: UIViewController {
             lblName.text = findNumber["name"] as? String
             lblNumber.text = findNumber["phone"] as? String
             lblFistLetter.text = findNameFistORMiddleNameFistLetter(name: findNumber["name"] as? String ?? "")
-            if findNumber["imageDataAvailable"] as? Bool == true {
+            if findNumber["imageData64"] as! String != "" {
                 lblFistLetter.isHidden = true
-                imgContact.image = UIImage(data: (findNumber["imageData"] as! Data))!
+                let dataDecoded:NSData = NSData(base64Encoded: findNumber["imageData64"] as! String, options: NSData.Base64DecodingOptions(rawValue: 0))!
+                let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
+                imgContact.image = decodedimage
             }
         }else {
             lblName.text = dicCall[0]["contact_name"] as? String

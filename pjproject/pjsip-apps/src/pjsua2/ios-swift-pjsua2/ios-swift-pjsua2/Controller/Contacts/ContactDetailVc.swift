@@ -44,8 +44,10 @@ class ContactDetailVc: UIViewController {
     func initCall(){
         letterImgeVW.layer.cornerRadius = letterImgeVW.layer.bounds.height/2
         
-        if contactDetail["imageDataAvailable"] as! Bool == true {
-            imgContact.image =  UIImage(data: (contactDetail["imageData"] as! Data))!
+        if contactDetail["imageData64"] as! String != "" {
+            let dataDecoded:NSData = NSData(base64Encoded: contactDetail["imageData64"] as! String, options: NSData.Base64DecodingOptions(rawValue: 0))!
+            let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
+            imgContact.image =  decodedimage
             lblNameInitial.isHidden = true
         }else {
             imgContact.isHidden = true
@@ -178,8 +180,9 @@ class ContactDetailVc: UIViewController {
         let workemail = contactDetail["Email"] as? String ?? "" //Your Input goes here
         let WorkEmail = CNLabeledValue(label:CNLabelWork, value: workemail as NSString)
         contact.emailAddresses = [WorkEmail]
-        if contactDetail["imageDataAvailable"] as! Bool == true {
-            contact.imageData = contactDetail["imageData"] as! Data?
+        if contactDetail["imageData64"] as! String != "" {
+            let dataDecoded:NSData = NSData(base64Encoded: contactDetail["imageData64"] as! String, options: NSData.Base64DecodingOptions(rawValue: 0))!
+            contact.imageData = dataDecoded as Data
         }
 
 

@@ -69,7 +69,7 @@ class dialpadVc: UIViewController, UITextFieldDelegate {
             lblContectName.text  = contectName
         }
         tableView.isHidden = false
-        ConteactNoSave()
+        ConteactNoSave() 
         textSearchChange(txtnumber)
     }
     
@@ -82,7 +82,7 @@ class dialpadVc: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func showCountryCode(){
+    func showCountryCode() {
         let cp = CountryPickerView(frame: CGRect(x: 0, y: 0, width: 300, height: 10))
         self.cpvTextField = cp
         cpvMain.tag = 1

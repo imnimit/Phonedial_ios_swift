@@ -1304,7 +1304,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PGg-5Z-ezP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1111.5942028985507" y="-1227.4553571428571"/>
+            <point key="canvasLocation" x="1155" y="-1227"/>
         </scene>
         <!--Phone Book-->
         <scene sceneID="iwM-i5-u8w">
@@ -2354,7 +2354,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j0J-80-xff" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1900.0000000000002" y="-1227.4553571428571"/>
+            <point key="canvasLocation" x="2128" y="-1227"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="7fx-zz-IHj">
@@ -2878,7 +2878,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sH7-BB-exA" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2814" y="-1227"/>
+            <point key="canvasLocation" x="3010" y="-1227"/>
         </scene>
         <!--SettingsListVctr-->
         <scene sceneID="pK9-xb-RTt">
@@ -8155,14 +8155,6 @@
             <point key="canvasLocation" x="5319" y="-415"/>
         </scene>
     </scenes>
-    <designables>
-        <designable name="Ms2-Px-IKS">
-            <size key="intrinsicContentSize" width="535" height="18"/>
-        </designable>
-        <designable name="r1n-eI-Lt3">
-            <size key="intrinsicContentSize" width="500" height="19"/>
-        </designable>
-    </designables>
     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
     <resources>
         <image name="US.png" width="40" height="30"/>

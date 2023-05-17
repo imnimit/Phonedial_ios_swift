@@ -250,6 +250,7 @@ class ChatUserListVc: UIViewController {
                 SocketHInit(Time: time)
                 ProgressHUD.dismiss()
             } else {
+                ProgressHUD.dismiss()
             }
         })
     }
@@ -278,8 +279,10 @@ class ChatUserListVc: UIViewController {
                 appDelegate.ChatTimeUserUserID = "\(Data["id"] as? Int ?? 0)"
                 let time = getLastSyncTime(LastSyncTimeKey: "last_sync_time")
                 SocketHInit(Time: time)
+                ProgressHUD.dismiss()
             } else {
-                
+                ProgressHUD.dismiss()
+
             }
         })
     }

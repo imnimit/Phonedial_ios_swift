@@ -121,7 +121,8 @@ extension phoneDIalersListVc: UITableViewDataSource, UITableViewDelegate {
         cell.btnGoDetail.tag = indexPath.row
         cell.btnGoDetail.addTarget(self, action: #selector(self.GoDetailSection(_:)), for: .touchUpInside)
         cell.lblNameLetter.isHidden = false
-
+        cell.imgContacts.image =  #imageLiteral(resourceName: "call_bg_image")
+        cell.lblName.text = "Unknown"
         if dataContectInfo.count > 0 {
             if let index = dataContectInfo.firstIndex(where: {
                 let phone = ($0["phone"] as! String).removeWhitespace()
@@ -154,6 +155,13 @@ extension phoneDIalersListVc: UITableViewDataSource, UITableViewDelegate {
                 cell.imgContacts.image =  #imageLiteral(resourceName: "call_bg_image")
             }
         }
+        
+        cell.boderVW.isHidden = false
+        if groupedUsers.count == indexPath.row + 1 {
+            cell.boderVW.isHidden = true
+        }
+        
+        
         return cell
     }
     
@@ -166,7 +174,7 @@ extension phoneDIalersListVc: UITableViewDataSource, UITableViewDelegate {
         if dataContectInfo.count > 0 {
             if let index = dataContectInfo.firstIndex(where: {
                 let phone = ($0["phone"] as! String).removeWhitespace()
-                return phone.suffix(10) == String((infoContact?[0]["number"] as? String ?? "").suffix(10))
+                return phone == String((infoContact?[0]["number"] as? String ?? ""))
             }) {
                 findNumber = dataContectInfo[index]
             }
@@ -180,7 +188,7 @@ extension phoneDIalersListVc: UITableViewDataSource, UITableViewDelegate {
             nextVC.number = (findNumber["phone"] as! String).removeWhitespace()
             nextVC.name = findNumber["name"] as? String ?? ""
         }else{
-            nextVC.number = String((infoContact?[0]["number"] as? String ?? "").suffix(10))
+            nextVC.number = String((infoContact?[0]["number"] as? String ?? ""))
             nextVC.name = infoContact?[0]["contact_name"] as? String ?? ""
         }
         nextVC.dicCall = infoContact!

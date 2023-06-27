@@ -51,10 +51,10 @@ class ActiveViewController: UIViewController {
     @IBAction func holdClick(_ sender: Any) {
         
         if(holdFlag == false){
-            CPPWrapper().holdCall(0)
+          //  CPPWrapper().holdCall(0)
             holdButton.setTitle("Unhold", for: .normal)
         } else if (holdFlag == true) {
-            CPPWrapper().unholdCall(0)
+            //CPPWrapper().unholdCall(0)
             holdButton.setTitle("Hold", for: .normal)
         }
         

@@ -26,6 +26,8 @@
 		0022F6512970295A003DF5E7 /* OTDefaultAudioDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 0022F64F2970295A003DF5E7 /* OTDefaultAudioDevice.m */; };
 		002BF22B29B9BFA600FA7C66 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002BF22A29B9BFA600FA7C66 /* StoreKit.framework */; };
 		002FE8332938B47B00CD0AE3 /* IncomeingCallScreenVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002FE8322938B47B00CD0AE3 /* IncomeingCallScreenVc.swift */; };
+		0038077B2A4AB0B800FA7C1F /* recording.json in Resources */ = {isa = PBXBuildFile; fileRef = 0038077A2A4AB0B800FA7C1F /* recording.json */; };
+		0038077D2A4AB18C00FA7C1F /* AlertRecordingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0038077C2A4AB18C00FA7C1F /* AlertRecordingVC.swift */; };
 		003A784C2963ED6400212E88 /* LottieHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003A784B2963ED6400212E88 /* LottieHUD.swift */; };
 		003A78502963ED8500212E88 /* animation_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 003A784D2963ED8500212E88 /* animation_1.json */; };
 		003A78512963ED8500212E88 /* custom_load.json in Resources */ = {isa = PBXBuildFile; fileRef = 003A784E2963ED8500212E88 /* custom_load.json */; };
@@ -258,6 +260,8 @@
 		0022F6502970295A003DF5E7 /* OTDefaultAudioDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTDefaultAudioDevice.h; sourceTree = "<group>"; };
 		002BF22A29B9BFA600FA7C66 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		002FE8322938B47B00CD0AE3 /* IncomeingCallScreenVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeingCallScreenVc.swift; sourceTree = "<group>"; };
+		0038077A2A4AB0B800FA7C1F /* recording.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recording.json; sourceTree = "<group>"; };
+		0038077C2A4AB18C00FA7C1F /* AlertRecordingVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertRecordingVC.swift; sourceTree = "<group>"; };
 		003A784B2963ED6400212E88 /* LottieHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LottieHUD.swift; sourceTree = "<group>"; };
 		003A784D2963ED8500212E88 /* animation_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = animation_1.json; sourceTree = "<group>"; };
 		003A784E2963ED8500212E88 /* custom_load.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = custom_load.json; sourceTree = "<group>"; };
@@ -566,6 +570,7 @@
 		003A784A2963ED5700212E88 /* Animation */ = {
 			isa = PBXGroup;
 			children = (
+				0038077A2A4AB0B800FA7C1F /* recording.json */,
 				003A784D2963ED8500212E88 /* animation_1.json */,
 				003A784E2963ED8500212E88 /* custom_load.json */,
 				003A784F2963ED8500212E88 /* warning.json */,
@@ -1045,6 +1050,7 @@
 		C337417625BADF12007785D7 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				0038077C2A4AB18C00FA7C1F /* AlertRecordingVC.swift */,
 				009C252629B21BAD00F27290 /* VedioCalling */,
 				00B4B2F429A9D31C00B24A03 /* Register */,
 				000DB8A02983AA1D009D3174 /* ChatWork */,
@@ -1308,6 +1314,7 @@
 				000DB8B02983F650009D3174 /* AudioView.xib in Resources */,
 				0073A40A2952EC7700B6107E /* CallInfo.storyboard in Resources */,
 				003A78512963ED8500212E88 /* custom_load.json in Resources */,
+				0038077B2A4AB0B800FA7C1F /* recording.json in Resources */,
 				B1FDA21A2A31B0B300F2686E /* data.db in Resources */,
 				C3B8520625A5EA6C0037A8AB /* Main.storyboard in Resources */,
 				000DB8B92983FF0F009D3174 /* rckit_incoming.aiff in Resources */,
@@ -1488,6 +1495,7 @@
 				0092AE39294B51FD00D0FA25 /* CountryPicker.swift in Sources */,
 				0075C46E2934BE5B00DC8C93 /* CommonMethods.swift in Sources */,
 				000DB8A42983ABEE009D3174 /* ChatVc.swift in Sources */,
+				0038077D2A4AB18C00FA7C1F /* AlertRecordingVC.swift in Sources */,
 				00CCD89A298790BD009DDC7A /* DataModel.swift in Sources */,
 				C3B851FF25A5EA6C0037A8AB /* AppDelegate.swift in Sources */,
 				0082B72829542B5E00A2B5D7 /* CloudDB.swift in Sources */,

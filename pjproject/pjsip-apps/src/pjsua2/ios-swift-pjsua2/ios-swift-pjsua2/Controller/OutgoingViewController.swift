@@ -32,7 +32,7 @@ class OutgoingViewController: UIViewController {
         title = "Outgoing Call"
         outgoingCallTitle.text = outgoingCallId
         
-        CPPWrapper().outgoingCall(outgoingCallId)
+        CPPWrapper().outgoingCall(outgoingCallId, "0")
         CPPWrapper().call_listener_wrapper(call_status_listener_swift)
 //        CPPWrapper.makeCall(outgoingCallId)
         

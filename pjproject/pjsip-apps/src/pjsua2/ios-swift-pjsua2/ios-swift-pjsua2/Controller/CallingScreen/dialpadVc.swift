@@ -41,7 +41,7 @@ class dialpadVc: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         showCountryCode()
-        
+
         logPressBtn()
         
         NotificationCenter.default.addObserver(self, selector: #selector(dialpadCallUpdata), name: Notification.Name("dialpadCallUpdata"), object: nil)
@@ -174,7 +174,6 @@ class dialpadVc: UIViewController, UITextFieldDelegate {
             nextVC.number = txtnumber.text ?? "<SIP-NUMBER>"
             let num1 = (cpvMain.selectedCountry.phoneCode).replace(string: "+", replacement: "")
             nextVC.phoneCode =  num1
-            
             nextVC.modalPresentationStyle = .overFullScreen //or .overFullScreen for transparency
             self.present(nextVC, animated: true)
             
@@ -218,14 +217,9 @@ class dialpadVc: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func btnCall(_ sender: UIButton) {
-        
         getCalleridForSelection()
-        
-
     }
-    
-    
-    
+        
     @IBAction func btnAddNewContect(_ sender: UIButton) {
         let nextVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddNewContectVc") as! AddNewContectVc
         nextVC.number = txtnumber.text ?? ""

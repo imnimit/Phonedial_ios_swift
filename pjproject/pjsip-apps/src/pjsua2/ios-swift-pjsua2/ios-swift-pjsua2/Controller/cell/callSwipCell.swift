@@ -11,5 +11,7 @@ class callSwipCell: UITableViewCell {
 
     @IBOutlet weak var lblNumber: UILabel!
     @IBOutlet weak var btnClick: UIButton!
+    @IBOutlet weak var imgBack: UIImageView!
+    @IBOutlet weak var lblName: UILabel!
     
 }

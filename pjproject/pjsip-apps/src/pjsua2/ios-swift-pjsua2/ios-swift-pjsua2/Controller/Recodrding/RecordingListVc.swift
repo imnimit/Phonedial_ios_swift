@@ -52,7 +52,21 @@ extension RecordingListVc: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "RecodingListCell", for: indexPath) as! RecodingListCell
         let dicForData =  callRecordingData[indexPath.row]
-        cell.lblRecodingName.text = "Audio \(indexPath.row + 1)"
+//        cell.lblRecodingName.text = "Audio \(indexPath.row + 1)"
+        
+        
+        if let index = dataContectInfo.firstIndex(where: {
+            let phone = ($0["phone"] as! String).removeWhitespace()
+            return phone.suffix(10) == (dicForData["number"] as? String ?? "")
+        }) {
+            print(index)
+            let indexPathRow = index
+            cell.lblRecodingName.text = "\(dataContectInfo[indexPathRow]["name"] as? String ?? "")"
+        } else {
+            cell.lblRecodingName.text = "\(dicForData["number"] as? String ?? "")"
+        }
+        
+        
         
         if (dicForData["data"] as? String ?? "") != "" {
             let df = DateFormatter()
@@ -70,7 +84,21 @@ extension RecordingListVc: UITableViewDataSource, UITableViewDelegate {
     }
     
     @objc func DeleteRecoding(_ sender: UIButton) {
-        let alert = UIAlertController(title: "Delete Call Recoding", message: "Are your sure want to delete auido \(sender.tag + 1) call recoding??" , preferredStyle: .alert)
+        
+        let dicForData =  callRecordingData[sender.tag]
+        
+        var number = ""
+        if let index = dataContectInfo.firstIndex(where: {
+            let phone = ($0["phone"] as! String).removeWhitespace()
+            return phone.suffix(10) == (dicForData["number"] as? String ?? "")
+        }) {
+            let indexPathRow = index
+            number = "\(dataContectInfo[indexPathRow]["name"] as? String ?? "")"
+        } else {
+            number = "\(dicForData["number"] as? String ?? "")"
+        }
+        
+        let alert = UIAlertController(title: "Delete Call Recoding", message: "Are your sure want to delete auido \(number) call recoding??" , preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "Yes", style: UIAlertAction.Style.default, handler: { [self]_ in
             DataBaseinRemoveCallRecoding(tag: sender.tag)
@@ -120,6 +148,4 @@ extension RecordingListVc: UITableViewDataSource, UITableViewDelegate {
             (($0 as! Dictionary<String, AnyObject>)["name"] as! String) < (($1 as! Dictionary<String, AnyObject>)["name"] as! String)
         }
     }
-    
-    
 }

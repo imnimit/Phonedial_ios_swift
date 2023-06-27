@@ -9,11 +9,10 @@ import UIKit
 import AVFAudio
 import CallKit
 import CoreBluetooth
+import Lottie
 
 
 class CallingDisplayVc: UIViewController {
-   
-
     @IBOutlet weak var lblNameCallingTime: UILabel!
     @IBOutlet weak var lblName: UILabel!
     @IBOutlet weak var txtKeybordNumber: UITextField!
@@ -48,14 +47,20 @@ class CallingDisplayVc: UIViewController {
     @IBOutlet weak var lblSwipTimeSecondName: UILabel!
     @IBOutlet weak var lblSwipTimeSecondCallType: UILabel!
     @IBOutlet weak var mainVWSwipCall: UIView!
-    @IBOutlet weak var hightMainSwip: NSLayoutConstraint!
     @IBOutlet weak var callFistInfoVW: UIView!
     @IBOutlet weak var callSecondInfoVW: UIView!
+//    @IBOutlet var numberView: [UIView]!
+//    @IBOutlet weak var btnClose: UIButton!
+    @IBOutlet weak var btnTransferCall: UIButton!
+    @IBOutlet weak var lblTransfer: UILabel!
+    @IBOutlet weak var btnRecord: UIButton!
+    @IBOutlet weak var recodingAnimaion: LottieAnimationView!
+    @IBOutlet weak var callAddTimeHigtht: NSLayoutConstraint!
     
     
     var phoneCode = ""
     var isDeviceLock = false
-    
+    var nameDisplay = ""
     
     static let sharedInstance = CallingDisplayVc()
 
@@ -74,6 +79,9 @@ class CallingDisplayVc: UIViewController {
     var number = ""
     var numberStoreinDB = ""
     var isMargeCallDone = false
+    var OnetimeUsed = false
+    
+    
     var isBluetoothPermissionGranted: Bool {
         if #available(iOS 13.1, *) {
             return CBCentralManager.authorization == .allowedAlways
@@ -83,32 +91,52 @@ class CallingDisplayVc: UIViewController {
         // Before iOS 13, Bluetooth permissions are not required
         return true
     }
+    
+    var timerNumberGet = Timer()
+
     var seconds  = 0
     var minutes = 0
     var hours = 0
-    var timer = Timer()
+//    var timer = Timer()
+    var confrenceTimeMange = [[String:Any]]()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         CallInit()
+        setAudioOutputSpeaker(enabled: false)
+        callAddTimeHigtht.constant = 0.0
+        recodingAnimaion.contentMode = .scaleAspectFill
+        recodingAnimaion.loopMode = .loop
+        recodingAnimaion.animationSpeed = 0.5
+        recodingAnimaion.play()
+        recodingAnimaion.isHidden = true
+        btncallinfo.isHidden = true
         
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         UIDevice.current.isProximityMonitoringEnabled = false
-      //  CPPWrapper().hangupCall();
+        NotificationCenter.default.removeObserver(self)
+        CPPWrapper().hangupCall();
     }
-    
-    
-    
+        
     func CallInit() {
-      
+      //  numberView.forEach { $0.layer.cornerRadius = $0.layer.bounds.height/2 }
+        txtKeybordNumber.layer.borderColor = #colorLiteral(red: 0.08344072165, green: 0.08344072165, blue: 0.08344072165, alpha: 0.5)
+        txtKeybordNumber.layer.borderWidth = 1
+        txtKeybordNumber.layer.cornerRadius = 10
+        txtKeybordNumber.layer.shadowColor = #colorLiteral(red: 0.08344072165, green: 0.08344072165, blue: 0.08344072165, alpha: 0.5)
+        txtKeybordNumber.layer.shadowOffset = CGSize(width: 0.0, height : -3.0)
+        txtKeybordNumber.layer.shadowOpacity = 0.5
+        txtKeybordNumber.layer.shadowRadius = 10
+//        btnClose.layer.cornerRadius = 10
         if appDelegate.callComePushNotification  == true {
             imcomeingCallVW.isHidden = true
             if  appDelegate.IncomeingCallInfo.count > 0 {
                 lblDialNumber.text = appDelegate.IncomeingCallInfo["phone"] as? String ?? ""
-                lblName.text = appDelegate.IncomeingCallInfo["name"] as? String ?? "Unkown"
+                lblName.text = appDelegate.IncomeingCallInfo["name"] as? String ?? "Unknown"
             }
             
             if isDeviceLock == false {
@@ -126,10 +154,13 @@ class CallingDisplayVc: UIViewController {
         }
         else {
             if incomingCallId == "" {
+//                let dictValue = UserDefaults.standard.value(forKey: "loginCheckKey") as? [String: Any]
+//                print(dictValue!)
+                
                 lblDialNumber.text = number
                 imcomeingCallVW.isHidden = true
                 if (CPPWrapper().registerStateInfoWrapper()){
-                    CPPWrapper().outgoingCall("sip:\(phoneCode)" + number + "@\(Constant.GlobalConstants.SERVERNAME)" + ":" + "\(Constant.GlobalConstants.PORT)")
+                    CPPWrapper().outgoingCall("sip:\(phoneCode)" + number + "@\(Constant.GlobalConstants.SERVERNAME)" + ":" + "\(Constant.GlobalConstants.PORT)", "0")
                     CPPWrapper().call_listener_wrapper(call_status_listener_swift)
                 }else {
                     self.showToast(message: "Sip Status: NOT REGISTERED")
@@ -142,26 +173,27 @@ class CallingDisplayVc: UIViewController {
                         appDelegate.IncomeingCallInfo = contactList[index!]
                     }
                 }
-                lblName.text  = appDelegate.IncomeingCallInfo["name"] as? String ?? "Unkown"
+                lblName.text = (nameDisplay == "") ? "Unknown" : nameDisplay
                 
                 
                 numberStoreinDB = number
                 allbtnDisalbe()
-            }else{
-                
-                if  appDelegate.IncomeingCallInfo.count > 0 {
-                    lblIncomeingNumber.text = appDelegate.IncomeingCallInfo["phone"] as? String ?? ""
-                    lblNameCallingTime.text = appDelegate.IncomeingCallInfo["name"] as? String ?? "Unkown"
-                    
-                    lblDialNumber.text = appDelegate.IncomeingCallInfo["phone"] as? String ?? ""
-                    lblName.text = appDelegate.IncomeingCallInfo["name"] as? String ?? "Unkown"
-                }
+            }
+            else{
                 
                 let maistr = incomingCallId.components(separatedBy: "<")
                 let newString = maistr[1].replacingOccurrences(of: "sip:", with: "", options: .literal, range: nil)
                 
                 let phonenumber = newString.components(separatedBy: "@")
-
+                
+                if UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber) != nil {
+                    let contactList =  UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber) as! [[String:Any]]
+                    let index = contactList.firstIndex(where: {($0["phone"] as! String).suffix(10) == phonenumber[0].suffix(10)})
+                    if index != nil {
+                        appDelegate.IncomeingCallInfo = contactList[index!]
+                    }
+                }
+                
                 lblDialNumber.text = phonenumber[0]
                 lblIncomeingNumber.text = phonenumber[0]
                 imcomeingCallVW.isHidden = false
@@ -170,49 +202,122 @@ class CallingDisplayVc: UIViewController {
                 numberStoreinDB = lblIncomeingNumber.text ?? ""
                 
                 lblTimer.text = "00:00:00"
-                self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(onTimer), userInfo: nil, repeats: true)
+                appDelegate.timerMinCall = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(onTimer), userInfo: nil, repeats: true)
+                RunLoop.main.add(appDelegate.timerMinCall, forMode: RunLoop.Mode.common)
+
                 lblCalling.text = "Mobile Calling..."
+                
+                lblIncomeingNumber.text = phonenumber[0]
+                lblNameCallingTime.text = (appDelegate.IncomeingCallInfo["name"] as? String ?? "" == "") ? "Unknown" : (appDelegate.IncomeingCallInfo["name"] as? String ?? "")
+
+                lblDialNumber.text = phonenumber[0]
+                lblName.text = (appDelegate.IncomeingCallInfo["name"] as? String ?? "" == "") ? "Unknown" : (appDelegate.IncomeingCallInfo["name"] as? String ?? "")
+                
             }
         }
         
-//        Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [self] timer in
-//            let numberarray = CPPWrapper.callNumber().components(separatedBy: ",")
+        timerNumberGet =  Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [self] timer in
+            let numberarray = CPPWrapper.callNumber().components(separatedBy: ",")
 //            btncallinfo.isHidden = true
-//            if numberarray.count > 1 {
-//                btncallinfo.isHidden = false
-//                if isMargeCallDone == false {
-//                    isMargeCallDone = true
-//                    holdVW.isHidden = true
-//                    print(numberarray.count)
-//                    if numberarray.count < 3 {
-//                       swipeVW.isHidden = false
-//                       swipeVW.alpha = 1.0
-//                    }
-//                    btnMargeCall.alpha = 1.0
-//                    btnMargeCall.isHidden = false
-//                    lblSwipTimeFistCallType.text = "Hold"
-//                    lblSwipTimeSecondCallType.text = "Active"
-//                    hightMainSwip.constant = 150
-//                }
-//                //timer.invalidate()
-//            }else {
-//                if hightMainSwip.constant == 150 {
+            if numberarray.count > 1 {
+                if isMargeCallDone == false {
+                    isMargeCallDone = true
+                    holdVW.isHidden = true
+                    print(numberarray.count)
+                      
+                    swipeVW.isHidden = false
+                    swipeVW.alpha = 1.0
+                    
+                    btnMargeCall.alpha = 1.0
+                    btnMargeCall.isHidden = false
+                    lblSwipTimeFistCallType.text = "Hold"
+//                     lblSwipTimeSecondCallType.text = "Active"
+//                     hightMainSwip.constant = 150
+                    OnetimeUsed = true
+                    callAddTimeHigtht.constant = 75
+//                    NameORNumberFind(numberarray: numberarray)
+                }
+                let confirmNumber = CPPWrapper.confirmCallNumber().components(separatedBy: ",")
+                if numberarray.count == confirmNumber.count {
+                    swipeVW.alpha = 1
+                    btnMargeCall.alpha = 1
+                } else {
+                    swipeVW.alpha = 0.5
+                    btnMargeCall.alpha = 0.5
+                }
+                
+                if confirmNumber.count == Constant.ConfrenceCallConnectUserNumber {
+                    btnAddCall.alpha = 0.5
+                } else {
+                    btnAddCall.alpha = 1.0
+                }
+                
+                //timer.invalidate()
+            }
+            else {
+                btnAddCall.alpha = 1.0
+                if numberarray.count == 1 && OnetimeUsed == true && callAddTimeHigtht.constant == 75 {
+                    callAddTimeHigtht.constant = 0
+   
+                    NameORNumberFind(numberarray: numberarray)
+                    
+                    CPPWrapper().unholdAllCall()
+                    
+                    CPPWrapper().valuePop()
+                    
+                    btnAddCall.isHidden = false
+                    btnMargeCall.isHidden = true
+                    holdVW.isHidden = false
+                    swipeVW.isHidden = true
+                    holdVW.alpha = 1.0
+                }
+                else if callAddTimeHigtht.constant == 150 {
 //                    hightMainSwip.constant = 0
-//                    let newString = number.replacingOccurrences(of: "sip:", with: "", options: .literal, range: nil)
-//                    let phonenumber = newString.components(separatedBy: "@")
-//                    swipeVW.isHidden = true
-//                    holdVW.isHidden = false
-//                    btnMargeCall.isHidden = true
-//                    btnAddCall.isHidden = false
-//                    if phonenumber[0] == (lblSwipTimeFistNumber.text ?? "" ).suffix(10) {
-//                        CPPWrapper().unholdCall(0)
-//                    }
-//                    else if phonenumber[0] == (lblSwipTimeSecondNumber.text ?? "" ).suffix(10) {
-//                        CPPWrapper().unholdCall(1)
-//                    }
-//                }
-//            }
-//        }
+                    callAddTimeHigtht.constant = 0
+                    let newString = number.replacingOccurrences(of: "sip:", with: "", options: .literal, range: nil)
+                    let phonenumber = newString.components(separatedBy: "@")
+                    swipeVW.isHidden = true
+                    holdVW.isHidden = false
+                    btnMargeCall.isHidden = true
+                    btnAddCall.isHidden = false
+                    if phonenumber[0] == (lblSwipTimeFistNumber.text ?? "" ).suffix(10) {
+                        CPPWrapper().unholdCall("0") // Change
+                    }
+                    else if phonenumber[0] == (lblSwipTimeSecondNumber.text ?? "" ).suffix(10) {
+                        CPPWrapper().unholdCall("1") // Change
+                     }
+                    
+//                    NameORNumberFind(numberarray: numberarray)
+                }
+                else if numberarray.count == 1 && OnetimeUsed == true {
+                    btncallinfo.isHidden = true
+
+                    let newString = numberarray[0].replacingOccurrences(of: "sip:", with: "", options: .literal, range: nil)
+                    let phonenumber = newString.components(separatedBy: "@")
+
+                    NameORNumberFind(numberarray: numberarray)
+
+                    
+                    btnAddCall.isHidden = false
+                    btnMargeCall.isHidden = true
+                    holdVW.isHidden = false
+                    swipeVW.isHidden = true
+                    holdVW.alpha = 1.0
+                    
+                    OnetimeUsed = false
+                    
+                    CPPWrapper().valuePop()
+                    
+                    if confrenceTimeMange.count  > 1 {
+                        for i in confrenceTimeMange {
+                            if (i["number"] as? String ?? "") != phonenumber[0] {
+                                callLogStoreCallCut(dic: i)
+                            }
+                        }
+                    }
+                }
+            }
+        }
         
         if isBluetoothPermissionGranted == true {
             manager = CBCentralManager()
@@ -220,15 +325,20 @@ class CallingDisplayVc: UIViewController {
         }
         
         mainVWSwipCall.layer.borderColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        mainVWSwipCall.layer.cornerRadius = 5
+        mainVWSwipCall.layer.cornerRadius = 10
         mainVWSwipCall.layer.borderWidth = 1.5
-        hightMainSwip.constant = 0.0
+//        hightMainSwip.constant = 0.0
+        callAddTimeHigtht.constant = 0.0
         btncallinfo.isHidden = true
         swipeVW.isHidden = true
         callTimerStart()
-//        callEndFind()
-        lblSwipTimeFistName.text = "UnKown"
-        lblSwipTimeFistNumber.text = phoneCode + number
+        callEndFind()
+//        lblSwipTimeFistName.text = lblName.text
+//        lblSwipTimeFistNumber.text = phoneCode + number
+        
+        let dic = ["number": lblDialNumber.text, "time":"","name":lblName.text] as! [String:Any]
+
+        confrenceTimeMange.append(dic)
 
 //        allbtnDisalbe()
 //        callPickupCheck()
@@ -237,45 +347,112 @@ class CallingDisplayVc: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(transferCall), name: Notification.Name("transferCall"), object: nil)
     }
     
+    func NameORNumberFind(numberarray: [String]){
+        var number = ""
+        var name = ""
+        if numberarray.count > 1 {
+            name = "Conference Call"
+            number = ""
+        }else{
+            for i in numberarray {
+                let newString = i.replacingOccurrences(of: "sip:", with: "", options: .literal, range: nil)
+                let phonenumber = newString.components(separatedBy: "@")
+                if number == "" {
+                    number = phonenumber[0]
+                    if UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber) != nil {
+                        let contactList =  UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber) as! [[String:Any]]
+                        let index = contactList.firstIndex(where: {($0["phone"] as! String).suffix(10) == phonenumber[0]})
+                        if index != nil {
+                            name = contactList[index!]["name"] as? String ?? ""
+                        }
+                        else {
+                            name = "Unknown"
+                        }
+                    }
+                }else {
+                    number = number + "&" + phonenumber[0]
+                    if UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber) != nil {
+                        let contactList =  UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber) as! [[String:Any]]
+                        let index = contactList.firstIndex(where: {($0["phone"] as! String).suffix(10) == phonenumber[0]})
+                        if index != nil {
+                            name = name + "&" + (contactList[index!]["name"] as? String ?? "")
+                        }
+                        else {
+                            name = "Unknown"
+                        }
+                    }
+                }
+            }
+        }
+        lblName.text = name
+        lblDialNumber.text = number
+    }
+    
     @objc func transferCall(_ notification: NSNotification){
-        self.dismiss(animated: false,completion: { [self] in
-            sleep(1)
-            if let number = notification.userInfo?["number"] as? String {
-                let num1 = number.replace(string: ")", replacement: "")
-                let num2 = num1.replace(string: "(", replacement: "")
-                let num3 = num2.replace(string: "-", replacement: "")
-                CPPWrapper.call_transfer_replaces(true)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
-                    let transfernumber = "<sip:\(self.phoneCode)" + num3 + "@\(Constant.GlobalConstants.SERVERNAME)" + ":" + "\(Constant.GlobalConstants.PORT)>"
-                    CPPWrapper.call_transfer(true, transfernumber)
+        
+        DispatchQueue.main.async {
+            self.dismiss(animated: false,completion: { [self] in
+//                sleep(1)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: { [self] in
+//                    let dictValue = UserDefaults.standard.value(forKey: "loginCheckKey") as? [String: Any]
+//                    print(dictValue!)
+                    
+                    if let number = notification.userInfo?["number"] as? String {
+                        let num1 = number.replace(string: ")", replacement: "")
+                        let num2 = num1.replace(string: "(", replacement: "")
+                        let num3 = num2.replace(string: "-", replacement: "")
+                        CPPWrapper.call_transfer_replaces(true)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
+                            let transfernumber = "<sip:\(self.phoneCode)" + num3 + "@\(Constant.GlobalConstants.SERVERNAME)" + ":" + "\(Constant.GlobalConstants.PORT)>"
+                            CPPWrapper.call_transfer(true, transfernumber)
+                        })
+                    }
                 })
-            }
-        })
+            })
+        }
     }
         
-    
     @objc func callAdd(_ notification: NSNotification){
-        self.dismiss(animated: false,completion: { [self] in
-            sleep(1)
-            btnAddCall.isHidden = true
-            btnMargeCall.isHidden = false
-            btnMargeCall.alpha = 0.5
-            holdVW.alpha = 0.5
-            isMargeCallDone = false
-            if let number = notification.userInfo?["number"] as? String {
-                let num1 = number.replace(string: ")", replacement: "")
-                let num2 = num1.replace(string: "(", replacement: "")
-                let num3 = num2.replace(string: "-", replacement: "")
-                let numbercall = "sip:\(phoneCode)\(num3)@\(Constant.GlobalConstants.SERVERNAME):\(Constant.GlobalConstants.PORT)"
-                lblSwipTimeSecondName.text = notification.userInfo?["name"] as? String
-                lblSwipTimeSecondNumber.text = phoneCode + num3
-                callFistInfoVW.alpha  = 0.8
-                CPPWrapper.addConfrenceAttendee(numbercall)
-            }
-        })
-        
+        DispatchQueue.main.async {
+            self.dismiss(animated: false,completion: { [self] in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: { [self] in
+                    btnAddCall.isHidden = true
+                    btnMargeCall.isHidden = false
+                    btnMargeCall.alpha = 0.5
+                    holdVW.alpha = 0.5
+                    isMargeCallDone = false
+//                    let dictValue = UserDefaults.standard.value(forKey: "loginCheckKey") as? [String: Any]
+//                    print(dictValue!)
+                    
+                    if let number = notification.userInfo?["number"] as? String {
+                        let num1 = number.replace(string: ")", replacement: "")
+                        let num2 = num1.replace(string: "(", replacement: "")
+                        let num3 = num2.replace(string: "-", replacement: "")
+                        let numbercall = "sip:\(phoneCode)\(num3)@\(Constant.GlobalConstants.SERVERNAME):\(Constant.GlobalConstants.PORT)"
+
+                        lblSwipTimeFistName.text = lblName.text ?? ""
+                        lblSwipTimeFistNumber.text = lblDialNumber.text ?? ""
+                        
+                        lblName.text = notification.userInfo?["name"] as? String ?? ""
+                        lblDialNumber.text = notification.userInfo?["number"] as? String ?? ""
+                        if lblSwipTimeFistNumber.text == "" {
+                            CPPWrapper().unholdCall(lblDialNumber.text!) // Change
+                        }else{
+                            let swipNumber = lblSwipTimeFistNumber.text ?? ""
+                            CPPWrapper().holdCall(swipNumber)
+                        }
+                        let dic = ["number": notification.userInfo?["number"] as? String ?? "", "time":lblTimer.text,"name":notification.userInfo?["name"] as? String ?? ""]
+                        confrenceTimeMange.append(dic as [String : Any])
+                        
+                        CPPWrapper.addConfrenceAttendee(numbercall)
+                    }
+                })
+                
+               
+            })
+        }
     }
-    
+        
     func callEndFind(){
         Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [self] timer in
             if CPPWrapper().checkCallEnd() == true {
@@ -286,18 +463,18 @@ class CallingDisplayVc: UIViewController {
         }
     }
     
-    func allbtnDisalbe(){
+    func allbtnDisalbe() {
         swipeVW.alpha = 0.5
         holdVW.alpha = 0.5
         muteVW.alpha = 0.5
-        spekerVW.alpha = 0.5
+//        spekerVW.alpha = 0.5
         addCallVW.alpha = 0.5
         keyBordVW.alpha = 0.5
         trasfterCallVW.alpha = 0.5
         recodCallVW.alpha = 0.5
     }
     
-    func allbtnEnable(){
+    func allbtnEnable() {
         swipeVW.alpha = 1.0
         holdVW.alpha = 1.0
         muteVW.alpha = 1.0
@@ -309,7 +486,7 @@ class CallingDisplayVc: UIViewController {
     }
     
     func callPickupCheck() {
-        Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [self] timer in
+        Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
             if CPPWrapper().checkCallConnected() == true {
 //                timer.invalidate()
                 print("Call Answer..........")
@@ -318,18 +495,17 @@ class CallingDisplayVc: UIViewController {
     }
     
     func callTimerStart(){
-//        Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [self] timer in
-//            if CPPWrapper().chekCallPickupOrNot() == true {
-//                timer.invalidate()
-//                Timer.scheduledTimer(withTimeInterval: (incomingCallId == "") ? 0 : 0 , repeats: false) { [self] timer in
-//                    allbtnEnable()
-//                    self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(onTimer), userInfo: nil, repeats: true)
-//                    lblCalling.text = "Mobile Calling..."
-//
-//                }
-//                print("Call ring..........")
-//            }
-//        }
+        Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [self] timer in
+            if CPPWrapper().chekCallPickupOrNot() == true {
+                timer.invalidate()
+                Timer.scheduledTimer(withTimeInterval: (incomingCallId == "") ? 0 : 0 , repeats: false) { [self] timer in
+                    allbtnEnable()
+                    appDelegate.timerMinCall = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(onTimer), userInfo: nil, repeats: true)
+                    lblCalling.text = "Mobile Calling..."
+                }
+                print("Call ring..........")
+            }
+        }
     }
         
     func callBluetoothTimeOpen(){
@@ -464,9 +640,6 @@ class CallingDisplayVc: UIViewController {
     //MARK: - Manual Speaker Enagle and Disable
     func setAudioOutputSpeaker(enabled: Bool) {
         let session = AVAudioSession.sharedInstance()
-//        var _: Error?
-//        try? session.setCategory(AVAudioSession.Category.playAndRecord)
-//        try? session.setMode(AVAudioSession.Mode.voiceChat)
         if enabled {
             try? session.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
         } else {
@@ -475,24 +648,39 @@ class CallingDisplayVc: UIViewController {
         try? session.setActive(true)
     }
     
-    
     //MARK: - btn click
     
     @IBAction func btncallEed(_ sender: UIButton) {
-        callLogStore()
+        if btnMargeCall.isHidden == false  {
+            
+            CPPWrapper.passCallHangOut(confrenceTimeMange[confrenceTimeMange.count - 1 ]["number"] as? String ?? "")
+            callLogStoreCallCut(dic: confrenceTimeMange[confrenceTimeMange.count - 1 ])
+            
+            swipeVW.isHidden = true
+            btnMargeCall.isHidden = true
+            
+            let numberarray = CPPWrapper.callNumber().components(separatedBy: ",")
+            NameORNumberFind(numberarray: numberarray)
+            CPPWrapper().holdCall("1")
+            callAddTimeHigtht.constant = 0.0
+            btnAddCall.isHidden = false
+            btncallinfo.isHidden = false
+            return
+        }
         
-//        sleep(1)
         CallKitDelegate.sharedInstance.endCall()
 
-//        DispatchQueue.global(qos: .background).async {
-            
-//        }
-       
-        
+        appDelegate.callComePushNotification = false
+
+        timerNumberGet.invalidate()
+        callLogStore()
+
         UIDevice.current.isProximityMonitoringEnabled = false
-        self.dismiss(animated: true)
+        self.dismiss(animated: true,completion: {
+            CPPWrapper().hangupCall()
+            CPPWrapper.clareAllData()
+        })
     }
-   
     
     @IBAction func btnMute(_ sender: UIButton) {
         if muteVW.alpha != 1.0 {
@@ -516,12 +704,12 @@ class CallingDisplayVc: UIViewController {
         sender.isSelected  = !sender.isSelected
         if IsHold == false {
             IsHold = true
-            sleep(1);
-            CPPWrapper().holdCall(0)
+//            sleep(1);
+            CPPWrapper().holdCall(lblDialNumber.text!) // Change
         }else {
             IsHold = false
-            sleep(1);
-            CPPWrapper().unholdCall(0)
+//            sleep(1);
+            CPPWrapper().unholdCall(lblDialNumber.text!) // Change
         }
     }
     
@@ -559,6 +747,10 @@ class CallingDisplayVc: UIViewController {
             return
         }
         
+        if btnAddCall.alpha != 1.0 {
+            return
+        }
+        
         sender.isSelected  = !sender.isSelected
         
         let nextVC = UIStoryboard(name: "Setting", bundle: nil).instantiateViewController(withIdentifier: "ContactsVc") as! ContactsVc
@@ -571,8 +763,9 @@ class CallingDisplayVc: UIViewController {
         nextVC.modalPresentationStyle = .overFullScreen
         self.present(nextVC, animated: true)
     
-        sleep(3)
+//        sleep(3)
         
+       
 //        CPPWrapper.addConfrenceAttendee("919696969696")
 //        print(CPPWrapper.callNumber())
         
@@ -582,24 +775,33 @@ class CallingDisplayVc: UIViewController {
         if btnMargeCall.alpha != 1.0 {
             return
         }
-        
+     
+
         swipeVW.isHidden = true
         btnMargeCall.isHidden = true
         
-        if IsSwipCall == true {
-            CPPWrapper().unholdCall(1)
-        }else{
-            CPPWrapper().unholdCall(0)
-        }
-        sleep(4)
+        let numberarray = CPPWrapper.callNumber().components(separatedBy: ",")
+        NameORNumberFind(numberarray: numberarray)
+        
+//        lblName.text = (lblName.text ?? "") + " & " +  (lblSwipTimeFistName.text ?? "")
+//        lblDialNumber.text = (lblDialNumber.text ?? "") + " & " +  (lblSwipTimeFistNumber.text ?? "")
+        
+//        if IsSwipCall == true {
+//            CPPWrapper().unholdCall(1)
+//        }else{
+//            CPPWrapper().unholdCall(0)
+//        }
+        CPPWrapper().holdCall("1") // Change
+//        sleep(4)
         CPPWrapper.connectMedia()
-        hightMainSwip.constant = 0.0
-
+//        hightMainSwip.constant = 0.0
+        callAddTimeHigtht.constant = 0.0
         btnAddCall.isHidden = false
-
+        btncallinfo.isHidden = false
     }
     
     @IBAction func btnCallNumPed(_ sender: UIButton) {
+        txtKeybordNumber.text = ""
         if keyBordVW.alpha != 1.0 {
             return
         }
@@ -614,6 +816,9 @@ class CallingDisplayVc: UIViewController {
         }) { _ in
             self.callVW.isUserInteractionEnabled = false
             self.numPedVW.isUserInteractionEnabled = true
+            self.trasfterCallVW.isUserInteractionEnabled = false
+            self.btnTransferCall.alpha = 0.5
+            self.lblTransfer.alpha = 0.5
         }
     }
     
@@ -629,6 +834,9 @@ class CallingDisplayVc: UIViewController {
         }) { _ in
             self.callVW.isUserInteractionEnabled = true
             self.numPedVW.isUserInteractionEnabled = false
+            self.trasfterCallVW.isUserInteractionEnabled = true
+            self.btnTransferCall.alpha = 1
+            self.lblTransfer.alpha = 1
         }
     }
     
@@ -646,15 +854,6 @@ class CallingDisplayVc: UIViewController {
         nextVC.iscallTransfer = true
         nextVC.modalPresentationStyle = .overFullScreen
         self.present(nextVC, animated: true)
-        
-        
-//        CPPWrapper.call_transfer_replaces(true)
-//        //        viewSwipCallShow.isHidden = true
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
-//            let transfernumber = "<sip:91" + "89798797" + "@\(Constant.GlobalConstants.SERVERNAME)" + ":" + "\(Constant.GlobalConstants.PORT)>"
-//            CPPWrapper.call_transfer(true, transfernumber)
-//        })
-        
     }
     
     @IBAction func btnswipCall(_ sender: UIButton) {
@@ -663,24 +862,50 @@ class CallingDisplayVc: UIViewController {
         }
         if IsSwipCall == false {
             IsSwipCall = true
-            sleep(1);
-            CPPWrapper().holdCall(1)
-            sleep(1);
-            CPPWrapper().unholdCall(0)
-            lblSwipTimeFistCallType.text = "Active"
+//            sleep(1);
+//            CPPWrapper().holdCall(1)
+//            sleep(1);
+//            CPPWrapper().unholdCall(0)
+//            lblSwipTimeFistCallType.text = "Active"
             lblSwipTimeSecondCallType.text = "Hold"
-            callFistInfoVW.alpha  = 1.0
+//            callFistInfoVW.alpha  = 1.0
             callSecondInfoVW.alpha  = 0.8
+            
+            let FistName = lblName.text
+            let number = lblDialNumber.text
+            
+            
+            lblName.text = lblSwipTimeFistName.text
+            lblDialNumber.text = lblSwipTimeFistNumber.text
+            
+            lblSwipTimeFistName.text = FistName
+            lblSwipTimeFistNumber.text = number
+            
+            
+            CPPWrapper().holdCall(lblSwipTimeFistNumber.text!) // Change
+
+
         }else {
             IsSwipCall = false
-            sleep(1);
-            CPPWrapper().unholdCall(1)
-            sleep(1);
-            CPPWrapper().holdCall(0)
+//            sleep(1);
+//            CPPWrapper().unholdCall(1)
+//            sleep(1);
+//            CPPWrapper().holdCall(0)
             lblSwipTimeFistCallType.text = "Hold"
-            lblSwipTimeSecondCallType.text = "Active"
-            callFistInfoVW.alpha  = 0.8
+//            lblSwipTimeSecondCallType.text = "Active"
+//            callFistInfoVW.alpha  = 0.8
             callSecondInfoVW.alpha  = 1.0
+         
+            let FistName = lblSwipTimeFistName.text
+            let number = lblSwipTimeFistNumber.text
+            
+            lblSwipTimeFistName.text =  lblName.text
+            lblSwipTimeFistNumber.text = lblDialNumber.text
+           
+            lblName.text = FistName
+            lblDialNumber.text = number
+            
+            CPPWrapper().holdCall(lblDialNumber.text!) // Change
         }
     }
         
@@ -688,38 +913,68 @@ class CallingDisplayVc: UIViewController {
         if recodCallVW.alpha != 1.0 {
             return
         }
+     
         sender.isSelected  = !sender.isSelected
-
-        if IsCallRecod == false {
-            lblRecod.text = "Stop"
-            IsCallRecod = true
-            let currentDateTime = Date()
-
-            // Instantiate a NSDateFormatter
-            let dateFormatter = DateFormatter()
-
-            // Set the dateFormatter format
-            dateFormatter.dateFormat = "yyyyMMdd_hhmmss"
-
-            // Get the date time in NSString
-            let toDateInString = dateFormatter.string(from: currentDateTime)
-
-            print("\(toDateInString)")
-
-            let strFileName = "rec_\(toDateInString)_\(111111).wav"
+        
+//        if UserDefaults.standard.object(forKey: "InAppPurchaseRecordingCheck") == nil {
+//            //plan purchase popup
+//            let nextVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AlertRecordingVC") as! AlertRecordingVC
+//            nextVC.settitle = "Recording Plan Required"
+//            nextVC.descrtion = "To unlock the recording features, you need to subscribe to our recording plan. Do you want to subscribe now?"
+//            nextVC.modalPresentationStyle = .overFullScreen
+//            self.present(nextVC, animated: false)
+//            btnRecord.isSelected = false
+//        } else {
+            //Recording Terms & Condition
+            btnRecord.alpha = 1
+            lblRecod.alpha = 1
+        
+            if UserDefaults.standard.object(forKey: "RecordPopShowOnce") == nil {
+                let nextVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AlertRecordingVC") as! AlertRecordingVC
+                nextVC.settitle = "Call Recording Disclaimer"
+                nextVC.descrtion = "By Tapping the call recording button, you confirm that you have the consent of every one in this call and that you agree and abide by the law governing recording phone conversation. Do you want to continue?"
+                nextVC.modalPresentationStyle = .overFullScreen
+                self.present(nextVC, animated: false)
+                btnRecord.isSelected = false
+                return
+            }
             
-            let urlstring = CPPWrapper.startRecording(151, userfilename: strFileName)
+            if IsCallRecod == false {
+                lblRecod.text = "Stop"
+                recodingAnimaion.isHidden = false
+                IsCallRecod = true
+                let currentDateTime = Date()
 
-            let dicRecodingInfo = ["recoding_name":strFileName,"data":toDateInString,"recoding_path":urlstring]
-            print(dicRecodingInfo)
-            callRecording(dic: dicRecodingInfo)
+                // Instantiate a NSDateFormatter
+                let dateFormatter = DateFormatter()
 
-//            CPPWrapper.startRecording(151, userfilename: strFileName)
-        }else {
-            lblRecod.text = "Record"
-            IsCallRecod = false
-            CPPWrapper.stopRecording(151)
-        }
+                // Set the dateFormatter format
+                dateFormatter.dateFormat = "yyyyMMdd_hhmmss"
+
+                // Get the date time in NSString
+                let toDateInString = dateFormatter.string(from: currentDateTime)
+
+                print("\(toDateInString)")
+
+                let strFileName = "rec_\(toDateInString)_\(111111).wav"
+                
+                let urlstring = CPPWrapper.startRecording(151, userfilename: strFileName)
+
+                let dicRecodingInfo = ["recoding_name":strFileName,"data":toDateInString,"recoding_path":urlstring]
+                print(dicRecodingInfo)
+                callRecording(dic: dicRecodingInfo)
+
+    //            CPPWrapper.startRecording(151, userfilename: strFileName)
+            }else {
+                recodingAnimaion.isHidden = true
+                
+                lblRecod.text = "Record"
+                IsCallRecod = false
+                CPPWrapper.stopRecording(151)
+            }
+//        }
+
+        
     }
     
     @IBAction func btnKeyBord(_ sender: UIButton) {
@@ -729,9 +984,9 @@ class CallingDisplayVc: UIViewController {
     
     @IBAction func btnInfoCall(_ sender: UIButton) {
         let nextVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AllCallNumberVC") as! AllCallNumberVC
+        nextVC.confrenceTimeMange = self.confrenceTimeMange
         self.present(nextVC, animated: true)
     }
-    
 
     //MARK: - incomeingCall
     @IBAction func btnAnsCall(_ sender: UIButton) {
@@ -741,12 +996,20 @@ class CallingDisplayVc: UIViewController {
     
     @IBAction func btnDeclineCall(_ sender: UIButton) {
 //        callEndFind()
+        CallKitDelegate.sharedInstance.endCall()
+
+        timerNumberGet.invalidate()
         callLogStore()
         
-        CallKitDelegate.sharedInstance.endCall()
+        appDelegate.callComePushNotification = false
+
         CPPWrapper().hangupCall();
+        CPPWrapper.clareAllData()
+
         UIDevice.current.isProximityMonitoringEnabled = false
+
         dismiss(animated: true)
+        
     }
     
     
@@ -758,21 +1021,122 @@ class CallingDisplayVc: UIViewController {
         }else{
             if imcomeingCallVW.isHidden == false {
                 callType = "MissCall"
-                lblTimer.text = "00:00:00"
+                lblTimer.text = "00h:00m:00s"
             } else {
                 callType = "Incoming"
             }
         }
-
-        let dicCallLogData =  ["contact_name": "unknown", "charges": "0", "call_length": lblTimer.text, "type": callType, "created_date": todayYourDataFormat(dataformat: "MM-dd-yyyy HH:mm:ss"), "number": "\(numberStoreinDB)"]  as! [String:Any]
-        DBManager().insertLog(dicLog: dicCallLogData)
         
+        for i in confrenceTimeMange {
+            if i["time"] as? String ?? "" == "" {
+                let dicCallLogData =  ["contact_name": (i["name"] as? String ?? ""), "charges": "0", "call_length": lblTimer.text, "type": callType, "created_date": todayYourDataFormat(dataformat: "MM-dd-yyyy HH:mm:ss"), "number": (i["number"] as? String ?? "" ),"type_log":"Call"]  as! [String:Any]
+                print(dicCallLogData)
+                DBManager().insertLog(dicLog: dicCallLogData)
+            }else{
+                let outputFormatter = DateFormatter()
+                outputFormatter.dateFormat = "HH:mm:ss"
+                
+                let FendTime = (i["time"] as? String ?? "" ).replace(string: "h", replacement: "").replace(string: "m", replacement: "").replace(string: "s", replacement: "")
+                let FstartTime = (lblTimer.text ?? "").replace(string: "h", replacement: "").replace(string: "m", replacement: "").replace(string: "s", replacement: "")
+                
+                let startTime = outputFormatter.date(from: FstartTime)// Replace with your start time
+                let endTime = outputFormatter.date(from: FendTime)
+                let calendar = Calendar.current
+
+                // Calculate the difference
+                let components = calendar.dateComponents([.hour, .minute, .second], from:endTime!,to: startTime!)
+
+                // Extract the difference values
+                let hours = components.hour ?? 0
+                let minutes = components.minute ?? 0
+                let seconds = components.second ?? 0
+                
+                let FindCallTime = "\((hours > 9) ? "\(hours)" : "0\(hours)"):\((minutes > 9) ? "\(minutes)" : "0\(minutes)"):\((seconds > 9) ? "\(seconds)" : "0\(seconds)")"
+                
+                let dicCallLogData =  ["contact_name": (i["name"] as? String ?? ""), "charges": "0", "call_length": FindCallTime, "type": callType, "created_date": todayYourDataFormat(dataformat: "MM-dd-yyyy HH:mm:ss"), "number": (i["number"] as? String ?? "" ),"type_log":"Call"]  as! [String:Any]
+                print(dicCallLogData)
+                DBManager().insertLog(dicLog: dicCallLogData)
+            }
+        }
+        
+        NotificationCenter.default.post(name: Notification.Name("callLogUpdata"), object: self, userInfo: nil)
+    }
+        
+    func callLogStoreCallCut(dic: [String:Any]) {
+        var callType = ""
+        if incomingCallId == "" {
+            callType = "Outgoing"
+        }else{
+            if imcomeingCallVW.isHidden == false {
+                callType = "MissCall"
+                lblTimer.text = "00h:00m:00s"
+            } else {
+                callType = "Incoming"
+            }
+        }
+        
+        let index = confrenceTimeMange.firstIndex(where: {$0["number"] as! String == dic["number"] as! String })
+
+        var count = 1
+        for i in confrenceTimeMange {
+            if i["number"] as? String ?? "" == dic["number"] as? String ?? "" && dic["time"] as? String ?? "" == "" {
+                let dicCallLogData =  ["contact_name": (confrenceTimeMange[0]["name"] as? String ?? ""), "charges": "0", "call_length": lblTimer.text, "type": callType, "created_date": todayYourDataFormat(dataformat: "MM-dd-yyyy HH:mm:ss"), "number": (confrenceTimeMange[0]["number"] as? String ?? "" ),"type_log":"Call"]  as! [String:Any]
+                print(dicCallLogData)
+                DBManager().insertLog(dicLog: dicCallLogData)
+                if let index = confrenceTimeMange.firstIndex(where: {$0["name"] as? String  == i["number"] as? String ?? "" }) {
+                    confrenceTimeMange.remove(at: index)
+                }
+                break
+            }else{
+                let outputFormatter = DateFormatter()
+                outputFormatter.dateFormat = "HH:mm:ss"
+                
+                let FendTime = (confrenceTimeMange[index!]["time"] as? String ?? "" ).replace(string: "h", replacement: "").replace(string: "m", replacement: "").replace(string: "s", replacement: "")
+                let FstartTime = (lblTimer.text ?? "").replace(string: "h", replacement: "").replace(string: "m", replacement: "").replace(string: "s", replacement: "")
+                
+                let startTime = outputFormatter.date(from: FstartTime)// Replace with your start time
+                let endTime = outputFormatter.date(from: FendTime)
+                let calendar = Calendar.current
+                
+                var components: DateComponents
+                var hours = Int()
+                var minutes = Int()
+                var seconds = Int()
+                
+                if FendTime == ""{
+                    // Calculate the difference
+ //                      components = calendar.dateComponents([.hour, .minute, .second], from:endTime!,to: startTime!)
+                    hours = 0
+                    minutes = 0
+                    seconds = 0
+                }else{
+                    components = calendar.dateComponents([.hour, .minute, .second], from:endTime!,to: startTime!)
+                    // Extract the difference values
+                    hours = components.hour ?? 0
+                    minutes = components.minute ?? 0
+                    seconds = components.second ?? 0
+                }
+
+                
+                let FindCallTime = "\((hours > 9) ? "\(hours)" : "0\(hours)"):\((minutes > 9) ? "\(minutes)" : "0\(minutes)"):\((seconds > 9) ? "\(seconds)" : "0\(seconds)")"
+                
+                let dicCallLogData =  ["contact_name": (confrenceTimeMange[index!]["name"] as? String ?? ""), "charges": "0", "call_length": FindCallTime, "type": callType, "created_date": todayYourDataFormat(dataformat: "MM-dd-yyyy HH:mm:ss"), "number": (confrenceTimeMange[index!]["number"] as? String ?? "" ),"type_log":"Call"]  as! [String:Any]
+                print(dicCallLogData)
+                DBManager().insertLog(dicLog: dicCallLogData)
+                
+                if let index = confrenceTimeMange.firstIndex(where: {$0["name"] as? String  == i["number"] as? String ?? "" }) {
+                    confrenceTimeMange.remove(at: index)
+                }
+                break
+            }
+        }
+        confrenceTimeMange.removeAll(where: { $0["number"] as? String ?? "" == dic["number"] as? String })
+
         NotificationCenter.default.post(name: Notification.Name("callLogUpdata"), object: self, userInfo: nil)
     }
     
     func callRecording(dic:[String:Any]){
-        
-        let dicCallRecordingData =  ["date":dic["data"] as? String, "number":"\(numberStoreinDB)", "name": "unknown" ,"audio_name": dic["recoding_name"] as? String, "audioPath": dic["recoding_path"] as? String]  as! [String:Any]
+        let dicCallRecordingData =  ["date":dic["data"] as? String, "number":"\(numberStoreinDB)", "name": "Unknown" ,"audio_name": dic["recoding_name"] as? String, "audioPath": dic["recoding_path"] as? String]  as! [String:Any]
         DBManager().insertrecording(dicrecording: dicCallRecordingData)
     }
 }
@@ -805,11 +1169,8 @@ extension CallingDisplayVc {
     @objc func onTimer() {
         lblTimer.isHidden = false
         seconds += 1
-//        if hours > 0 {
-            lblTimer.text = String(format: "%02d:%02d:%02d", hours, minutes, seconds)
-//        }else{
-//            lblTimer.text = String(format: "%02d:%02d",minutes, seconds)
-//        }
+        lblTimer.text = String(format: "%02d:%02d:%02d", hours, minutes, seconds)
+        
         if seconds >= 59 {
             seconds = 0
             minutes += 1
@@ -821,6 +1182,6 @@ extension CallingDisplayVc {
     }
     
     func timerStop(){
-        timer.invalidate()
+        appDelegate.timerMinCall.invalidate()
     }
 }

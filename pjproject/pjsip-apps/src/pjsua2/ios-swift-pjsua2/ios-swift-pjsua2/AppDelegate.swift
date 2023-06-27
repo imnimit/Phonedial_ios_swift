@@ -55,6 +55,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     let chatService = ChatService()
     var loginSocialMediaUsed = ""
     var OneTimeCreateLib = false
+    var timerMinCall = Timer()
+    var callKitTimeShowNumber = ""
+    var recentCallLogToDirectCall = ""
 
 
     static var instance: AppDelegate {
@@ -122,6 +125,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
 //
 //    }
     
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+      /*  if let startAudioCallIntent = userActivity.interaction?.intent as? INStartAudioCallIntent {
+            if let person = startAudioCallIntent.contacts?.first,
+               let phoneNumber = person.personHandle?.value {
+                let d: [String: Any] = [
+                    "name": phoneNumber,
+                    "number": phoneNumber
+                ]
+                recentCallLogToDirectCall = d["number"] as? String ?? ""
+                
+                if CPPWrapper().registerStateInfoWrapper() != false && recentCallLogToDirectCall != ""{
+                   CPPWrapper.clareAllData()
+                   
+                   var name = "Unknown"
+                   if UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber) != nil {
+                       let contactList =  UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber) as! [[String:Any]]
+                       let index = contactList.firstIndex(where: {($0["phone"] as! String).suffix(10) == recentCallLogToDirectCall.suffix(10)})
+                       if index != nil {
+                           appDelegate.IncomeingCallInfo = contactList[index!]
+                           name = appDelegate.IncomeingCallInfo["name"] as? String ?? "Unknown"
+                       }
+                   }
+                   
+                   let nextVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CallingDisplayVc") as! CallingDisplayVc
+                   nextVC.number = recentCallLogToDirectCall
+                   nextVC.phoneCode =  ""
+                   nextVC.nameDisplay = name
+                   nextVC.modalPresentationStyle = .overFullScreen //or .overFullScreen for transparency
+                   appDelegate.window?.rootViewController?.present(nextVC, animated: true)
+                   recentCallLogToDirectCall = ""
+               }
+            }
+        }
+       */
+        return true
+    }
     
     
     func application(_ app: UIApplication,
@@ -356,10 +395,8 @@ extension AppDelegate {
         let isONN : Bool = APIsMain.apiCalling.isConnectedToNetwork()
         if(isONN == false) {
             return
-        }
-
-        
-        if UserDefaults.standard.object(forKey: "isAlreadyMember") != nil {
+        }        
+        /*if UserDefaults.standard.object(forKey: "isAlreadyMember") != nil {
             let dictValue = UserDefaults.standard.value(forKey: "isAlreadyMember") as? [String: Any]
             print(dictValue)
             if (CPPWrapper().registerStateInfoWrapper() == false) {
@@ -367,7 +404,7 @@ extension AppDelegate {
                 
                 if OneTimeCreateLib == false {
                     do {
-                        CPPWrapper().createLibWrapper()
+                        CPPWrapper().createLibWrapper(Constant.GlobalConstants.PORT, "1")
                     } catch {
                         return
                     }
@@ -392,12 +429,55 @@ extension AppDelegate {
                     }
                 })
             }
+        }*/
+        
+        if UserDefaults.standard.object(forKey: "isAlreadyMember") != nil {
+            if (CPPWrapper().registerStateInfoWrapper() == false) {
+                HelperClassAnimaion.showProgressHud()
+                
+                if OneTimeCreateLib == false {
+                    do {
+                        CPPWrapper().createLibWrapper(Constant.GlobalConstants.PORT, "1")
+                    } catch {
+                        return
+                    }
+                }
+                
+                OneTimeCreateLib = true
+                
+                CPPWrapper().incoming_call_wrapper(incoming_call_swift)
+                //                CPPWrapper().update_video_wrapper(update_video_swift)
+                
+                //Register to the user
+                CPPWrapper().createAccountWrapper(
+                    User.sharedInstance.getContactNumber(),
+                    User.sharedInstance.getsipPassWord(),
+                    Constant.GlobalConstants.SERVERNAME,
+                    Constant.GlobalConstants.PORT)
+                HelperClassAnimaion.hideProgressHud()
+                
+                if recentCallLogToDirectCall != "" {
+                    CPPWrapper.clareAllData()
+                    
+                    var name = "Unknown"
+                    if UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber) != nil {
+                        let contactList =  UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber) as! [[String:Any]]
+                        let index = contactList.firstIndex(where: {($0["phone"] as! String).suffix(10) == recentCallLogToDirectCall.suffix(10)})
+                        if index != nil {
+                            appDelegate.IncomeingCallInfo = contactList[index!]
+                            name = appDelegate.IncomeingCallInfo["name"] as? String ?? "Unknown"
+                        }
+                    }
+                    let nextVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CallingDisplayVc") as! CallingDisplayVc
+                    nextVC.number = recentCallLogToDirectCall
+                    nextVC.phoneCode =  ""
+                    nextVC.nameDisplay = name
+                    nextVC.modalPresentationStyle = .overFullScreen //or .overFullScreen for transparency
+                    appDelegate.window?.rootViewController?.present(nextVC, animated: true)
+                    recentCallLogToDirectCall = ""
+                }
+            }
         }
-        
-            
-        
-        
-        
     }
 }
 extension AppDelegate {
@@ -570,7 +650,7 @@ extension AppDelegate: PKPushRegistryDelegate {
 
     func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType) {
         
-        print("\(#function) incoming voip notfication: \(payload.dictionaryPayload)")
+//        print("\(#function) incoming voip notfication: \(payload.dictionaryPayload)")
         let callData = payload.dictionaryPayload
 
         let aps = callData["aps"] as! [String:Any]

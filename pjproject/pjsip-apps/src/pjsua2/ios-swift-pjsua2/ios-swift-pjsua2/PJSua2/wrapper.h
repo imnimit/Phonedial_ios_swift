@@ -29,7 +29,7 @@
 /**
  Create Lib with EpConfig
  */
--(void) createLibWrapper;
+-(void) createLibWrapper: (NSString*) portID :(NSString*) transportTag;
 
 /**
  Delete lib
@@ -67,7 +67,7 @@
  Listener (When we have incoming call, this function pointer will notify swift.)
  (Runs swift code from C++)
  */
--(void) incoming_call_wrapper: (void(*)())function;
+-(void) incoming_call_wrapper: (void(*)(int))function;
 
 /**
  Listener (When we have changes on the call state, this function pointer will notify swift.)
@@ -88,13 +88,16 @@
 /**
  Hold the call
  */
--(void) holdCallWrapper:(int)callid;
+-(void) holdCallWrapper:(NSString*)callid;
 
 /**
  unhold the call
  */
--(void) unholdCallWrapper:(int)callid;
+-(void) unholdCallWrapper:(NSString*)callid;
 
+-(void) unholdAllCall;
+
+-(void) valuePop;
 
 -(void) callmute;
 
@@ -102,12 +105,16 @@
 
 +(void) connectMedia;
 
-+(void) showCodecs;
++(NSMutableArray*) showCodecs;
+
++(void)showVideoCodecs;
+
++(NSMutableArray*)showVidoeCodecs;
 
 /**
  Make outgoing call (string dest_uri) -> e.g. makeCall(sip:<SIP_USERNAME@SIP_IP:SIP_PORT>)
  */
--(void) outgoingCallWrapper :(NSString*) dest_uri;
+-(void) outgoingCallWrapper:(NSString*) dest_uriNS :(NSString*) isVideo;
 
 +(NSString *)startRecording:(int)callid userfilename:(NSString *)filename;
 
@@ -127,12 +134,31 @@
 +(void)pjsuaDataClare;
 
 +(NSString *)callNumber;
++(NSString *)ConfirmCallNumber;
++(NSString *)ConfrimeNumber;
 
-+(void)passCallHangOut:(int)number;
++(void)passCallHangOut:(NSString*)number;
 
 +(void)clareAllData;
 -(bool) checkCallConnected;
 -(bool) chekCallPickupOrNot;
 -(bool) checkCallEnd;
++(void)previewHide;
++(void)previewShow;
+
+void codecList();
++(void)setCodecPriorityByName:(NSString*)codecName :(int)num;
+
+// Camera Implimation
++(void)swapCamera :(NSString*) cameraDiration;
+-(void) update_video_wrapper: (void(*)(void *))function;
+-(void) preview_updata_listener_wrapper: (void(*)(void *))function;
+
+// Contact Block
++(void)bolockContact :(NSString*) contact;
++(void)unBolockContact :(NSString*) contact;
++(void)loadAllBlockContact;
+
+
 
 @end

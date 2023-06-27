@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "/Volumes/Secondary/Projects/Phonedial_ios_swift/pjproject/pjsip-apps/src/pjsua/pjsua_app_common.h"
+#include "/Users/magictech/Desktop/Phonedial_ios_swift/pjproject/pjsip-apps/src/pjsua/pjsua_app_common.h"
 
 #define THIS_FILE	"pjsua_app_cli.c"
 
@@ -2338,7 +2338,7 @@ static pj_status_t cmd_vid_codec_list()
 //		vfd->size.w, vfd->size.h));
 //	}
 //    }
-//    return PJ_SUCCESS;
+    return PJ_SUCCESS;
 }
 
 static pj_status_t cmd_set_vid_codec_prio(pj_cli_cmd_val *cval)
@@ -2370,7 +2370,7 @@ static pj_status_t cmd_set_vid_codec_fps(pj_cli_cmd_val *cval)
 //    if (status != PJ_SUCCESS)
 //	PJ_PERROR(1,(THIS_FILE, status, "Set codec framerate error"));
 //
-//    return PJ_SUCCESS;
+    return PJ_SUCCESS;
 }
 
 static pj_status_t cmd_set_vid_codec_bitrate(pj_cli_cmd_val *cval)
@@ -2397,7 +2397,7 @@ static pj_status_t cmd_set_vid_codec_size(pj_cli_cmd_val *cval)
 {
 //    pjmedia_vid_codec_param cp;
 //    int M, N;
-//    pj_status_t status;
+    pj_status_t status;
 //
 //    M = (int)pj_strtol(&cval->argv[2]);
 //    N = (int)pj_strtol(&cval->argv[3]);
@@ -2410,7 +2410,7 @@ static pj_status_t cmd_set_vid_codec_size(pj_cli_cmd_val *cval)
 //    if (status != PJ_SUCCESS)
 //	PJ_PERROR(1,(THIS_FILE, status, "Set codec size error"));
 //
-//    return status;
+    return status;
 }
 
 static pj_status_t cmd_vid_win_list()

@@ -20,13 +20,14 @@
 #include <string>
 #include <pjsua2.hpp>
 #include <dispatch/dispatch.h>
-
+#include <set>
+#include <fstream>
+#include <sstream>
 /**
  Create a class to be able to use it from objective-c++
  */
 
-
-class PJSua2{
+class PJSua2 {
 public:
     
     
@@ -35,7 +36,7 @@ public:
     /**
      Create Lib with EpConfig
      */
-    void createLib();
+    void createLib(int portID, int transportTag);
     
     /**
      Delete lib
@@ -74,7 +75,7 @@ public:
     /**
      Listener (When we have incoming call, this function pointer will notify swift.)
      */
-    void incoming_call(void(*function)());
+    void incoming_call(void(*function)(int));
 
     /**
      Listener (When we have changes on the call state, this function pointer will notify swift.)
@@ -105,7 +106,7 @@ public:
     /**
      Make outgoing call (string dest_uri) -> e.g. makeCall(sip:<SIP_USERNAME@SIP_IP:SIP_PORT>)
      */
-    void outgoingCall(std::string dest_uri);
+    void outgoingCall(std::string dest_uri,std::string isVideo);
     
     void callRecodingstart();
     
@@ -120,15 +121,69 @@ public:
     void clareData();
     
     std::string allnumberGet();
-    void pertiqulerhangupCall(int passid);
+    std::string allnumberGetConfiremed();
+    std::string allnumberConfirmdGet();
+    void pertiqulerhangupCall(std::string passid);
     bool checkCallPickup();
     bool callPickup();
     bool callEnd();
     void callTrasfer(std::string dest_uri);
-    void pjsua_vid_codec_set_param();
+   // void pjsua_vid_codec_set_param();
     void VideoMediaTrasfter();
     void StartPreview(int device_id, void* hwnd, int width, int height, int fps);
     void onTimer(const pj::OnTimerParam &prm);
-    void videoConference();
+    void videoConference(bool OneConnect);
+    void videoCallmargeWork(int id);
+    
+    void unholdAllCall();
+    void sigleValuePop();
+    
+    
+    
+    // Vidoe Call Funcation
+    void previewStop();
+    void CameraDirationChange(int type);
+    void update_video(void (*funcpntr)(void *));
+    void videoview_update_video(void (*funcpntr)(void *));
+    
+    // Block OR unBlock
+    void callBlock(const std::string& contact);
+    void uncallBlock(const std::string& contact);
+    void lodeBolckNumber();
+    
+    
+    void previewHide();
+    void previewShow();
+    
+    // Test Perpous
+    
+    void acc_listener(void (*function)(bool));
+
+    
 };
 
+class BlockedContactsManager {
+public:
+    static BlockedContactsManager& getInstance() {
+        static BlockedContactsManager instance;
+        return instance;
+    }
+    
+    void blockContact(const std::string& contact);
+    
+    void unblockContact(const std::string& contact);
+    
+    bool isContactBlocked(const std::string& contact);
+    
+    void saveBlockedContacts();
+    
+    void loadBlockedContacts();
+    
+    std::set<std::string> blockedContacts;
+
+    BlockedContactsManager() {
+//        loadBlockedContacts();
+    }
+    BlockedContactsManager(const BlockedContactsManager&);
+    BlockedContactsManager& operator=(const BlockedContactsManager&);
+};

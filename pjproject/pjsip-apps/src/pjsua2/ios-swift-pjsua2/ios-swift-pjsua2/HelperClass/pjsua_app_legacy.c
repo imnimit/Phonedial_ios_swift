@@ -20,7 +20,7 @@
 
 #include <pjsua-lib/pjsua.h>
 
-#include "/Volumes/Secondary/Projects/Phonedial_ios_swift/pjproject/pjsip-apps/src/pjsua/pjsua_app_common.h"
+#include "/Users/magictech/Desktop/Phonedial_ios_swift/pjproject/pjsip-apps/src/pjsua/pjsua_app_common.h"
 
 #define THIS_FILE	"pjsua_app_legacy.c"
 

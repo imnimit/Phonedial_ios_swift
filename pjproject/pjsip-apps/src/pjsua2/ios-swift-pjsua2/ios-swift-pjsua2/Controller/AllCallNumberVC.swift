@@ -11,10 +11,13 @@ class AllCallNumberVC: UIViewController {
 
     @IBOutlet weak var tbl: UITableView!
     var numberarray = [String]()
+    var name = [String]()
+    var confrenceTimeMange = [[String:Any]]()
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        numberarray = CPPWrapper.callNumber().components(separatedBy: ",")
-        
+        numberarray = CPPWrapper.confirmCallNumber().components(separatedBy: ",")
         // Do any additional setup after loading the view.
     }
 
@@ -30,19 +33,29 @@ extension AllCallNumberVC : UITableViewDataSource,UITableViewDelegate,UIScrollVi
         cell.btnClick.tag = indexPath.row
         cell.btnClick.addTarget(self, action: #selector(self.siwpCall(_:)), for: .touchUpInside)
         let newString = numberarray[indexPath.row].replacingOccurrences(of: "sip:", with: "", options: .literal, range: nil)
+        cell.imgBack.layer.cornerRadius = 10
+        cell.imgBack.layer.borderColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        cell.imgBack.layer.borderWidth = 1
         let phonenumber = newString.components(separatedBy: "@")
         cell.lblNumber.text = phonenumber[0]
+        cell.lblName.text = "Unknown"
+        let index = confrenceTimeMange.firstIndex(where: {($0["number"] as! String).suffix(10) == (cell.lblNumber.text ?? "").suffix(10)})
+        if index != nil {
+            cell.lblName.text = confrenceTimeMange[index!]["name"] as? String ?? "Unknown"
+        }
         return cell
     }
     
     @objc func siwpCall(_ sender: UIButton) {
-        CPPWrapper.passCallHangOut(Int32(sender.tag))
+        let newString = numberarray[sender.tag].replacingOccurrences(of: "sip:", with: "", options: .literal, range: nil)
+        let phonenumber = newString.components(separatedBy: "@")
+        CPPWrapper.passCallHangOut(phonenumber[0])
         numberarray = CPPWrapper.callNumber().components(separatedBy: ",")
+      //  CPPWrapper().valuePop()
         if numberarray.count == 1 {
             self.dismiss(animated: false)
         }else{
             tbl.reloadData()
         }
-        
     }
 }

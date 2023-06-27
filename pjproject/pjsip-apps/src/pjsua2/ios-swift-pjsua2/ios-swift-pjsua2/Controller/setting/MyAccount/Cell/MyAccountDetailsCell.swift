@@ -12,6 +12,7 @@ class MyAccountDetailsCell: UITableViewCell {
     @IBOutlet weak var lblDiscription: UILabel!
     @IBOutlet weak var imge: UIImageView!
     @IBOutlet weak var imageMainVW: UIView!
+    @IBOutlet weak var btnNext: UIButton!
     
 
 }

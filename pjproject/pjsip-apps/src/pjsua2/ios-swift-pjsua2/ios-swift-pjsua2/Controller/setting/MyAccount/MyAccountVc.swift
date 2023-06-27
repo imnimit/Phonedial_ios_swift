@@ -66,6 +66,10 @@ extension MyAccountVc:  UITableViewDataSource,UITableViewDelegate {
         cell.lblDiscription.text = lblMyaccount[indexPath.row]["Disciption"] as? String
         cell.imge.image = lblMyaccount[indexPath.row]["image"] as? UIImage
         cell.imageMainVW.layer.cornerRadius = 5
+        cell.btnNext.isHidden = false 
+        if indexPath.row == 2 {
+            cell.btnNext.isHidden = true
+        }
         return cell
     }
     

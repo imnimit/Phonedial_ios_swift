@@ -40,12 +40,12 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         //Create Lib
-        CPPWrapper().createLibWrapper()
+//        CPPWrapper().createLibWrapper()
        
         
         //Listen incoming call via function pointer
         CPPWrapper().incoming_call_wrapper(incoming_call_swift)
-     
+
         //Done button to the keyboard
         sipIpTField.addDoneButtonOnKeyboard()
         sipPortTField.addDoneButtonOnKeyboard()

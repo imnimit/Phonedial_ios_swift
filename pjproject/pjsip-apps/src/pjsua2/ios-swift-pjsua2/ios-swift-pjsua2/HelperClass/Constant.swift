@@ -104,4 +104,7 @@ class Constant: NSObject {
         static let TenDollar = "com.phonedial.io.ten"
         static let FifteenDollar = "com.phonedial.io.fifteen"
     }
+    
+    static let ConfrenceCallConnectUserNumber = 10
+
 }

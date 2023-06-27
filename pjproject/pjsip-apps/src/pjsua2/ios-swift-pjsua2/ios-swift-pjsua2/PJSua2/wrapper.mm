@@ -31,9 +31,8 @@
 #include <pj/types.h>
 #include <pj/compat/string.h>
 
-
-#include "/Volumes/Secondary/Projects/Phonedial_ios_swift/pjproject/pjsip-apps/src/pjsua/pjsua_app.h"
-#include "/Volumes/Secondary/Projects/Phonedial_ios_swift/pjproject/pjsip-apps/src/pjsua/pjsua_app_config.h"
+#include "/Users/magictech/Desktop/VoizCall-iOS/pjproject/pjsip-apps/src/pjsua/pjsua_app.h"
+#include "/Users/magictech/Desktop/VoizCall-iOS/pjproject/pjsip-apps/src/pjsua/pjsua_app_config.h"
 
 
 #define THIS_FILE    "ipjsuaAppDelegate.m"
@@ -59,10 +58,13 @@ PJSua2 pjsua2;
 /**
  Create Lib with EpConfig
  */
--(void) createLibWrapper
+-(void) createLibWrapper : (NSString*) portID :(NSString*) transportTag
 {
-    
-    return pjsua2.createLib();
+    NSString *a = portID;
+    NSInteger b = [a integerValue];
+    NSString *c = transportTag;
+    NSInteger d = [c integerValue];
+    return pjsua2.createLib(b, d);
 };
 
 /**
@@ -120,7 +122,7 @@ PJSua2 pjsua2;
 /**
  Listener (When we have incoming call, this function pointer will notify swift.)
  */
-- (void)incoming_call_wrapper: (void(*)())function {
+- (void)incoming_call_wrapper: (void(*)(int))function {
     pjsua2.incoming_call(function);
 }
 
@@ -153,43 +155,56 @@ PJSua2 pjsua2;
 /**
  Hold the call
  */
-- (void) holdCallWrapper:(int) idCall {
-    pjsua2.holdCall(idCall);
+- (void) holdCallWrapper:(NSString*) idCall {
     
-//    if (current_call != PJSUA_INVALID_ID) {
-//        pjsua_call_set_hold(current_call, NULL);
-//
-//    } else {
-//        PJ_LOG(3,(THIS_FILE, "No current call"));
-//    }
+    NSString *c = idCall;
+    NSInteger d = [c integerValue];
+    
+    pjsua2.holdCall(d);
+    
+    //    if (current_call != PJSUA_INVALID_ID) {
+    //        pjsua_call_set_hold(current_call, NULL);
+    //
+    //    } else {
+    //        PJ_LOG(3,(THIS_FILE, "No current call"));
+    //    }
 }
 
 /**
  unhold the call
  */
-- (void) unholdCallWrapper:(int) idCall {
-    pjsua2.unholdCall(idCall);
+- (void) unholdCallWrapper:(NSString*) idCall {
     
-//    if (current_call != PJSUA_INVALID_ID) {
-//        /*
-//         * re-INVITE
-//         */
-//        call_opt.flag |= PJSUA_CALL_UNHOLD;
-//        pjsua_call_reinvite2(current_call, &call_opt, NULL);
-//
-//    } else {
-//        PJ_LOG(3,(THIS_FILE, "No current call"));
-//    }
+    NSString *c = idCall;
+    NSInteger d = [c integerValue];
+    pjsua2.unholdCall(d);
+    
+    //    if (current_call != PJSUA_INVALID_ID) {
+    //        /*
+    //         * re-INVITE
+    //         */
+    //        call_opt.flag |= PJSUA_CALL_UNHOLD;
+    //        pjsua_call_reinvite2(current_call, &call_opt, NULL);
+    //
+    //    } else {
+    //        PJ_LOG(3,(THIS_FILE, "No current call"));
+    //    }
 }
-
+-(void) unholdAllCall{
+    pjsua2.unholdAllCall();
+}
+-(void) valuePop{
+    pjsua2.sigleValuePop();
+}
 
 /**
  Make outgoing call (string dest_uri) -> e.g. makeCall(sip:<SIP_USERNAME@SIP_IP:SIP_PORT>)
  */
--(void) outgoingCallWrapper :(NSString*) dest_uriNS
+-(void) outgoingCallWrapper :(NSString*) dest_uriNS :(NSString*) isVideo
 {
     std::string dest_uri = std::string([[dest_uriNS componentsSeparatedByString:@"*"][0] UTF8String]);
-    pjsua2.outgoingCall(dest_uri);
+    std::string callType  =  std::string([isVideo UTF8String]);
+    pjsua2.outgoingCall(dest_uri, callType);  // outgoingCall(dest_uri,isVideo);
     [UIDevice currentDevice].proximityMonitoringEnabled = YES;
     
 }
@@ -205,6 +220,15 @@ PJSua2 pjsua2;
 
 +(NSString *)callNumber {
     NSString *strPath = [NSString stringWithFormat:@"%s", pjsua2.allnumberGet().c_str()];
+    return  strPath;
+}
++(NSString *)ConfrimeNumber {
+    NSString *strPath = [NSString stringWithFormat:@"%s", pjsua2.allnumberGetConfiremed().c_str()];
+    return  strPath;
+    
+}
++(NSString *)ConfirmCallNumber {
+    NSString *strPath = [NSString stringWithFormat:@"%s", pjsua2.allnumberConfirmdGet().c_str()];
     return  strPath;
 }
 +(NSString *)startRecording:(int)callid userfilename:(NSString
@@ -311,8 +335,11 @@ PJSua2 pjsua2;
     
     //  }
 }
-+(void)passCallHangOut:(int)number {
-    pjsua2.pertiqulerhangupCall(number);
++(void)passCallHangOut:(NSString*)number {
+//    NSString *c = number;
+//    NSInteger d = [c integerValue];
+    std::string idnumber = std::string([[number componentsSeparatedByString:@"*"][0] UTF8String]);
+    pjsua2.pertiqulerhangupCall(idnumber);
 }
 
 +(void)clareAllData {
@@ -325,40 +352,40 @@ PJSua2 pjsua2;
 {
     
     pjsua2.callTrasfer(call_transferNumber);
-//
-//    current_call = 0;
-//    if (current_call == -1) {
-//        PJ_LOG(3,(THIS_FILE, "No current call"));
-//    } else {
-//        int call = current_call;
-//        pjsip_generic_string_hdr refer_sub;
-//        pj_str_t STR_REFER_SUB = { "Refer-Sub", 9 };
-//        pj_str_t STR_FALSE = { "false", 5 };
-//        pjsua_call_info ci;
-//        pjsua_msg_data msg_data_;
-//
-//        pjsua_call_get_info(current_call, &ci);
-//        printf("Transferring current call [%d] %.*s\n", current_call,
-//               (int)ci.remote_info.slen, ci.remote_info.ptr);
-//
-//        pj_str_t transferNumber = (pj_str(strdup(call_transferNumber)));
-//
-//        /* Check if call is still there. */
-//
-//        if (call != current_call) {
-//            puts("Call has been disconnected");
-//            return;
-//        }
-//
-//        pjsua_msg_data_init(&msg_data_);
-//        if (no_refersub) {
-//            /* Add Refer-Sub: false in outgoing REFER request */
-//            pjsip_generic_string_hdr_init2(&refer_sub, &STR_REFER_SUB,
-//                                           &STR_FALSE);
-//            pj_list_push_back(&msg_data_.hdr_list, &refer_sub);
-//        }
-//        pjsua_call_xfer( current_call, &transferNumber, &msg_data_);
-//    }
+    //
+    //    current_call = 0;
+    //    if (current_call == -1) {
+    //        PJ_LOG(3,(THIS_FILE, "No current call"));
+    //    } else {
+    //        int call = current_call;
+    //        pjsip_generic_string_hdr refer_sub;
+    //        pj_str_t STR_REFER_SUB = { "Refer-Sub", 9 };
+    //        pj_str_t STR_FALSE = { "false", 5 };
+    //        pjsua_call_info ci;
+    //        pjsua_msg_data msg_data_;
+    //
+    //        pjsua_call_get_info(current_call, &ci);
+    //        printf("Transferring current call [%d] %.*s\n", current_call,
+    //               (int)ci.remote_info.slen, ci.remote_info.ptr);
+    //
+    //        pj_str_t transferNumber = (pj_str(strdup(call_transferNumber)));
+    //
+    //        /* Check if call is still there. */
+    //
+    //        if (call != current_call) {
+    //            puts("Call has been disconnected");
+    //            return;
+    //        }
+    //
+    //        pjsua_msg_data_init(&msg_data_);
+    //        if (no_refersub) {
+    //            /* Add Refer-Sub: false in outgoing REFER request */
+    //            pjsip_generic_string_hdr_init2(&refer_sub, &STR_REFER_SUB,
+    //                                           &STR_FALSE);
+    //            pj_list_push_back(&msg_data_.hdr_list, &refer_sub);
+    //        }
+    //        pjsua_call_xfer( current_call, &transferNumber, &msg_data_);
+    //    }
 }
 
 
@@ -456,18 +483,68 @@ PJSua2 pjsua2;
     sleep(2);
     char *destUri = (char*)[ contactNum  UTF8String];
     pjsua2.outgoingCall1(destUri);
-    
-//    pj_status_t status;
-//    pj_str_t uri = pj_str(destUri);
-//    status = pjsua_call_make_call(current_acc, &uri, 0, NULL, NULL, NULL);
-//    pjsua_call_setting_default(&call_opt);
-    
-    //    printf(" making call Status is %d",status);
-    
+  
     NSLog(@"make call executed");
 }
 
-+(void)showCodecs{
++(NSMutableArray*)showCodecs{
+    pjsua_codec_info c[32];
+    unsigned i, count = PJ_ARRAY_SIZE(c);
+    
+    
+    printf("List of audio codecs:\n");
+    pjsua_enum_codecs(c, &count);
+    NSMutableArray *codecLists = [NSMutableArray array];
+    for (i=0; i<count; ++i) {
+        printf("  %d\t%.*s\n", c[i].priority, (int)c[i].codec_id.slen,
+               c[i].codec_id.ptr);
+        NSString *codecPriority = [NSString stringWithFormat:@"%d",c[i].priority];
+        NSString *codecPtr = [NSString stringWithFormat:@"%s",c[i].codec_id.ptr];
+        
+        NSArray *stringArray = [codecPtr componentsSeparatedByString: @"/"];
+        codecPtr = [NSString stringWithFormat:@"%@/%@",stringArray[0],stringArray[1]];
+        
+        NSDictionary *dict = @{ @"priority" : codecPriority,  @"codec" : codecPtr, @"isEnable" : @1 };
+        [codecLists addObject:dict];
+    }
+//    pjsua_vid_enum_codecs(c, &count);
+//    for (i=0; i<count; ++i) {
+//        printf("  %d\t%.*s%s%.*s\n", c[i].priority,
+//               (int)c[i].codec_id.slen,
+//               c[i].codec_id.ptr,
+//               c[i].desc.slen? " - ":"",
+//               (int)c[i].desc.slen,
+//               c[i].desc.ptr);
+//    }
+    return codecLists;
+    
+}
++(NSMutableArray*)showVidoeCodecs{
+    pjsua_codec_info c[32];
+    unsigned i, count = PJ_ARRAY_SIZE(c);
+    
+    
+    printf("List of video codecs:\n");
+    pjsua_vid_enum_codecs(c, &count);
+    
+    
+    NSMutableArray *codecLists = [NSMutableArray array];
+    for (i=0; i<count; ++i) {
+        printf("  %d\t%.*s\n", c[i].priority, (int)c[i].codec_id.slen,
+               c[i].codec_id.ptr);
+        NSString *codecPriority = [NSString stringWithFormat:@"%d",c[i].priority];
+        NSString *codecPtr = [NSString stringWithFormat:@"%s",c[i].codec_id.ptr];
+        
+        NSArray *stringArray = [codecPtr componentsSeparatedByString: @"/"];
+        codecPtr = [NSString stringWithFormat:@"%@/%@",stringArray[0],stringArray[1]];
+        
+        NSDictionary *dict = @{ @"priority" : codecPriority,  @"codec" : codecPtr, @"isEnable" : @1 };
+        [codecLists addObject:dict];
+    }
+    return codecLists;
+}
+
++(void)showVideoCodecs {
     pjsua_codec_info c[32];
     unsigned i, count = PJ_ARRAY_SIZE(c);
     
@@ -477,8 +554,10 @@ PJSua2 pjsua2;
         printf("  %d\t%.*s\n", c[i].priority, (int)c[i].codec_id.slen,
                c[i].codec_id.ptr);
     }
+    
     printf("List of video codecs:\n");
-  //  pjsua_vid_enum_codecs(c, &count);
+    
+    pjsua_vid_enum_codecs(c, &count);
     for (i=0; i<count; ++i) {
         printf("  %d\t%.*s%s%.*s\n", c[i].priority,
                (int)c[i].codec_id.slen,
@@ -487,8 +566,20 @@ PJSua2 pjsua2;
                (int)c[i].desc.slen,
                c[i].desc.ptr);
     }
+    
 }
 
+
+
+//+(void)setCodecPriority:(char*)codec :(int)num{
+//    pj_str_t fileName = pj_str((char *)[codecName UTF8String]);
+//    pj_str_t codecid=pj_str(codec);
+//    pjsua_codec_set_priority( &codecid,(pj_uint8_t)num);
+//}
++(void)setCodecPriorityByName:(NSString*)codecName :(int)num{
+    pj_str_t codecid = pj_str((char *)[codecName UTF8String]);
+    pjsua_codec_set_priority( &codecid,(pj_uint8_t)num);
+}
 +(void)makeCall:(NSString *)callee{
     static pj_thread_desc a_thread_descrip;
     static pj_thread_t *a_thread;
@@ -633,6 +724,39 @@ static void pjsuaOnAppConfigCb(pjsua_app_config *cfg)
     PJ_UNUSED_ARG(cfg);
 }
 
+
+
+/// Vidoe Implimation
+///
++(void)swapCamera :(NSString*) cameraDiration {
+    NSInteger b = [cameraDiration integerValue];
+    pjsua2.CameraDirationChange(b);
+}
++(void)previewHide{
+    pjsua2.previewHide();
+}
++(void)previewShow {
+    pjsua2.previewShow();
+}
+-(void) update_video_wrapper: (void(*)(void *))function {
+    pjsua2.update_video(function);
+}
+-(void) preview_updata_listener_wrapper: (void(*)(void *))function {
+    pjsua2.videoview_update_video(function);
+}
+
++(void)bolockContact :(NSString*) contact{
+    std::string number = std::string([contact UTF8String]);
+    pjsua2.callBlock(number);
+}
++(void)unBolockContact :(NSString*) contact{
+    std::string number = std::string([contact UTF8String]);
+    pjsua2.callBlock(number);
+}
+
++(void)loadAllBlockContact {
+    pjsua2.lodeBolckNumber();
+}
 
 @end
 

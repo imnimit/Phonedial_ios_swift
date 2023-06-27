@@ -15,5 +15,6 @@ class phoneDIalersListCell: UITableViewCell {
     @IBOutlet weak var lblTimer: UILabel!
     @IBOutlet weak var imgeCallType: UIImageView!
     @IBOutlet weak var btnGoDetail: UIButton!
+    @IBOutlet weak var boderVW: UIView!
     
 }

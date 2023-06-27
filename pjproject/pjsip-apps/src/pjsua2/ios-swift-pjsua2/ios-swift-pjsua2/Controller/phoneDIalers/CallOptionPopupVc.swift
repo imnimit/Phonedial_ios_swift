@@ -27,12 +27,12 @@ class CallOptionPopupVc: UIViewController {
         
     }
     
-    func initCall(){
+    func initCall() {
         mainVW.layer.cornerRadius = 5
         lblCallerName.text = name
-        lblCallNumber.text = number.toPhoneNumber()
+        lblCallNumber.text = number //number.toPhoneNumber()
         
-        if name != "unknown" {
+        if name != "Unknown" {
             AddcontactVW.isHidden = true
         }
     }

@@ -36,7 +36,10 @@ class AddNewCardVCtr: UIViewController {
     var usCountryDetail = [String:Any]()
     var countState = -1
     var countCity = -1
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.isHidden = false
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -161,7 +164,7 @@ class AddNewCardVCtr: UIViewController {
     
     //MARK: - btnClick
     @IBAction func btnSave(_ sender: UIButton) {
-        
+        dismissKeyboard()
         if txtCardNumber.text == "" {
             showToastMessage(message: "Please enter card number")
             return
@@ -197,6 +200,8 @@ class AddNewCardVCtr: UIViewController {
             return
         }
         
+        
+        
         if txtzipCode.text == "" {
             showToastMessage(message: "Please enter zipcode")
             return
@@ -213,9 +218,11 @@ class AddNewCardVCtr: UIViewController {
         UserDefaults.standard.setValue(dicarray, forKey: "CardDetils")
         UserDefaults.standard.synchronize()
         
-        self.dismiss(animated: true,completion: {
-            NotificationCenter.default.post(name: Notification.Name("crditcardDetail"), object: self, userInfo: nil)
-        })
+//        self.dismiss(animated: true,completion: {
+//            NotificationCenter.default.post(name: Notification.Name("crditcardDetail"), object: self, userInfo: nil)
+//        })
+        NotificationCenter.default.post(name: Notification.Name("crditcardDetail"), object: self, userInfo: nil)
+        self.navigationController?.popViewController(animated: false)
         
     }
     
@@ -343,6 +350,7 @@ extension AddNewCardVCtr: UIPickerViewDelegate , UIPickerViewDataSource  {
                 txtstate.text = ""
                 txtstate.text = arrayState[countState]["name"] as? String
                 arrayCity = DBManager().GetAllCityName(stateId: arrayState[countState]["country_id"] as! String)
+                txtCity.text = ""
             }
         }else {
             if countCity != -1 {
@@ -383,8 +391,14 @@ extension AddNewCardVCtr: UIPickerViewDelegate , UIPickerViewDataSource  {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
          if pickerCountry.tag == 2 {
              countState = row
+             let itemselected = arrayState[row]["name"] as? String
+             txtstate.text = itemselected
+             txtCity.text = ""
+             arrayCity.removeAll()
          }else {
              countCity = row
+             let itemselected = arrayCity[row]["name"] as? String
+             txtCity.text = itemselected
         }
     }
 }

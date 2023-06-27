@@ -7,6 +7,7 @@
 
 import UIKit
 import ProgressHUD
+import RealmSwift
 
 class ChatUserListVc: UIViewController {
 
@@ -31,7 +32,6 @@ class ChatUserListVc: UIViewController {
         }else {
             FistTimeHistoyLoad = false
         }
-        
         
         SocketEvent()
     }
@@ -67,7 +67,7 @@ class ChatUserListVc: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
-
+        self.tabBarController?.tabBar.isHidden = false
         if appDelegate.ChatTimeUserUserID == "" {
             SocketTimeLogin()
         }else {
@@ -75,7 +75,6 @@ class ChatUserListVc: UIViewController {
             print(requestData)
             chatHistory.mSocketH.emit(ChatConstanct.EventListenerHistroy.HISTORY, requestData)
             SocketEvent()
-            
         }
     }
     
@@ -103,12 +102,15 @@ class ChatUserListVc: UIViewController {
 
         chatHistory.mSocketH.off(ChatConstanct.EventListenerHistroy.HISTORY)
         chatHistory.mSocketH.on(ChatConstanct.EventListenerHistroy.HISTORY) { [self]  data, ack in
-            if FistTimeHistoyLoad == true {
+            let dicData = data as? [[String:Any]]
+            
+            if FistTimeHistoyLoad == true && dicData?[0]["status"] as? String != "Fail" {
                 ProgressHUD.show(interaction: false)
             }
             let time = getLastSyncTime(LastSyncTimeKey: "last_sync_time")
             
             var CountHistory = 0
+            var SecondDataStore = 0
 
             print(data)
             if let message = data as? [[String:Any]] {
@@ -124,15 +126,21 @@ class ChatUserListVc: UIViewController {
                             if (i["history"] as! [[String:Any]]).count > 0 {
                                 for historyMessage in i["history"] as! [[String:Any]] {
                                     if RealmDatabaseeHelper.shared.DateModelDataIsExistorNot(ChatID: "\(historyMessage["chat_id"] as? Int ?? 0)") == true {
-                                        CountHistory  = CountHistory  + 1
-                                        if historyMessage["user_id"] as! String == i["user_id"] as? String ?? "" {
-                                            let dic = DataModel(id: "\(RealmDatabaseeHelper.shared.getAllDataModel().count + 1)", chatID: "\(historyMessage["chat_id"] as? Int ?? 0)" ,userID: appDelegate.ChatTimeUserUserID,dateTime:historyMessage["chat_dateTime"] as! String, msgType: historyMessage["message_type"] as! String , message: historyMessage["message"] as! String , isSentSuccessFully: "1", senderID:  i["user_id"] as? String ?? "" , receiverID: historyMessage["user_id"] as! String )
-                                            RealmDatabaseeHelper.shared.saveDataModel(dataModel: dic)
-                                        }else{
-                                            let dic = DataModel(id: "\(RealmDatabaseeHelper.shared.getAllDataModel().count + 1)", chatID: "\(historyMessage["chat_id"] as? Int ?? 0)" ,userID: appDelegate.ChatTimeUserUserID,dateTime:historyMessage["chat_dateTime"] as! String, msgType: historyMessage["message_type"] as! String , message: historyMessage["message"] as! String , isSentSuccessFully: "1", senderID: historyMessage["user_id"] as! String, receiverID:  i["user_id"] as? String ?? "")
+                                         CountHistory  = CountHistory  + 1
+                                        if (i["type"] as? String ?? "") == "group" {
+                                            let dic = DataModel(id: "\(RealmDatabaseeHelper.shared.getAllDataModel().count + 1)", chatID: "\(historyMessage["chat_id"] as? Int ?? 0)" ,userID: appDelegate.ChatTimeUserUserID,dateTime:historyMessage["chat_dateTime"] as! String, msgType: historyMessage["message_type"] as! String , message: historyMessage["message"] as! String , isSentSuccessFully: "1", senderID: historyMessage["user_id"] as? String ?? "", receiverID: "0", groupID: i["group_id"] as? String ?? "")
                                             RealmDatabaseeHelper.shared.saveDataModel(dataModel: dic)
                                         }
-                                        
+                                        else {
+                                            if historyMessage["user_id"] as! String == i["user_id"] as? String ?? "" {
+                                                let dic = DataModel(id: "\(RealmDatabaseeHelper.shared.getAllDataModel().count + 1)", chatID: "\(historyMessage["chat_id"] as? Int ?? 0)" ,userID: appDelegate.ChatTimeUserUserID,dateTime:historyMessage["chat_dateTime"] as! String, msgType: historyMessage["message_type"] as! String , message: historyMessage["message"] as! String , isSentSuccessFully: "1", senderID:  i["user_id"] as? String ?? "" , receiverID: historyMessage["user_id"] as! String, groupID: "")
+                                                RealmDatabaseeHelper.shared.saveDataModel(dataModel: dic)
+                                            }else{
+                                                let dic = DataModel(id: "\(RealmDatabaseeHelper.shared.getAllDataModel().count + 1)", chatID: "\(historyMessage["chat_id"] as? Int ?? 0)" ,userID: appDelegate.ChatTimeUserUserID,dateTime:historyMessage["chat_dateTime"] as! String, msgType: historyMessage["message_type"] as! String , message: historyMessage["message"] as! String , isSentSuccessFully: "1", senderID: historyMessage["user_id"] as! String, receiverID:  i["user_id"] as? String ?? "", groupID: "")
+                                                RealmDatabaseeHelper.shared.saveDataModel(dataModel: dic)
+                                            }
+                                        }
+                                       
                                         if historyMessage["message_type"] as! String != ChatConstanct.FileTypes.TEXT_MESSAGE {
                                             let dicmidia = MediaModel(id: "\(RealmDatabaseeHelper.shared.getAllUserModall().count + 1)", chatID: "\(historyMessage["chat_id"] as? Int ?? 0)", msgType: historyMessage["message_type"] as! String , mediaURL: historyMessage["files"] as! String, localPath: "", fileSize: "\(historyMessage["size"] as? Int ??  0)" , isDownloaded: "0", isVedioImage64Encoding: "")
                                             RealmDatabaseeHelper.shared.saveMediaModel(dataMediaModel: dicmidia)
@@ -142,9 +150,17 @@ class ChatUserListVc: UIViewController {
                             }
                             
                             let count = FistTimeHistoyLoad == true ? 0 : CountHistory
-                            let dicForUser = UserModal(id: "\(RealmDatabaseeHelper.shared.getAllUserModall().count + 1)", receiverIdForChat: i["user_id"] as? String ?? "", contactNumber: i["mobile_no"] as? String ?? "", contactName: i["group_name"] as? String ?? "", lastChatDateTime: i["last_chat_time"] as? String ?? "", lastMessage: i["last_chat_msg"] as? String ?? "", lastMessageType: i["last_chat_msg_type"] as? String ?? "", chatCounter: "\(count)", roomID: i["group_id"] as? String ?? "")
-                            RealmDatabaseeHelper.shared.saveUserModalUpdate(dataUserModal: dicForUser)
-                            storeLastSyncTime(LastSyncTime: historyArrry[0]["last_sync_time"] as? String ?? "")
+                            if (i["type"] as? String ?? "") == "group" {
+                                let dicForUser = UserModal(id: "\(RealmDatabaseeHelper.shared.getAllUserModall().count + 1)", receiverIdForChat: i["group_id"] as? String ?? "", chatType: "group",  contactNumber: i["mobile_no"] as? String ?? "", contactName: i["group_name"] as? String ?? "", lastChatDateTime: i["last_chat_time"] as? String ?? "", lastMessage: i["last_chat_msg"] as? String ?? "", lastMessageType: i["last_chat_msg_type"] as? String ?? "", chatCounter: "\(count)", roomID: i["group_id"] as? String ?? "")
+                                print(dicForUser)
+                                RealmDatabaseeHelper.shared.saveUserModalUpdateGroup(dataUserModal: dicForUser)
+                                storeLastSyncTime(LastSyncTime: i["last_sync_time"] as? String ?? "")
+                            }else{
+                                let dicForUser = UserModal(id: "\(RealmDatabaseeHelper.shared.getAllUserModall().count + 1)", receiverIdForChat: i["user_id"] as? String ?? "", chatType: "private",  contactNumber: i["mobile_no"] as? String ?? "", contactName: i["group_name"] as? String ?? "", lastChatDateTime: i["last_chat_time"] as? String ?? "", lastMessage: i["last_chat_msg"] as? String ?? "", lastMessageType: i["last_chat_msg_type"] as? String ?? "", chatCounter: "\(count)", roomID: i["group_id"] as? String ?? "")
+                                RealmDatabaseeHelper.shared.saveUserModalUpdate(dataUserModal: dicForUser)
+                                storeLastSyncTime(LastSyncTime: historyArrry[0]["last_sync_time"] as? String ?? "")
+                            }
+                            
                         }
                         
                     }
@@ -177,7 +193,7 @@ class ChatUserListVc: UIViewController {
         chat.mSocket.on(ChatConstanct.EventListener.DELETEGROP) { data, ack in
            print(data)
         }
-        
+        ProgressHUD.dismiss()
     }
     
     // MARK: - btn Click
@@ -189,7 +205,9 @@ class ChatUserListVc: UIViewController {
         nextVC.isContectNumberShow = false
         nextVC.isShowTopNavigationBar = true
         nextVC.isAddToChatView = true
+        nextVC.buttonShow = true
         nextVC.modalPresentationStyle = .overFullScreen
+        self.tabBarController?.tabBar.isHidden = true
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
     
@@ -211,7 +229,7 @@ class ChatUserListVc: UIViewController {
         ProgressHUD.show(interaction: false)
 
         let requestData : [String : String] = ["device_token":appDelegate.notificationTokan,
-                                               "mobile_no":User.sharedInstance.getContactNumber(),"is_replace_token":"1"]
+                                               "mobile_no":User.sharedInstance.getContactNumber()]    //,"is_replace_token":"1"]
         print(requestData)
         APIsMain.apiCalling.callDataWithoutLoaderSoket(credentials: requestData,requstTag : strReq, withCompletionHandler: { [self] (result) in
             print(result)
@@ -219,8 +237,9 @@ class ChatUserListVc: UIViewController {
             if diddata["status"] as! String == "Success" {
                 SocketTimeGetUser()
             } else {
-                SocketTimeCreateUser()
+//                SocketTimeCreateUser()
             }
+            ProgressHUD.dismiss()
         })
     }
     
@@ -305,21 +324,28 @@ extension ChatUserListVc: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChatUserListCell", for: indexPath) as! ChatUserListCell
         let dicForData = RealmDatabaseeHelper.shared.getAllUserModall()[indexPath.row]
-        let userLastMessageFind = RealmDatabaseeHelper.shared.FilterDataModel(ReciverId: dicForData.receiverIdForChat, SenderID:  dicForData.receiverIdForChat)
-        if UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber) != nil {
-            let contactList =  UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber) as! [[String:Any]]
-            let index = contactList.firstIndex(where: {($0["phone"] as! String).suffix(10) == (dicForData.contactNumber).suffix(10)})
-            if index != nil {
-                let infoUser = contactList[index!]
-                cell.userName.text = infoUser["name"] as? String ?? ""
-            }else{
+        var userLastMessageFind: Results<DataModel>
+       
+        if dicForData.chatType == "group" {
+            cell.userName.text = dicForData.contactName
+            userLastMessageFind = RealmDatabaseeHelper.shared.FilterDataModelGroup(groupId: dicForData.roomID)
+        }else{
+            userLastMessageFind = RealmDatabaseeHelper.shared.FilterDataModel(ReciverId: dicForData.receiverIdForChat, SenderID:  dicForData.receiverIdForChat)
+            if UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber) != nil {
+                let contactList =  UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber) as! [[String:Any]]
+                let index = contactList.firstIndex(where: {($0["phone"] as! String).suffix(10) == (dicForData.contactNumber).suffix(10)})
+                if index != nil {
+                    let infoUser = contactList[index!]
+                    cell.userName.text = infoUser["name"] as? String ?? ""
+                }else{
+                    cell.userName.text = dicForData.contactNumber
+                }
+            } else {
                 cell.userName.text = dicForData.contactNumber
             }
-        } else {
-            cell.userName.text = dicForData.contactNumber
         }
         
-        cell.lblUserLastMessage.text = userLastMessageFind[userLastMessageFind.count - 1].message
+        cell.lblUserLastMessage.text = dicForData.lastMessage// userLastMessageFind[userLastMessageFind.count - 1].message
         if userLastMessageFind[userLastMessageFind.count - 1].msgType == ChatConstanct.FileTypes.IMAGE_MESSAGE {
             cell.lblUserLastMessage.text  = "Image"
         }else if userLastMessageFind[userLastMessageFind.count - 1].msgType == ChatConstanct.FileTypes.VIDEO_MESSAGE {
@@ -353,25 +379,35 @@ extension ChatUserListVc: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         self.tabBarController?.tabBar.isHidden = true
-
+        
         let nextVC = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "ChatVc") as! ChatVc
         let dicForData = RealmDatabaseeHelper.shared.getAllUserModall()[indexPath.row]
-        if UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber) != nil {
-            let contactList =  UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber) as! [[String:Any]]
-            let index = contactList.firstIndex(where: {($0["phone"] as! String).suffix(10) == (dicForData.contactNumber).suffix(10)})
-            if index != nil {
-                let infoUser = contactList[index!]
-                nextVC.phoneNumber = dicForData.contactNumber
-                nextVC.Name = infoUser["name"] as? String ?? ""
+        if dicForData.chatType == "group" {
+            nextVC.Name  = dicForData.contactName
+            nextVC.isgroupchat = true
+//            nextVC.userGroupId = dicForData.roomID
+            RealmDatabaseeHelper.shared.readTimeCountGroup(roomID: dicForData.roomID)
+
+        }
+        else{
+            if UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber) != nil {
+                let contactList =  UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber) as! [[String:Any]]
+                let index = contactList.firstIndex(where: {($0["phone"] as! String).suffix(10) == (dicForData.contactNumber).suffix(10)})
+                if index != nil {
+                    let infoUser = contactList[index!]
+                    nextVC.phoneNumber = dicForData.contactNumber
+                    nextVC.Name = infoUser["name"] as? String ?? ""
+                }else{
+                    nextVC.phoneNumber = dicForData.contactNumber
+                    nextVC.Name = ""
+                }
             }else{
                 nextVC.phoneNumber = dicForData.contactNumber
                 nextVC.Name = ""
             }
-        }else{
-            nextVC.phoneNumber = dicForData.contactNumber
-            nextVC.Name = ""
+            RealmDatabaseeHelper.shared.readTimeCountChange(phonenumber: dicForData.contactNumber)
         }
-        RealmDatabaseeHelper.shared.readTimeCountChange(phonenumber: dicForData.contactNumber)
+        
         nextVC.userChatId = dicForData.receiverIdForChat
         appDelegate.ChatGroupID = dicForData.roomID
         navigationController?.pushViewController(nextVC, animated: true)

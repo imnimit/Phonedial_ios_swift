@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "/Users/magictech/Desktop/pjproject/pjsip-apps/src/pjsua/pjsua_app_common.h"
+#include "/Volumes/Secondary/Projects/Phonedial_ios_swift/pjproject/pjsip-apps/src/pjsua/pjsua_app_common.h"
 
 #define THIS_FILE	"pjsua_app_cli.c"
 
@@ -608,42 +608,42 @@ static void get_video_dev_id(pj_cli_dyn_choice_param *param,
 
 static void get_video_codec_id(pj_cli_dyn_choice_param *param)
 {
-    if (param->cnt < param->max_cnt) {
-	pjsua_codec_info ci[32];
-	unsigned i, count = PJ_ARRAY_SIZE(ci);
-	char codec_id[64];
-	char desc[128];
-
-	pjsua_vid_enum_codecs(ci, &count);
-	for (i=0; i<count; ++i) {
-	    pjmedia_vid_codec_param cp;
-	    pjmedia_video_format_detail *vfd;
-	    pj_status_t status = PJ_SUCCESS;
-
-	    status = pjsua_vid_codec_get_param(&ci[i].codec_id, &cp);
-	    if (status != PJ_SUCCESS)
-		continue;
-
-	    vfd = pjmedia_format_get_video_format_detail(&cp.enc_fmt, PJ_TRUE);
-
-	    pj_ansi_snprintf(codec_id, sizeof(codec_id),
-			     "%.*s", (int)ci[i].codec_id.slen,
-			     ci[i].codec_id.ptr);
-
-	    pj_strdup2(param->pool, &param->choice[param->cnt].value, codec_id);
-
-	    pj_ansi_snprintf(desc, sizeof(desc),
-	    		     "Video, p[%d], f[%.2f], b[%d/%d], s[%dx%d]",
-	    		     ci[i].priority,
-			     (vfd->fps.num*1.0/vfd->fps.denum),
-			     vfd->avg_bps/1000, vfd->max_bps/1000,
-			     vfd->size.w, vfd->size.h);
-
-	    pj_strdup2(param->pool, &param->choice[param->cnt].desc, desc);
-	    if (++param->cnt >= param->max_cnt)
-		break;
-	}
-    }
+//    if (param->cnt < param->max_cnt) {
+//	pjsua_codec_info ci[32];
+//	unsigned i, count = PJ_ARRAY_SIZE(ci);
+//	char codec_id[64];
+//	char desc[128];
+//
+//	pjsua_vid_enum_codecs(ci, &count);
+//	for (i=0; i<count; ++i) {
+//	    pjmedia_vid_codec_param cp;
+//	    pjmedia_video_format_detail *vfd;
+//	    pj_status_t status = PJ_SUCCESS;
+//
+//	    status = pjsua_vid_codec_get_param(&ci[i].codec_id, &cp);
+//	    if (status != PJ_SUCCESS)
+//		continue;
+//
+//	    vfd = pjmedia_format_get_video_format_detail(&cp.enc_fmt, PJ_TRUE);
+//
+//	    pj_ansi_snprintf(codec_id, sizeof(codec_id),
+//			     "%.*s", (int)ci[i].codec_id.slen,
+//			     ci[i].codec_id.ptr);
+//
+//	    pj_strdup2(param->pool, &param->choice[param->cnt].value, codec_id);
+//
+//	    pj_ansi_snprintf(desc, sizeof(desc),
+//	    		     "Video, p[%d], f[%.2f], b[%d/%d], s[%dx%d]",
+//	    		     ci[i].priority,
+//			     (vfd->fps.num*1.0/vfd->fps.denum),
+//			     vfd->avg_bps/1000, vfd->max_bps/1000,
+//			     vfd->size.w, vfd->size.h);
+//
+//	    pj_strdup2(param->pool, &param->choice[param->cnt].desc, desc);
+//	    if (++param->cnt >= param->max_cnt)
+//		break;
+//	}
+//    }
 }
 
 static void get_video_window_id(pj_cli_dyn_choice_param *param)
@@ -2309,36 +2309,36 @@ static pj_status_t cmd_vid_device_preview(pj_cli_cmd_val *cval)
 
 static pj_status_t cmd_vid_codec_list()
 {
-    pjsua_codec_info ci[PJMEDIA_CODEC_MGR_MAX_CODECS];
-    unsigned count = PJ_ARRAY_SIZE(ci);
-    pj_status_t status = pjsua_vid_enum_codecs(ci, &count);
-    if (status != PJ_SUCCESS) {
-	PJ_PERROR(1,(THIS_FILE, status, "Error enumerating codecs"));
-    } else {
-	unsigned i;
-	PJ_LOG(3,(THIS_FILE, "Found %d video codecs:", count));
-	PJ_LOG(3,(THIS_FILE, "codec id      prio  fps    bw(kbps)   size"));
-	PJ_LOG(3,(THIS_FILE, "------------------------------------------"));
-	for (i=0; i<count; ++i) {
-	    pjmedia_vid_codec_param cp;
-	    pjmedia_video_format_detail *vfd;
-
-	    status = pjsua_vid_codec_get_param(&ci[i].codec_id, &cp);
-	    if (status != PJ_SUCCESS)
-		continue;
-
-	    vfd = pjmedia_format_get_video_format_detail(&cp.enc_fmt,
-		PJ_TRUE);
-	    PJ_LOG(3,(THIS_FILE, "%.*s%.*s %3d %7.2f  %4d/%4d  %dx%d",
-		(int)ci[i].codec_id.slen, ci[i].codec_id.ptr,
-		13-(int)ci[i].codec_id.slen, "                ",
-		ci[i].priority,
-		(vfd->fps.num*1.0/vfd->fps.denum),
-		vfd->avg_bps/1000, vfd->max_bps/1000,
-		vfd->size.w, vfd->size.h));
-	}
-    }
-    return PJ_SUCCESS;
+//    pjsua_codec_info ci[PJMEDIA_CODEC_MGR_MAX_CODECS];
+//    unsigned count = PJ_ARRAY_SIZE(ci);
+//    pj_status_t status = pjsua_vid_enum_codecs(ci, &count);
+//    if (status != PJ_SUCCESS) {
+//	PJ_PERROR(1,(THIS_FILE, status, "Error enumerating codecs"));
+//    } else {
+//	unsigned i;
+//	PJ_LOG(3,(THIS_FILE, "Found %d video codecs:", count));
+//	PJ_LOG(3,(THIS_FILE, "codec id      prio  fps    bw(kbps)   size"));
+//	PJ_LOG(3,(THIS_FILE, "------------------------------------------"));
+//	for (i=0; i<count; ++i) {
+//	    pjmedia_vid_codec_param cp;
+//	    pjmedia_video_format_detail *vfd;
+//
+//	    status = pjsua_vid_codec_get_param(&ci[i].codec_id, &cp);
+//	    if (status != PJ_SUCCESS)
+//		continue;
+//
+//	    vfd = pjmedia_format_get_video_format_detail(&cp.enc_fmt,
+//		PJ_TRUE);
+//	    PJ_LOG(3,(THIS_FILE, "%.*s%.*s %3d %7.2f  %4d/%4d  %dx%d",
+//		(int)ci[i].codec_id.slen, ci[i].codec_id.ptr,
+//		13-(int)ci[i].codec_id.slen, "                ",
+//		ci[i].priority,
+//		(vfd->fps.num*1.0/vfd->fps.denum),
+//		vfd->avg_bps/1000, vfd->max_bps/1000,
+//		vfd->size.w, vfd->size.h));
+//	}
+//    }
+//    return PJ_SUCCESS;
 }
 
 static pj_status_t cmd_set_vid_codec_prio(pj_cli_cmd_val *cval)
@@ -2355,22 +2355,22 @@ static pj_status_t cmd_set_vid_codec_prio(pj_cli_cmd_val *cval)
 
 static pj_status_t cmd_set_vid_codec_fps(pj_cli_cmd_val *cval)
 {
-    pjmedia_vid_codec_param cp;
-    int M, N;
-    pj_status_t status;
-
-    M = (int)pj_strtol(&cval->argv[2]);
-    N = (int)pj_strtol(&cval->argv[3]);
-    status = pjsua_vid_codec_get_param(&cval->argv[1], &cp);
-    if (status == PJ_SUCCESS) {
-	cp.enc_fmt.det.vid.fps.num = M;
-	cp.enc_fmt.det.vid.fps.denum = N;
-	status = pjsua_vid_codec_set_param(&cval->argv[1], &cp);
-    }
-    if (status != PJ_SUCCESS)
-	PJ_PERROR(1,(THIS_FILE, status, "Set codec framerate error"));
-
-    return PJ_SUCCESS;
+//    pjmedia_vid_codec_param cp;
+//    int M, N;
+//    pj_status_t status;
+//
+//    M = (int)pj_strtol(&cval->argv[2]);
+//    N = (int)pj_strtol(&cval->argv[3]);
+//    status = pjsua_vid_codec_get_param(&cval->argv[1], &cp);
+//    if (status == PJ_SUCCESS) {
+//	cp.enc_fmt.det.vid.fps.num = M;
+//	cp.enc_fmt.det.vid.fps.denum = N;
+//	status = pjsua_vid_codec_set_param(&cval->argv[1], &cp);
+//    }
+//    if (status != PJ_SUCCESS)
+//	PJ_PERROR(1,(THIS_FILE, status, "Set codec framerate error"));
+//
+//    return PJ_SUCCESS;
 }
 
 static pj_status_t cmd_set_vid_codec_bitrate(pj_cli_cmd_val *cval)
@@ -2395,22 +2395,22 @@ static pj_status_t cmd_set_vid_codec_bitrate(pj_cli_cmd_val *cval)
 
 static pj_status_t cmd_set_vid_codec_size(pj_cli_cmd_val *cval)
 {
-    pjmedia_vid_codec_param cp;
-    int M, N;
-    pj_status_t status;
-
-    M = (int)pj_strtol(&cval->argv[2]);
-    N = (int)pj_strtol(&cval->argv[3]);
-    status = pjsua_vid_codec_get_param(&cval->argv[1], &cp);
-    if (status == PJ_SUCCESS) {
-	cp.enc_fmt.det.vid.size.w = M;
-	cp.enc_fmt.det.vid.size.h = N;
-	status = pjsua_vid_codec_set_param(&cval->argv[1], &cp);
-    }
-    if (status != PJ_SUCCESS)
-	PJ_PERROR(1,(THIS_FILE, status, "Set codec size error"));
-
-    return status;
+//    pjmedia_vid_codec_param cp;
+//    int M, N;
+//    pj_status_t status;
+//
+//    M = (int)pj_strtol(&cval->argv[2]);
+//    N = (int)pj_strtol(&cval->argv[3]);
+//    status = pjsua_vid_codec_get_param(&cval->argv[1], &cp);
+//    if (status == PJ_SUCCESS) {
+//	cp.enc_fmt.det.vid.size.w = M;
+//	cp.enc_fmt.det.vid.size.h = N;
+//	status = pjsua_vid_codec_set_param(&cval->argv[1], &cp);
+//    }
+//    if (status != PJ_SUCCESS)
+//	PJ_PERROR(1,(THIS_FILE, status, "Set codec size error"));
+//
+//    return status;
 }
 
 static pj_status_t cmd_vid_win_list()

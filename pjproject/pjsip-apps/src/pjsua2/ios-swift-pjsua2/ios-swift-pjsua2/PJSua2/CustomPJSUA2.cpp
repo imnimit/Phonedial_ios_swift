@@ -516,7 +516,7 @@ void PJSua2::outgoingCall(std::string dest_uri) {
     
     CallOpParam prm(true); // Use default call settings
     prm.opt.audioCount = 1;
-    prm.opt.videoCount = 1;
+    prm.opt.videoCount = 0;
     
     callOp.push_back(prm);
     Callarray.push_back(call1);
@@ -549,17 +549,17 @@ void PJSua2::outgoingCall(std::string dest_uri) {
 //    }
 }
 void PJSua2:: pjsua_vid_codec_set_param() {
-    const pj_str_t codec_id = {"H264", 4};
-    pjmedia_vid_codec_param param;
-
-    pjsua_vid_codec_get_param(&codec_id, &param);
-
-
-    ::pjsua_vid_codec_set_param(&codec_id, &param);
-
-    
-    param.enc_fmt.det.vid.size.w = 1280;
-    param.enc_fmt.det.vid.size.h = 720;
+//    const pj_str_t codec_id = {"H264", 4};
+//    pjmedia_vid_codec_param param;
+//
+//    pjsua_vid_codec_get_param(&codec_id, &param);
+//
+//
+//    ::pjsua_vid_codec_set_param(&codec_id, &param);
+//
+//    
+//    param.enc_fmt.det.vid.size.w = 1280;
+//    param.enc_fmt.det.vid.size.h = 720;
 }
 
 void PJSua2::outgoingCall1(std::string dest_uri) {

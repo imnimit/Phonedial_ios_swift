@@ -34,11 +34,13 @@ class ChatVc: UIViewController {
     var avatarImages: [String: UIImage] = [:]
     var phoneNumber = ""
     var Name = ""
-    var fistTimeUserEentry = false
+    var fistTimeUserEntry = false
     var isAudioScreenOpne = false
     var groupedUserData =  [String : [DataModel]]()
     var indexLettersInContactsArray = [String]()
     var last7Days = [String]()
+    var isgroupchat = false
+    var userGroupId = ""
     
       
     override func viewDidLoad() {
@@ -51,13 +53,13 @@ class ChatVc: UIViewController {
 //                self.SocketTimeGetGroup()
 //            }
 //        }
-        
+        print(appDelegate.ChatGroupID)
         DispatchQueue.main.async {
             self.callInit()
         }
         
         DispatchQueue.main.async { [self] in
-            appDelegate.ChatGroupID = ""
+//            appDelegate.ChatGroupID = ""
             
             if Name == "" {
                 navTitle.text = phoneNumber
@@ -78,11 +80,16 @@ class ChatVc: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        DispatchQueue.main.async {
-            if self.userChatId == "" {
-                self.SocketTimeConnected()
+        navigationController?.navigationBar.isHidden = true
+        DispatchQueue.main.async { [self] in
+            if isgroupchat == false {
+                if self.userChatId == "" {
+                    self.SocketTimeConnected()
+                }else{
+                    self.SocketTimeGetGroup()
+                }
             }else{
-                self.SocketTimeGetGroup()
+                SocketInit()
             }
         }
     }
@@ -111,20 +118,29 @@ class ChatVc: UIViewController {
             if #available(iOS 15.0, *) {
                 self.tableView.sectionHeaderTopPadding = 0
             }
-            if self.userChatId != "" {
+            if self.isgroupchat == true {
+                self.dataMange()
+            }
+           else if self.userChatId != ""  {
                 self.dataMange()
             }
         }
-        
-        
     }
     
     func dataMange(ScallMove:Bool = true){
         groupedUserData.removeAll()
         indexLettersInContactsArray = [String]()
-        groupedUserData = Dictionary(grouping: RealmDatabaseeHelper.shared.FilterDataModel(ReciverId: userChatId, SenderID:  userChatId), by: {
-            return DataFormateSet(yourDataFormate: "yyyy/MM/dd HH:mm:ss", getDataFormat: "yyyy/MM/dd", data: $0.dateTime)
-        })
+        if self.isgroupchat == true {
+            groupedUserData = Dictionary(grouping: RealmDatabaseeHelper.shared.FilterDataModelGroup(groupId: appDelegate.ChatGroupID), by: {
+                return DataFormateSet(yourDataFormate: "yyyy/MM/dd HH:mm:ss", getDataFormat: "yyyy/MM/dd", data: $0.dateTime)
+            })
+        }
+        else{
+            groupedUserData = Dictionary(grouping: RealmDatabaseeHelper.shared.FilterDataModel(ReciverId: userChatId, SenderID:  userChatId), by: {
+                return DataFormateSet(yourDataFormate: "yyyy/MM/dd HH:mm:ss", getDataFormat: "yyyy/MM/dd", data: $0.dateTime)
+            })
+        }
+        
         indexLettersInContactsArray = [String](groupedUserData.keys)
         indexLettersInContactsArray = indexLettersInContactsArray.sorted()
         FistTimeKeyBordOpen = true
@@ -132,7 +148,6 @@ class ChatVc: UIViewController {
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
-        
         
         if ScallMove == true {
             DispatchQueue.main.async {
@@ -165,9 +180,9 @@ class ChatVc: UIViewController {
                             self.scrollToBottom()
                         }
                     }else {
-                        
+
                         DispatchQueue.main.async {
-                            let dic = DataModel(id: "\(RealmDatabaseeHelper.shared.getAllDataModel().count + 1)", chatID: "\(message["chat_id"] as? Int ?? 0)" ,userID: appDelegate.ChatTimeUserUserID,dateTime: Date().string(format: "yyyy/MM/dd HH:mm:ss") , msgType: ChatConstanct.FileTypes.IMAGE_MESSAGE , message: "Image" , isSentSuccessFully: "0", senderID: message["user_id"] as! String , receiverID: appDelegate.ChatTimeUserUserID)
+                            let dic = DataModel(id: "\(RealmDatabaseeHelper.shared.getAllDataModel().count + 1)", chatID: "\(message["chat_id"] as? Int ?? 0)" ,userID: appDelegate.ChatTimeUserUserID,dateTime: Date().string(format: "yyyy/MM/dd HH:mm:ss") , msgType: ChatConstanct.FileTypes.IMAGE_MESSAGE , message: "Image" , isSentSuccessFully: "0", senderID: message["user_id"] as! String , receiverID: (self.isgroupchat == true) ?  "0" : appDelegate.ChatTimeUserUserID, groupID: "\(message["group_id"] as? Int ?? 0)")
                             RealmDatabaseeHelper.shared.saveDataModel(dataModel: dic)
                         }
                         
@@ -215,7 +230,7 @@ class ChatVc: UIViewController {
                             self.scrollToBottom()
                         }
                     } else {
-                        let dic = DataModel(id: "\(RealmDatabaseeHelper.shared.getAllDataModel().count + 1)", chatID: "\(message["chat_id"] as? Int ?? 0)" ,userID: appDelegate.ChatTimeUserUserID,dateTime: Date().string(format: "yyyy/MM/dd HH:mm:ss") , msgType: ChatConstanct.FileTypes.VIDEO_MESSAGE , message: "Video" , isSentSuccessFully: "0", senderID: message["user_id"] as! String , receiverID: appDelegate.ChatTimeUserUserID)
+                        let dic = DataModel(id: "\(RealmDatabaseeHelper.shared.getAllDataModel().count + 1)", chatID: "\(message["chat_id"] as? Int ?? 0)" ,userID: appDelegate.ChatTimeUserUserID,dateTime: Date().string(format: "yyyy/MM/dd HH:mm:ss") , msgType: ChatConstanct.FileTypes.VIDEO_MESSAGE , message: "Video" , isSentSuccessFully: "0", senderID: message["user_id"] as! String , receiverID: (isgroupchat == true) ?  "0" : appDelegate.ChatTimeUserUserID, groupID: "\(message["group_id"] as? Int ?? 0)")
                         RealmDatabaseeHelper.shared.saveDataModel(dataModel: dic)
                         
                         DispatchQueue.main.async {
@@ -246,7 +261,7 @@ class ChatVc: UIViewController {
                         }
                     } else {
                         
-                        let dic = DataModel(id: "\(RealmDatabaseeHelper.shared.getAllDataModel().count + 1)", chatID: "\(message["chat_id"] as? Int ?? 0)" ,userID: appDelegate.ChatTimeUserUserID,dateTime: Date().string(format: "yyyy/MM/dd HH:mm:ss") , msgType: ChatConstanct.FileTypes.AUDIO_MESSAGE , message: "Auido" , isSentSuccessFully: "0", senderID: message["user_id"] as! String , receiverID: appDelegate.ChatTimeUserUserID)
+                        let dic = DataModel(id: "\(RealmDatabaseeHelper.shared.getAllDataModel().count + 1)", chatID: "\(message["chat_id"] as? Int ?? 0)" ,userID: appDelegate.ChatTimeUserUserID,dateTime: Date().string(format: "yyyy/MM/dd HH:mm:ss") , msgType: ChatConstanct.FileTypes.AUDIO_MESSAGE , message: "Auido" , isSentSuccessFully: "0", senderID: message["user_id"] as! String , receiverID: (isgroupchat == true) ?  "0" : appDelegate.ChatTimeUserUserID, groupID: "\(message["group_id"] as? Int ?? 0)")
                         RealmDatabaseeHelper.shared.saveDataModel(dataModel: dic)
                         
                         let mp3URL = URL(string: message["files"] as? String ?? "")!
@@ -265,6 +280,7 @@ class ChatVc: UIViewController {
                 }
                 else  if message["msg_type"] as? String ?? "" == ChatConstanct.FileTypes.FILE_MESSAGE{
                     if message["user_id"] as? String ?? "" == appDelegate.ChatTimeUserUserID {
+                        
                         RealmDatabaseeHelper.shared.UpdateRowGet(key: message["chat_unique_id"] as? String ?? "", Data: message["sendtime"] as! String, Updatechatid: "\(message["chat_id"] as? Int ?? 0)")
                         RealmDatabaseeHelper.shared.UpdateRowtMediaModel(key: message["chat_unique_id"] as? String ?? "",Updatechatid: "\(message["chat_id"] as? Int ?? 0)")
 
@@ -274,7 +290,7 @@ class ChatVc: UIViewController {
                         }
                         
                     } else {
-                        let dic = DataModel(id: "\(RealmDatabaseeHelper.shared.getAllDataModel().count + 1)", chatID: "\(message["chat_id"] as? Int ?? 0)" ,userID: appDelegate.ChatTimeUserUserID,dateTime: Date().string(format: "yyyy/MM/dd HH:mm:ss") , msgType: ChatConstanct.FileTypes.FILE_MESSAGE , message: "Doc" , isSentSuccessFully: "0", senderID: message["user_id"] as! String , receiverID: appDelegate.ChatTimeUserUserID)
+                        let dic = DataModel(id: "\(RealmDatabaseeHelper.shared.getAllDataModel().count + 1)", chatID: "\(message["chat_id"] as? Int ?? 0)" ,userID: appDelegate.ChatTimeUserUserID,dateTime: Date().string(format: "yyyy/MM/dd HH:mm:ss") , msgType: ChatConstanct.FileTypes.FILE_MESSAGE , message: "Doc" , isSentSuccessFully: "0", senderID: message["user_id"] as! String , receiverID: (isgroupchat == true) ?  "0" : appDelegate.ChatTimeUserUserID, groupID: "\(message["group_id"] as? Int ?? 0)")
                         RealmDatabaseeHelper.shared.saveDataModel(dataModel: dic)
                         
                         let dicmidia = MediaModel(id: "\(RealmDatabaseeHelper.shared.getAllUserModall().count + 1)", chatID: "\(message["chat_id"] as? Int ?? 0)", msgType: ChatConstanct.FileTypes.FILE_MESSAGE, mediaURL:  message["files"] as? String ?? "", localPath: "", fileSize: message["size"] as? String ??  "" , isDownloaded: "0", isVedioImage64Encoding: "")
@@ -290,7 +306,7 @@ class ChatVc: UIViewController {
                             self.scrollToBottom()
                         }
                     } else {
-                        let dic = DataModel(id: "\(RealmDatabaseeHelper.shared.getAllDataModel().count + 1)", chatID: "\(message["chat_id"] as? Int ?? 0)" ,userID: appDelegate.ChatTimeUserUserID,dateTime: message["sendtime"] as! String , msgType: message["msg_type"] as! String , message: message["msg"] as! String , isSentSuccessFully: "1", senderID: message["user_id"] as! String, receiverID: appDelegate.ChatTimeUserUserID)
+                        let dic = DataModel(id: "\(RealmDatabaseeHelper.shared.getAllDataModel().count + 1)", chatID: "\(message["chat_id"] as? Int ?? 0)" ,userID: appDelegate.ChatTimeUserUserID,dateTime: message["sendtime"] as! String , msgType: message["msg_type"] as! String , message: message["msg"] as! String , isSentSuccessFully: "1", senderID: message["user_id"] as! String, receiverID: (isgroupchat == true) ?  "0" : appDelegate.ChatTimeUserUserID, groupID: "\(message["group_id"] as? Int ?? 0)")
                         RealmDatabaseeHelper.shared.saveDataModel(dataModel: dic)
                         self.dataMange()
                     }
@@ -476,14 +492,14 @@ class ChatVc: UIViewController {
                 userDataChat = Data
                 SocketTimeGetGroup()
             } else {
-                createUser()
+                //createUser()
             }
         })
     }
     
     func createUser() {
         let strReq = API_URL.SoketAPIURL + APISoketName.CreateUser
-        let requestData : [String : String] = ["user_name":Name ,"mobile_no":phoneNumber] //  ["mobile_num":"919033269045"] //
+        let requestData : [String : String] = ["user_name":Name ,"mobile_no":phoneNumber, "is_replace_token": "0", "device_token": appDelegate.notificationTokan] //  ["mobile_num":"919033269045"] //
         APIsMain.apiCalling.callDataWithoutLoaderSoket(credentials: requestData,requstTag : strReq, withCompletionHandler: { [self] (result) in
             let diddata : [String: Any] = (result as! [String: Any])
             if diddata["status"] as! String == "Success" {
@@ -500,7 +516,7 @@ class ChatVc: UIViewController {
     
     func SocketTimeGetGroup() {
         let strReq = API_URL.SoketAPIURL + APISoketName.GetGroup
-        let requestData : [String : String] = ["user_id":"\(appDelegate.ChatTimeUserUserID),\(userChatId)"]
+        let requestData : [String : String] = ["user_id":(isgroupchat == true ? "\(userChatId)" : "\(appDelegate.ChatTimeUserUserID),\(userChatId)")]
         APIsMain.apiCalling.callDataWithoutLoaderSoket(credentials: requestData,requstTag : strReq, withCompletionHandler: { [self] (result) in
             let diddata : [String: Any] = (result as! [String: Any])
             if diddata["status"] as! String == "Success" {
@@ -516,12 +532,13 @@ class ChatVc: UIViewController {
     
     func SocketTimeCreateGruop() {
         let strReq = API_URL.SoketAPIURL + APISoketName.CreateGroup
-        let requestData : [String : String] = ["user_id": appDelegate.ChatTimeUserUserID + "," + userChatId ,"name":"","type":"0"]
+        let requestData : [String : String] = ["user_id": appDelegate.ChatTimeUserUserID + "," + userChatId ,"name":"","type":(isgroupchat == true ? "1" : "0")]
         APIsMain.apiCalling.callDataWithoutLoaderSoket(credentials: requestData,requstTag : strReq, withCompletionHandler: { [self](result) in
             let diddata : [String: Any] = (result as! [String: Any])
             if diddata["status"] as! String == "Success" {
                 let Response: [String: Any]  = (diddata["Response"] as! [String: Any])
                 let Data = Response["data"] as! [String:Any]
+                print(Data)
                 appDelegate.ChatGroupID = "\(Data["id"] as? Int ?? 0)"
                 SocketInit()
             } else {
@@ -773,16 +790,22 @@ extension ChatVc {
     func textSaveInDataBase(text:String) {
         let time = UInt64(Date().timeIntervalSince1970 * 1000)
         print(time)
-        let dic = DataModel(id: "\(RealmDatabaseeHelper.shared.getAllDataModel().count + 1)", chatID: "\(time)" ,userID: appDelegate.ChatTimeUserUserID,dateTime: Date().string(format: "yyyy/MM/dd HH:mm:ss") , msgType: ChatConstanct.FileTypes.TEXT_MESSAGE , message: text , isSentSuccessFully: "0", senderID: appDelegate.ChatTimeUserUserID, receiverID: userChatId)
+        let dic = DataModel(id: "\(RealmDatabaseeHelper.shared.getAllDataModel().count + 1)", chatID: "\(time)" ,userID: appDelegate.ChatTimeUserUserID,dateTime: Date().string(format: "yyyy/MM/dd HH:mm:ss") , msgType: ChatConstanct.FileTypes.TEXT_MESSAGE , message: text , isSentSuccessFully: "0", senderID: appDelegate.ChatTimeUserUserID, receiverID: (isgroupchat == true) ?  "0" : userChatId, groupID: appDelegate.ChatGroupID)
 
         print("socket connected")
         let requestData : [String : String] = ["user_id":appDelegate.ChatTimeUserUserID,"room_id":appDelegate.ChatGroupID,"msg":text,"msg_type":ChatConstanct.FileTypes.TEXT_MESSAGE,"chat_unique_id": "\(time)","bs64_string":""]
         appDelegate.chatService.mSocket.emit(ChatConstanct.EventListener.SendMSG, requestData)
         RealmDatabaseeHelper.shared.saveDataModel(dataModel: dic)
         
-        if fistTimeUserEentry == true {
-            let dicForUser = UserModal(id: "\(RealmDatabaseeHelper.shared.getAllUserModall().count + 1)", receiverIdForChat: userChatId, contactNumber: phoneNumber, contactName: "", lastChatDateTime: Date().string(format: "yyyy/MM/dd HH:mm:ss"), lastMessage:text, lastMessageType: ChatConstanct.FileTypes.TEXT_MESSAGE, chatCounter: "0", roomID: appDelegate.ChatGroupID)
-            RealmDatabaseeHelper.shared.saveUserModal(dataUserModal: dicForUser)
+        if fistTimeUserEntry == true {
+            if isgroupchat == true {
+                let dicForUser = UserModal(id: "\(RealmDatabaseeHelper.shared.getAllUserModall().count + 1)", receiverIdForChat: appDelegate.ChatGroupID, chatType: "group", contactNumber: phoneNumber, contactName: Name, lastChatDateTime: Date().string(format: "yyyy/MM/dd HH:mm:ss"), lastMessage:text, lastMessageType: ChatConstanct.FileTypes.TEXT_MESSAGE, chatCounter: "0", roomID: appDelegate.ChatGroupID)
+                RealmDatabaseeHelper.shared.saveUserModal(dataUserModal: dicForUser)
+            }else{
+                let dicForUser = UserModal(id: "\(RealmDatabaseeHelper.shared.getAllUserModall().count + 1)", receiverIdForChat: userChatId, chatType: "private", contactNumber: phoneNumber, contactName: "", lastChatDateTime: Date().string(format: "yyyy/MM/dd HH:mm:ss"), lastMessage:text, lastMessageType: ChatConstanct.FileTypes.TEXT_MESSAGE, chatCounter: "0", roomID: appDelegate.ChatGroupID)
+                RealmDatabaseeHelper.shared.saveUserModal(dataUserModal: dicForUser)
+            }
+            fistTimeUserEntry = false
         }
         
         dataMange()
@@ -957,7 +980,7 @@ extension ChatVc: UITableViewDataSource {
                 if fullNameArr.count > 2 {
                     cell.lblTime.text = fullNameArr[1] + " " + fullNameArr[2]
                 }
-                if rcmessage.isSentSuccessFully == "1" {
+                if rcmessage.isSentSuccessFully == "1"  {
                     cell.imgDoubleTic.image = #imageLiteral(resourceName: "Ic_DubleTic.png")
                 }else{
                     cell.imgDoubleTic.image = #imageLiteral(resourceName: "ic_singleTic.png")
@@ -1514,7 +1537,7 @@ extension ChatVc: UIImagePickerControllerDelegate, UINavigationControllerDelegat
         print(auth)
         
         uploadImge.sharUploadImge.UploadImge(photo, video, audio, nil, pram: auth, { [self]response,link,error  in
-            let dic = DataModel(id: "\(RealmDatabaseeHelper.shared.getAllDataModel().count + 1)", chatID: "\(time)" ,userID: appDelegate.ChatTimeUserUserID,dateTime: Date().string(format: "yyyy/MM/dd HH:mm:ss") , msgType: MessageType , message: MessagePass , isSentSuccessFully: "0", senderID: appDelegate.ChatTimeUserUserID, receiverID: userChatId)
+            let dic = DataModel(id: "\(RealmDatabaseeHelper.shared.getAllDataModel().count + 1)", chatID: "\(time)" ,userID: appDelegate.ChatTimeUserUserID,dateTime: Date().string(format: "yyyy/MM/dd HH:mm:ss") , msgType: MessageType , message: MessagePass , isSentSuccessFully: "0", senderID: appDelegate.ChatTimeUserUserID, receiverID: userChatId, groupID: appDelegate.ChatGroupID)
             RealmDatabaseeHelper.shared.saveDataModel(dataModel: dic)
             
             if MessageType == ChatConstanct.FileTypes.VIDEO_MESSAGE {
@@ -1608,7 +1631,7 @@ extension ChatVc: UIDocumentPickerDelegate {
             let auth = ["user_id":appDelegate.ChatTimeUserUserID,"room_id":appDelegate.ChatGroupID,"msg_type":ChatConstanct.FileTypes.FILE_MESSAGE,"unique_id": "\(time)"]
             print(auth)
             uploadImge.sharUploadImge.UploadImge(nil, nil, nil, fileURL, pram: auth, { [self] response,link,error  in
-                let dic = DataModel(id: "\(RealmDatabaseeHelper.shared.getAllDataModel().count + 1)", chatID: "\(time)" ,userID: appDelegate.ChatTimeUserUserID,dateTime: Date().string(format: "yyyy/MM/dd HH:mm:ss") , msgType: ChatConstanct.FileTypes.FILE_MESSAGE , message: "Doc" , isSentSuccessFully: "0", senderID: appDelegate.ChatTimeUserUserID, receiverID: userChatId)
+                let dic = DataModel(id: "\(RealmDatabaseeHelper.shared.getAllDataModel().count + 1)", chatID: "\(time)" ,userID: appDelegate.ChatTimeUserUserID,dateTime: Date().string(format: "yyyy/MM/dd HH:mm:ss") , msgType: ChatConstanct.FileTypes.FILE_MESSAGE , message: "Doc" , isSentSuccessFully: "0", senderID: appDelegate.ChatTimeUserUserID, receiverID: userChatId, groupID: appDelegate.ChatGroupID)
                 RealmDatabaseeHelper.shared.saveDataModel(dataModel: dic)
                 
                 let requestData : [String : String] = ["user_id":appDelegate.ChatTimeUserUserID,"room_id":appDelegate.ChatGroupID,"msg":"Doc" ,"msg_type":ChatConstanct.FileTypes.FILE_MESSAGE,"chat_unique_id": "\(time)","files":link ?? "","bs64_string": ""]

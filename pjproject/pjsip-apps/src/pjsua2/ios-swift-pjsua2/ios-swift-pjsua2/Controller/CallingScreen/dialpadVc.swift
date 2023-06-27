@@ -68,6 +68,8 @@ class dialpadVc: UIViewController, UITextFieldDelegate {
             txtnumber.text = filter
             lblContectName.text  = contectName
         }
+        cpvMain.delegate = self
+
         tableView.isHidden = false
         ConteactNoSave() 
         textSearchChange(txtnumber)
@@ -98,6 +100,7 @@ class dialpadVc: UIViewController, UITextFieldDelegate {
         
         cpvMain.showCountryNameInView = true
         cpvMain.showCountryCodeInView = true
+        cpvMain.setCountryByCode(UserDefaults.standard.string(forKey: "CountrySet") ?? "phoneDial")
     }
   
     
@@ -352,6 +355,7 @@ extension dialpadVc: CountryPickerViewDelegate {
     func countryPickerView(_ countryPickerView: CountryPickerView, didSelectCountry country: Country) {
         let title = "Selected Country"
         let message = "Name: \(country.name) \nCode: \(country.code) \nPhone: \(country.phoneCode)"
+        UserDefaults.standard.set(country.code, forKey: "CountrySet")
     }
 }
 

@@ -31,8 +31,9 @@
 #include <pj/types.h>
 #include <pj/compat/string.h>
 
-#include "/Users/magictech/Desktop/pjproject/pjsip-apps/src/pjsua/pjsua_app.h"
-#include "/Users/magictech/Desktop/pjproject/pjsip-apps/src/pjsua/pjsua_app_config.h"
+
+#include "/Volumes/Secondary/Projects/Phonedial_ios_swift/pjproject/pjsip-apps/src/pjsua/pjsua_app.h"
+#include "/Volumes/Secondary/Projects/Phonedial_ios_swift/pjproject/pjsip-apps/src/pjsua/pjsua_app_config.h"
 
 
 #define THIS_FILE    "ipjsuaAppDelegate.m"
@@ -477,7 +478,7 @@ PJSua2 pjsua2;
                c[i].codec_id.ptr);
     }
     printf("List of video codecs:\n");
-    pjsua_vid_enum_codecs(c, &count);
+  //  pjsua_vid_enum_codecs(c, &count);
     for (i=0; i<count; ++i) {
         printf("  %d\t%.*s%s%.*s\n", c[i].priority,
                (int)c[i].codec_id.slen,

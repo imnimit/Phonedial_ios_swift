@@ -257,14 +257,18 @@ class ipjsuaLoginVc: UIViewController ,TTTAttributedLabelDelegate {
     
     func CallRegistrationInServer() {
         
-        if (CPPWrapper().registerStateInfoWrapper() == false
-            && !txtUserName.text!.isEmpty
+        if (!txtUserName.text!.isEmpty
             && !txtPassword.text!.isEmpty
             && !SIPIP.text!.isEmpty
             && !SIPPort.text!.isEmpty){
             
-            CPPWrapper().createLibWrapper()
-            CPPWrapper().incoming_call_wrapper(incoming_call_swift)
+            
+            if AppDelegate.instance.OneTimeCreateLib == false {
+                CPPWrapper().createLibWrapper()
+                CPPWrapper().incoming_call_wrapper(incoming_call_swift)
+            }
+            
+            AppDelegate.instance.OneTimeCreateLib = true
             
             //Register to the user
             CPPWrapper().createAccountWrapper(

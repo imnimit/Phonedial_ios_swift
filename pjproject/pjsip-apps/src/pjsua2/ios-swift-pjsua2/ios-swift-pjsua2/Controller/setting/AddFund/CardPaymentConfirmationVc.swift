@@ -26,6 +26,7 @@ class CardPaymentConfirmationVc: UIViewController {
     }
     
     func initCall(){
+        self.title = "Confirmation"
         BtnSubmit.layer.cornerRadius = BtnSubmit.layer.bounds.height/2
         
         lblName.text = User.sharedInstance.getFullName()
@@ -44,12 +45,15 @@ class CardPaymentConfirmationVc: UIViewController {
         }else {
             Inappid = Constant.InappPuchseId.FifteenDollar
         }
-        
+        HelperClassAnimaion.showProgressHud()
         IAPHelper.shared.startPurchase(productId: Inappid, completion: { [self]result in
             if result == true {
+                HelperClassAnimaion.hideProgressHud()
                 receiptValidation()
             }else {
-                showToastMessage(message: "Payment Fail")
+               // showToastMessage(message: "Payment Fail")
+                HelperClassAnimaion.hideProgressHud()
+                print("Fail Payment")
             }
         })
     }

@@ -97,7 +97,7 @@ class CallingDisplayVc: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         UIDevice.current.isProximityMonitoringEnabled = false
-        CPPWrapper().hangupCall();
+      //  CPPWrapper().hangupCall();
     }
     
     
@@ -175,44 +175,44 @@ class CallingDisplayVc: UIViewController {
             }
         }
         
-        Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [self] timer in
-            let numberarray = CPPWrapper.callNumber().components(separatedBy: ",")
-            btncallinfo.isHidden = true
-            if numberarray.count > 1 {
-                btncallinfo.isHidden = false
-                if isMargeCallDone == false {
-                    isMargeCallDone = true
-                    holdVW.isHidden = true
-                    print(numberarray.count)
-                    if numberarray.count < 3 {
-                       swipeVW.isHidden = false
-                       swipeVW.alpha = 1.0
-                    }
-                    btnMargeCall.alpha = 1.0
-                    btnMargeCall.isHidden = false
-                    lblSwipTimeFistCallType.text = "Hold"
-                    lblSwipTimeSecondCallType.text = "Active"
-                    hightMainSwip.constant = 150
-                }
-                //timer.invalidate()
-            }else {
-                if hightMainSwip.constant == 150 {
-                    hightMainSwip.constant = 0
-                    let newString = number.replacingOccurrences(of: "sip:", with: "", options: .literal, range: nil)
-                    let phonenumber = newString.components(separatedBy: "@")
-                    swipeVW.isHidden = true
-                    holdVW.isHidden = false
-                    btnMargeCall.isHidden = true
-                    btnAddCall.isHidden = false
-                    if phonenumber[0] == (lblSwipTimeFistNumber.text ?? "" ).suffix(10) {
-                        CPPWrapper().unholdCall(0)
-                    }
-                    else if phonenumber[0] == (lblSwipTimeSecondNumber.text ?? "" ).suffix(10) {
-                        CPPWrapper().unholdCall(1)
-                    }
-                }
-            }
-        }
+//        Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [self] timer in
+//            let numberarray = CPPWrapper.callNumber().components(separatedBy: ",")
+//            btncallinfo.isHidden = true
+//            if numberarray.count > 1 {
+//                btncallinfo.isHidden = false
+//                if isMargeCallDone == false {
+//                    isMargeCallDone = true
+//                    holdVW.isHidden = true
+//                    print(numberarray.count)
+//                    if numberarray.count < 3 {
+//                       swipeVW.isHidden = false
+//                       swipeVW.alpha = 1.0
+//                    }
+//                    btnMargeCall.alpha = 1.0
+//                    btnMargeCall.isHidden = false
+//                    lblSwipTimeFistCallType.text = "Hold"
+//                    lblSwipTimeSecondCallType.text = "Active"
+//                    hightMainSwip.constant = 150
+//                }
+//                //timer.invalidate()
+//            }else {
+//                if hightMainSwip.constant == 150 {
+//                    hightMainSwip.constant = 0
+//                    let newString = number.replacingOccurrences(of: "sip:", with: "", options: .literal, range: nil)
+//                    let phonenumber = newString.components(separatedBy: "@")
+//                    swipeVW.isHidden = true
+//                    holdVW.isHidden = false
+//                    btnMargeCall.isHidden = true
+//                    btnAddCall.isHidden = false
+//                    if phonenumber[0] == (lblSwipTimeFistNumber.text ?? "" ).suffix(10) {
+//                        CPPWrapper().unholdCall(0)
+//                    }
+//                    else if phonenumber[0] == (lblSwipTimeSecondNumber.text ?? "" ).suffix(10) {
+//                        CPPWrapper().unholdCall(1)
+//                    }
+//                }
+//            }
+//        }
         
         if isBluetoothPermissionGranted == true {
             manager = CBCentralManager()
@@ -318,18 +318,18 @@ class CallingDisplayVc: UIViewController {
     }
     
     func callTimerStart(){
-        Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [self] timer in
-            if CPPWrapper().chekCallPickupOrNot() == true {
-                timer.invalidate()
-                Timer.scheduledTimer(withTimeInterval: (incomingCallId == "") ? 0 : 0 , repeats: false) { [self] timer in
-                    allbtnEnable()
-                    self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(onTimer), userInfo: nil, repeats: true)
-                    lblCalling.text = "Mobile Calling..."
-                    
-                }
-                print("Call ring..........")
-            }
-        }
+//        Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [self] timer in
+//            if CPPWrapper().chekCallPickupOrNot() == true {
+//                timer.invalidate()
+//                Timer.scheduledTimer(withTimeInterval: (incomingCallId == "") ? 0 : 0 , repeats: false) { [self] timer in
+//                    allbtnEnable()
+//                    self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(onTimer), userInfo: nil, repeats: true)
+//                    lblCalling.text = "Mobile Calling..."
+//
+//                }
+//                print("Call ring..........")
+//            }
+//        }
     }
         
     func callBluetoothTimeOpen(){

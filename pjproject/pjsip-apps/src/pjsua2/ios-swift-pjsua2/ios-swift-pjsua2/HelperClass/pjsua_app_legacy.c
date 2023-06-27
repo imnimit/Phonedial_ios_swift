@@ -20,7 +20,7 @@
 
 #include <pjsua-lib/pjsua.h>
 
-#include "/Users/magictech/Desktop/pjproject/pjsip-apps/src/pjsua/pjsua_app_common.h"
+#include "/Volumes/Secondary/Projects/Phonedial_ios_swift/pjproject/pjsip-apps/src/pjsua/pjsua_app_common.h"
 
 #define THIS_FILE	"pjsua_app_legacy.c"
 
@@ -522,9 +522,9 @@ static void vid_handle_menu(char *menuin)
 		    pjmedia_vid_codec_param cp;
 		    pjmedia_video_format_detail *vfd;
 
-		    status = pjsua_vid_codec_get_param(&ci[i].codec_id, &cp);
-		    if (status != PJ_SUCCESS)
-			continue;
+//		    status = pjsua_vid_codec_get_param(&ci[i].codec_id, &cp);
+//		    if (status != PJ_SUCCESS)
+//			continue;
 
 		    vfd = pjmedia_format_get_video_format_detail(&cp.enc_fmt,
 								 PJ_TRUE);

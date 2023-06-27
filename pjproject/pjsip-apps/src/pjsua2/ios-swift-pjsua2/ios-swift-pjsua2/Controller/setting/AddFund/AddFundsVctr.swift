@@ -17,7 +17,7 @@ class AddFundsVctr: UIViewController {
     @IBOutlet weak var lblWalletBalance: UILabel!
     @IBOutlet weak var lblChargeValue: UILabel!
     @IBOutlet weak var tableView: UITableView!
-    var cardSelection = -1
+    var cardSelection = 0
     @IBOutlet weak var hightTableView: NSLayoutConstraint!
     
     var dataForResponce = [String:Any]()
@@ -29,6 +29,7 @@ class AddFundsVctr: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initCall()
+        self.title = "Add Fund"
         NotificationCenter.default.addObserver(self, selector: #selector(crditcardDetail), name: Notification.Name("crditcardDetail"), object: nil)
     }
     
@@ -43,6 +44,10 @@ class AddFundsVctr: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         crditcardDetail()
+        self.navigationController?.navigationBar.isHidden = false
+        self.navigationItem.setHidesBackButton(true, animated: true)
+        self.navigationController?.navigationBar.backgroundColor = .none
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -51,6 +56,9 @@ class AddFundsVctr: UIViewController {
     
     
     func initCall(){
+        let leftButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_back_arrow"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(self.backArrow))
+        navigationItem.leftBarButtonItem = leftButton
+        
         btnCreditCard.layer.borderColor = #colorLiteral(red: 0.2361463308, green: 0.6436210275, blue: 0.7784664035, alpha: 1)
         btnCreditCard.layer.borderWidth = 1
         btnCreditCard.layer.cornerRadius = 5
@@ -79,6 +87,10 @@ class AddFundsVctr: UIViewController {
         
         hightTableView.constant = 0.0
         
+    }
+    
+    @objc func backArrow() {
+        self.navigationController?.popToRootViewController(animated: true)
     }
     
     //MARK: - btn Click
@@ -140,7 +152,8 @@ class AddFundsVctr: UIViewController {
     @IBAction func btnCallAddCardDetails(_ sender: UIButton) {
         let nextVC = UIStoryboard(name: "Setting", bundle: nil).instantiateViewController(withIdentifier: "AddNewCardVCtr") as! AddNewCardVCtr
         self.navigationController?.pushViewController(nextVC, animated: true)
-//        self.present(nextVC, animated: false)
+       // nextVC.modalPresentationStyle = .overFullScreen
+       // self.present(nextVC, animated: false)
     }
     
     

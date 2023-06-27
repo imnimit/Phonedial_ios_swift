@@ -11,6 +11,7 @@ class MyAccountDetailsCell: UITableViewCell {
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var lblDiscription: UILabel!
     @IBOutlet weak var imge: UIImageView!
+    @IBOutlet weak var imageMainVW: UIView!
     
 
 }

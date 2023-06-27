@@ -20,8 +20,9 @@ class DataModel : Object{
     @Persisted var isSentSuccessFully: String
     @Persisted var senderID: String
     @Persisted var receiverID: String
+    @Persisted var groupID: String
     
-    convenience init(id: String, chatID: String, userID: String, dateTime: String, msgType: String, message: String, isSentSuccessFully: String, senderID: String, receiverID: String) {
+    convenience init(id: String, chatID: String, userID: String, dateTime: String, msgType: String, message: String, isSentSuccessFully: String, senderID: String, receiverID: String, groupID: String) {
         self.init()
         self.id = id
         self.chatID = chatID
@@ -32,5 +33,6 @@ class DataModel : Object{
         self.isSentSuccessFully = isSentSuccessFully
         self.senderID = senderID
         self.receiverID = receiverID
+        self.groupID = groupID
     }
 }

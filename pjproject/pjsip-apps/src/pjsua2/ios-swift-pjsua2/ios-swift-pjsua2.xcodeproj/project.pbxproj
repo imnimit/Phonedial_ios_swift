@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		00082475298B89F1001E39A0 /* TextReceiverCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00082474298B89F1001E39A0 /* TextReceiverCell.swift */; };
-		0008CA2229263F2C001CAEF5 /* libopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0008CA2129263F2C001CAEF5 /* libopus.a */; };
-		0008CA24292644B7001CAEF5 /* libopenh264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0008CA23292644B7001CAEF5 /* libopenh264.a */; };
 		000DB8A22983AA35009D3174 /* Chat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 000DB8A12983AA35009D3174 /* Chat.storyboard */; };
 		000DB8A42983ABEE009D3174 /* ChatVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000DB8A32983ABEE009D3174 /* ChatVc.swift */; };
 		000DB8A62983AD96009D3174 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000DB8A52983AD96009D3174 /* ChatService.swift */; };
@@ -49,7 +47,6 @@
 		00697C362955897600C5C621 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00697C352955897600C5C621 /* UserModel.swift */; };
 		00697C382955ADAD00C5C621 /* DBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00697C372955ADAD00C5C621 /* DBManager.swift */; };
 		00697C3D2955CFF500C5C621 /* phoneDIalersListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00697C3C2955CFF500C5C621 /* phoneDIalersListCell.swift */; };
-		00697C3F2955E3E100C5C621 /* dataold.db in Resources */ = {isa = PBXBuildFile; fileRef = 00697C3E2955E3E100C5C621 /* dataold.db */; };
 		006FBB2029519B4800A3CB6F /* BlockCallsVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006FBB1F29519B4800A3CB6F /* BlockCallsVc.swift */; };
 		006FBB2329519B7900A3CB6F /* BlockCallsListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006FBB2229519B7900A3CB6F /* BlockCallsListCell.swift */; };
 		006FBB2829519E6200A3CB6F /* FeedbackOrSuggestVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006FBB2729519E6200A3CB6F /* FeedbackOrSuggestVc.swift */; };
@@ -131,7 +128,6 @@
 		00A6EF2229A8968900E69CE4 /* StripePayments in Frameworks */ = {isa = PBXBuildFile; productRef = 00A6EF2129A8968900E69CE4 /* StripePayments */; };
 		00A6EF2429A8968900E69CE4 /* StripePaymentsUI in Frameworks */ = {isa = PBXBuildFile; productRef = 00A6EF2329A8968900E69CE4 /* StripePaymentsUI */; };
 		00A6EF2E29A89A9000E69CE4 /* IAPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A6EF2D29A89A9000E69CE4 /* IAPHelper.swift */; };
-		00AB08EF291D34930025CB6B /* libopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AB08EE291D34930025CB6B /* libopus.a */; };
 		00B08E88299375D700DB6ED5 /* VideoSenderSideCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B08E87299375D700DB6ED5 /* VideoSenderSideCell.swift */; };
 		00B08E8A2993A9B100DB6ED5 /* VideoReceiverSideCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B08E892993A9B100DB6ED5 /* VideoReceiverSideCell.swift */; };
 		00B4B2F629A9D33400B24A03 /* RegisterVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B4B2F529A9D33400B24A03 /* RegisterVc.swift */; };
@@ -158,7 +154,6 @@
 		00D651222959856D009FEEEF /* CallDtShowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D651212959856D009FEEEF /* CallDtShowCell.swift */; };
 		00D651252959BE63009FEEEF /* RecordingListVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D651242959BE63009FEEEF /* RecordingListVc.swift */; };
 		00D651282959BE9B009FEEEF /* RecodingListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D651272959BE9B009FEEEF /* RecodingListCell.swift */; };
-		00D6512A2959C08E009FEEEF /* data.db in Resources */ = {isa = PBXBuildFile; fileRef = 00D651292959C08E009FEEEF /* data.db */; };
 		00D824A0295AB269002F3E3A /* RecordingDetailVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D8249F295AB269002F3E3A /* RecordingDetailVc.swift */; };
 		00D824A3295AF408002F3E3A /* VoiceMailLogsVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D824A2295AF408002F3E3A /* VoiceMailLogsVc.swift */; };
 		00D824A6295AF4B6002F3E3A /* VoiceMailLogsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D824A5295AF4B6002F3E3A /* VoiceMailLogsCell.swift */; };
@@ -170,6 +165,15 @@
 		00F9A44129B06E3600724DE2 /* PhoneDialUserListVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9A44029B06E3600724DE2 /* PhoneDialUserListVc.swift */; };
 		00F9A44329B072F400724DE2 /* PhoneDialerUserListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9A44229B072F400724DE2 /* PhoneDialerUserListCell.swift */; };
 		154019EBBD0808B65A31688C /* Pods_ios_swift_pjsua2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A91B19AF8B702A61C411653C /* Pods_ios_swift_pjsua2.framework */; };
+		B1F368672A38493500EEA198 /* CreateParticipantVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F368662A38493500EEA198 /* CreateParticipantVC.swift */; };
+		B1F368692A384DCA00EEA198 /* CreateParticipantCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F368682A384DCA00EEA198 /* CreateParticipantCell.swift */; };
+		B1F3686B2A38815A00EEA198 /* ContactAddCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F3686A2A38815A00EEA198 /* ContactAddCell.swift */; };
+		B1FBFA4D2A49BCF600D290D2 /* AddContactsListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FBFA4C2A49BCF600D290D2 /* AddContactsListCell.swift */; };
+		B1FDA21A2A31B0B300F2686E /* data.db in Resources */ = {isa = PBXBuildFile; fileRef = B1FDA2192A31B0B300F2686E /* data.db */; };
+		B1FDA21C2A31B97B00F2686E /* libopenh264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B1FDA21B2A31B97400F2686E /* libopenh264.a */; };
+		B1FDA21E2A31BA3800F2686E /* libopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B1FDA21D2A31BA3500F2686E /* libopus.a */; };
+		B1FE7AFD2A3988670000E2BB /* CreateGroupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FE7AFC2A3988670000E2BB /* CreateGroupVC.swift */; };
+		B1FE7AFF2A398A100000E2BB /* CreateGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FE7AFE2A398A100000E2BB /* CreateGroupCell.swift */; };
 		C337417325BADEEE007785D7 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = C337417225BADEEE007785D7 /* Model.swift */; };
 		C351398125A5F70D00A090AA /* libg7221codec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3B8521F25A5EC380037A8AB /* libg7221codec.a */; };
 		C351398225A5F70D00A090AA /* libgsmcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3B8521A25A5EC380037A8AB /* libgsmcodec.a */; };
@@ -275,7 +279,6 @@
 		00697C352955897600C5C621 /* UserModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		00697C372955ADAD00C5C621 /* DBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBManager.swift; sourceTree = "<group>"; };
 		00697C3C2955CFF500C5C621 /* phoneDIalersListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = phoneDIalersListCell.swift; sourceTree = "<group>"; };
-		00697C3E2955E3E100C5C621 /* dataold.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = dataold.db; sourceTree = "<group>"; };
 		006FBB1F29519B4800A3CB6F /* BlockCallsVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockCallsVc.swift; sourceTree = "<group>"; };
 		006FBB2229519B7900A3CB6F /* BlockCallsListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockCallsListCell.swift; sourceTree = "<group>"; };
 		006FBB2729519E6200A3CB6F /* FeedbackOrSuggestVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackOrSuggestVc.swift; sourceTree = "<group>"; };
@@ -370,7 +373,6 @@
 		00D651212959856D009FEEEF /* CallDtShowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallDtShowCell.swift; sourceTree = "<group>"; };
 		00D651242959BE63009FEEEF /* RecordingListVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingListVc.swift; sourceTree = "<group>"; };
 		00D651272959BE9B009FEEEF /* RecodingListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecodingListCell.swift; sourceTree = "<group>"; };
-		00D651292959C08E009FEEEF /* data.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = data.db; sourceTree = "<group>"; };
 		00D8249F295AB269002F3E3A /* RecordingDetailVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingDetailVc.swift; sourceTree = "<group>"; };
 		00D824A2295AF408002F3E3A /* VoiceMailLogsVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMailLogsVc.swift; sourceTree = "<group>"; };
 		00D824A5295AF4B6002F3E3A /* VoiceMailLogsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMailLogsCell.swift; sourceTree = "<group>"; };
@@ -383,6 +385,15 @@
 		00F9A44229B072F400724DE2 /* PhoneDialerUserListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneDialerUserListCell.swift; sourceTree = "<group>"; };
 		5288C9243E4A8376B9239B9C /* Pods-ios-swift-pjsua2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ios-swift-pjsua2.debug.xcconfig"; path = "Target Support Files/Pods-ios-swift-pjsua2/Pods-ios-swift-pjsua2.debug.xcconfig"; sourceTree = "<group>"; };
 		A91B19AF8B702A61C411653C /* Pods_ios_swift_pjsua2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ios_swift_pjsua2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1F368662A38493500EEA198 /* CreateParticipantVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateParticipantVC.swift; sourceTree = "<group>"; };
+		B1F368682A384DCA00EEA198 /* CreateParticipantCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateParticipantCell.swift; sourceTree = "<group>"; };
+		B1F3686A2A38815A00EEA198 /* ContactAddCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactAddCell.swift; sourceTree = "<group>"; };
+		B1FBFA4C2A49BCF600D290D2 /* AddContactsListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddContactsListCell.swift; sourceTree = "<group>"; };
+		B1FDA2192A31B0B300F2686E /* data.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = data.db; sourceTree = "<group>"; };
+		B1FDA21B2A31B97400F2686E /* libopenh264.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopenh264.a; path = Libraries/libopenh264.a; sourceTree = "<group>"; };
+		B1FDA21D2A31BA3500F2686E /* libopus.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopus.a; path = Libraries/libopus.a; sourceTree = "<group>"; };
+		B1FE7AFC2A3988670000E2BB /* CreateGroupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroupVC.swift; sourceTree = "<group>"; };
+		B1FE7AFE2A398A100000E2BB /* CreateGroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroupCell.swift; sourceTree = "<group>"; };
 		C337417225BADEEE007785D7 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		C374860725B84FA100FBE972 /* OutgoingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutgoingViewController.swift; sourceTree = "<group>"; };
 		C399A57025AF2721000F742A /* IncomingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomingViewController.swift; sourceTree = "<group>"; };
@@ -440,7 +451,6 @@
 				00CDDFED29AF1B1000DBD58C /* GoogleSignInSwift in Frameworks */,
 				0082B72B29542CA700A2B5D7 /* libsqlite3.tbd in Frameworks */,
 				00A6EF1829A8968900E69CE4 /* StripeApplePay in Frameworks */,
-				0008CA24292644B7001CAEF5 /* libopenh264.a in Frameworks */,
 				00A6EF1C29A8968900E69CE4 /* StripeFinancialConnections in Frameworks */,
 				00A6EF2229A8968900E69CE4 /* StripePayments in Frameworks */,
 				C351398125A5F70D00A090AA /* libg7221codec.a in Frameworks */,
@@ -449,8 +459,8 @@
 				C351398425A5F70D00A090AA /* libpj.a in Frameworks */,
 				007724C8292E06D1000F1658 /* UIKit.framework in Frameworks */,
 				C351398525A5F70D00A090AA /* libpjlib-util.a in Frameworks */,
+				B1FDA21E2A31BA3800F2686E /* libopus.a in Frameworks */,
 				C351398625A5F70D00A090AA /* libpjmedia-audiodev.a in Frameworks */,
-				0008CA2229263F2C001CAEF5 /* libopus.a in Frameworks */,
 				00CDDFEB29AF1B1000DBD58C /* GoogleSignIn in Frameworks */,
 				0090DDDD293F0799005B6115 /* PushKit.framework in Frameworks */,
 				C351398725A5F70D00A090AA /* libpjmedia-codec.a in Frameworks */,
@@ -462,7 +472,6 @@
 				C351398A25A5F70D00A090AA /* libpjnath.a in Frameworks */,
 				00A6EF1E29A8968900E69CE4 /* StripeIdentity in Frameworks */,
 				C351398B25A5F70D00A090AA /* libpjsip-simple.a in Frameworks */,
-				00AB08EF291D34930025CB6B /* libopus.a in Frameworks */,
 				C351398C25A5F70D00A090AA /* libpjsip-ua.a in Frameworks */,
 				C351398D25A5F70D00A090AA /* libpjsip.a in Frameworks */,
 				C351398E25A5F70D00A090AA /* libpjsua.a in Frameworks */,
@@ -477,6 +486,7 @@
 				C3B8524725A5ED6D0037A8AB /* AudioToolbox.framework in Frameworks */,
 				C3B8524325A5EC940037A8AB /* AVFoundation.framework in Frameworks */,
 				0075101929AE209E004545EA /* FacebookShare in Frameworks */,
+				B1FDA21C2A31B97B00F2686E /* libopenh264.a in Frameworks */,
 				00B4B2FE29A9E48E00B24A03 /* CountryPicker in Frameworks */,
 				0075101329AE209E004545EA /* FacebookCore in Frameworks */,
 				00A6EF1A29A8968900E69CE4 /* StripeCardScan in Frameworks */,
@@ -707,8 +717,7 @@
 		0082B72129542B5700A2B5D7 /* SQLiteDB-Swift */ = {
 			isa = PBXGroup;
 			children = (
-				00D651292959C08E009FEEEF /* data.db */,
-				00697C3E2955E3E100C5C621 /* dataold.db */,
+				B1FDA2192A31B0B300F2686E /* data.db */,
 				0082B72429542B5E00A2B5D7 /* CloudDB.swift */,
 				0082B72329542B5E00A2B5D7 /* SQLiteBase.swift */,
 				0082B72529542B5E00A2B5D7 /* SQLiteDB.swift */,
@@ -840,6 +849,8 @@
 				0073A4052952CCFC00B6107E /* ContactDetailVc.swift */,
 				0073A4122953028400B6107E /* AddContacts.swift */,
 				00F9A44029B06E3600724DE2 /* PhoneDialUserListVc.swift */,
+				B1F368662A38493500EEA198 /* CreateParticipantVC.swift */,
+				B1FE7AFC2A3988670000E2BB /* CreateGroupVC.swift */,
 			);
 			path = Contacts;
 			sourceTree = "<group>";
@@ -847,9 +858,13 @@
 		009BCF9E294C513500EB6001 /* cell */ = {
 			isa = PBXGroup;
 			children = (
+				B1FBFA4C2A49BCF600D290D2 /* AddContactsListCell.swift */,
 				009BCF9F294C513B00EB6001 /* ContactsCell.swift */,
 				0073A4072952CDFC00B6107E /* ContactDetailListCell.swift */,
 				00F9A44229B072F400724DE2 /* PhoneDialerUserListCell.swift */,
+				B1F368682A384DCA00EEA198 /* CreateParticipantCell.swift */,
+				B1F3686A2A38815A00EEA198 /* ContactAddCell.swift */,
+				B1FE7AFE2A398A100000E2BB /* CreateGroupCell.swift */,
 			);
 			path = cell;
 			sourceTree = "<group>";
@@ -1118,6 +1133,8 @@
 		C3B8521725A5EC380037A8AB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B1FDA21D2A31BA3500F2686E /* libopus.a */,
+				B1FDA21B2A31B97400F2686E /* libopenh264.a */,
 				002BF22A29B9BFA600FA7C66 /* StoreKit.framework */,
 				0082B72A29542C3E00A2B5D7 /* libsqlite3.tbd */,
 				0090DDDC293F0799005B6115 /* PushKit.framework */,
@@ -1287,12 +1304,11 @@
 				C3B8520825A5EA6D0037A8AB /* Assets.xcassets in Resources */,
 				003A78502963ED8500212E88 /* animation_1.json in Resources */,
 				000DB8A22983AA35009D3174 /* Chat.storyboard in Resources */,
-				00697C3F2955E3E100C5C621 /* dataold.db in Resources */,
-				00D6512A2959C08E009FEEEF /* data.db in Resources */,
 				000DB8B82983FF0F009D3174 /* rckit_outgoing.aiff in Resources */,
 				000DB8B02983F650009D3174 /* AudioView.xib in Resources */,
 				0073A40A2952EC7700B6107E /* CallInfo.storyboard in Resources */,
 				003A78512963ED8500212E88 /* custom_load.json in Resources */,
+				B1FDA21A2A31B0B300F2686E /* data.db in Resources */,
 				C3B8520625A5EA6C0037A8AB /* Main.storyboard in Resources */,
 				000DB8B92983FF0F009D3174 /* rckit_incoming.aiff in Resources */,
 			);
@@ -1363,6 +1379,7 @@
 				0075100C29ADC594004545EA /* ListOFPurchaseNumberCell.swift in Sources */,
 				00BA7DC529961936009C2FA4 /* mp3SenderSideCell.swift in Sources */,
 				005F6E2D2997B9BE00A4C6CC /* DocReceiverSideCell.swift in Sources */,
+				B1F3686B2A38815A00EEA198 /* ContactAddCell.swift in Sources */,
 				00D339CA2988E08900AC8E9A /* RCMessage.swift in Sources */,
 				0075C46D2934BE5B00DC8C93 /* pjsua_app_cli.c in Sources */,
 				00697C2F2955765C00C5C621 /* InviteContactPopup.swift in Sources */,
@@ -1378,6 +1395,7 @@
 				009AB147294C31D40042E4FE /* ReceiptVc.swift in Sources */,
 				006FBB3A2951D6BB00A3CB6F /* phoneDIalersListVc.swift in Sources */,
 				00D55C362992738B00B5FB8E /* ImgeReceiverSideCell.swift in Sources */,
+				B1FBFA4D2A49BCF600D290D2 /* AddContactsListCell.swift in Sources */,
 				009AB152294C41D70042E4FE /* CommonAlertVc.swift in Sources */,
 				009AB158294C4A690042E4FE /* ContactsVc.swift in Sources */,
 				00697C382955ADAD00C5C621 /* DBManager.swift in Sources */,
@@ -1404,6 +1422,7 @@
 				005F6E322997C6EF00A4C6CC /* Scheduler.swift in Sources */,
 				0075C46F2934BE5B00DC8C93 /* pjsua_app.c in Sources */,
 				0062A0C629601CCC00AC5C0B /* speedDialListCell.swift in Sources */,
+				B1FE7AFD2A3988670000E2BB /* CreateGroupVC.swift in Sources */,
 				000DB8B12983F651009D3174 /* AudioView.swift in Sources */,
 				000DB8A62983AD96009D3174 /* ChatService.swift in Sources */,
 				005F6E2B2997586B00A4C6CC /* DocSenderSideCell.swift in Sources */,
@@ -1418,6 +1437,7 @@
 				00D824A6295AF4B6002F3E3A /* VoiceMailLogsCell.swift in Sources */,
 				0073A4042952C84100B6107E /* CallInfoListVc.swift in Sources */,
 				006FBB2829519E6200A3CB6F /* FeedbackOrSuggestVc.swift in Sources */,
+				B1F368672A38493500EEA198 /* CreateParticipantVC.swift in Sources */,
 				C399A57125AF2721000F742A /* IncomingViewController.swift in Sources */,
 				C3AB889B25A734B400224276 /* wrapper.mm in Sources */,
 				009AB14F294C33740042E4FE /* MyAccountDetailsCell.swift in Sources */,
@@ -1433,6 +1453,7 @@
 				00B08E8A2993A9B100DB6ED5 /* VideoReceiverSideCell.swift in Sources */,
 				0092AE2C294B3D9700D0FA25 /* SettingVc.swift in Sources */,
 				009C32A2299B76920058E022 /* hederCellDateOrTime.swift in Sources */,
+				B1FE7AFF2A398A100000E2BB /* CreateGroupCell.swift in Sources */,
 				00D824A0295AB269002F3E3A /* RecordingDetailVc.swift in Sources */,
 				00F9A43F29B0681B00724DE2 /* PurchaseNumberListCell.swift in Sources */,
 				00F060CE296D379F000A8778 /* LogoutPopupVc.swift in Sources */,
@@ -1459,6 +1480,7 @@
 				009AB155294C44E30042E4FE /* InviteFriendsVc.swift in Sources */,
 				00D651222959856D009FEEEF /* CallDtShowCell.swift in Sources */,
 				009AB145294C31A40042E4FE /* CardPaymentConfirmationVc.swift in Sources */,
+				B1F368692A384DCA00EEA198 /* CreateParticipantCell.swift in Sources */,
 				00CCD8BB2987BEFC009DDC7A /* ChatUserListCell.swift in Sources */,
 				0075C46C2934BE5B00DC8C93 /* Constant.swift in Sources */,
 				00CCD8A029879356009DDC7A /* UserModal.swift in Sources */,

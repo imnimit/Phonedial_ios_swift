@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
  */
-#include "/Users/magictech/Desktop/pjproject/pjsip-apps/src/pjsua/pjsua_app.h"
+#include "/Volumes/Secondary/Projects/Phonedial_ios_swift/pjproject/pjsip-apps/src/pjsua/pjsua_app.h"
 //#include "ring.h"
 
 #import <AudioToolbox/AudioToolbox.h>

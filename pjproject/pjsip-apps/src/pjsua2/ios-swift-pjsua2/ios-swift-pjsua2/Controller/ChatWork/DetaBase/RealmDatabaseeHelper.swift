@@ -50,7 +50,14 @@ class RealmDatabaseeHelper{
     
     func FilterDataModel(ReciverId: String , SenderID: String) ->  Results<DataModel> {
         let realm = try! Realm()
-        let newItems = realm.objects(DataModel.self).filter("senderID == %@ OR receiverID == %@", ReciverId, ReciverId)
+        let newItems = realm.objects(DataModel.self).filter("(senderID == %@ OR receiverID == %@) AND receiverID  != %@", ReciverId, ReciverId,"0")
+        let ascendingdataFormate = newItems.sorted(byKeyPath: "dateTime", ascending: true)
+        return ascendingdataFormate
+    }
+    
+    func FilterDataModelGroup(groupId: String) ->  Results<DataModel> {
+        let realm = try! Realm()
+        let newItems = realm.objects(DataModel.self).filter("groupID == %@", groupId)
         let ascendingdataFormate = newItems.sorted(byKeyPath: "dateTime", ascending: true)
         return ascendingdataFormate
     }
@@ -104,6 +111,37 @@ class RealmDatabaseeHelper{
     
     
     ///////////////////// ----------User Modal-------------------///////////////////
+    func saveUserModalUpdateGroup(dataUserModal: UserModal){
+        let realm = try! Realm()
+             
+        let people = realm.objects(UserModal.self)
+
+        let result = people.filter("roomID == '\(dataUserModal.roomID)'")
+        if result.isEmpty {
+            print("not exist in the database.")
+            try! realm.write{
+                realm.add(dataUserModal)
+            }
+        } else {
+            print("John Doe exists in the database.")
+            try! realm.write {
+                result.first!.lastChatDateTime = dataUserModal.lastChatDateTime
+                result.first!.lastMessageType = dataUserModal.lastMessageType
+                result.first!.lastMessage = dataUserModal.lastMessage
+//                result.first!.receiverIdForChat = dataUserModal.receiverIdForChat
+//                result.first!.roomID = dataUserModal.roomID
+                if result.first!.chatCounter != "0" {
+                    let count = Int(result.first!.chatCounter)! + Int(dataUserModal.chatCounter)!
+                    result.first!.chatCounter =  "\(count)"
+                }else{
+                    result.first!.chatCounter = dataUserModal.chatCounter
+                }
+            }
+        }
+        
+    }
+    
+    
     func saveUserModalUpdate(dataUserModal: UserModal){
         let realm = try! Realm()
              
@@ -121,6 +159,8 @@ class RealmDatabaseeHelper{
                 result.first!.lastChatDateTime = dataUserModal.lastChatDateTime
                 result.first!.lastMessageType = dataUserModal.lastMessageType
                 result.first!.lastMessage = dataUserModal.lastMessage
+//                result.first!.receiverIdForChat = dataUserModal.receiverIdForChat
+//                result.first!.roomID = dataUserModal.roomID
                 if result.first!.chatCounter != "0" {
                     let count = Int(result.first!.chatCounter)! + Int(dataUserModal.chatCounter)!
                     result.first!.chatCounter =  "\(count)"
@@ -150,6 +190,14 @@ class RealmDatabaseeHelper{
     func readTimeCountChange(phonenumber: String) {
         let realm = try! Realm()
         let taskToUpdate = realm.objects(UserModal.self).filter("contactNumber = '\(phonenumber)'").first!
+        try! realm.write {
+            taskToUpdate.chatCounter = "0"
+        }
+    }
+    
+    func readTimeCountGroup(roomID: String) {
+        let realm = try! Realm()
+        let taskToUpdate = realm.objects(UserModal.self).filter("roomID = '\(roomID)'").first!
         try! realm.write {
             taskToUpdate.chatCounter = "0"
         }

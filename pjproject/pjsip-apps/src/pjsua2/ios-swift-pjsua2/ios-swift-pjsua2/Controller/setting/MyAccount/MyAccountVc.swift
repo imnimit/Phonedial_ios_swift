@@ -15,7 +15,7 @@ import AuthenticationServices
 class MyAccountVc: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
-    var lblMyaccount = [["title":"Speed Dial","Disciption":"Set your favorite contact"],["title":"Delete Account","Disciption":"Remove account from PhoneDial"],["title":"Log Out","Disciption":"Are you sure want to logout?"]]
+    var lblMyaccount = [["title":"Speed Dial","Disciption":"Set your favorite contact", "image": #imageLiteral(resourceName: "ic_speed_dial.png")],["title":"Delete Account","Disciption":"Remove account from PhoneDial", "image": #imageLiteral(resourceName: "ic_delete_account.png")],["title":"Log Out","Disciption":"Are you sure want to logout?", "image": #imageLiteral(resourceName: "ic_log_out.pdf")]]
     
     var Logout = false
     
@@ -62,8 +62,10 @@ extension MyAccountVc:  UITableViewDataSource,UITableViewDelegate {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyAccountDetailsCell", for: indexPath) as! MyAccountDetailsCell
         let lbl = lblMyaccount[indexPath.row]
-        cell.lblTitle.text = lbl["title"] ?? ""
-        cell.lblDiscription.text = lbl["Disciption"] ?? ""
+        cell.lblTitle.text = lblMyaccount[indexPath.row]["title"] as? String//lbl["title"] ?? "" as! String
+        cell.lblDiscription.text = lblMyaccount[indexPath.row]["Disciption"] as? String
+        cell.imge.image = lblMyaccount[indexPath.row]["image"] as? UIImage
+        cell.imageMainVW.layer.cornerRadius = 5
         return cell
     }
     

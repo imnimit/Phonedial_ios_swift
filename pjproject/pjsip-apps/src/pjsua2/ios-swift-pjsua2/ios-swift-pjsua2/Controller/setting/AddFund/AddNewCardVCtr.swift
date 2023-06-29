@@ -64,7 +64,8 @@ class AddNewCardVCtr: UIViewController {
         }
         
         arrayState = DBManager().GetAllStatesName(phoneCode: usCountryDetail["phoneCode"] as! String)
-
+        
+        self.title = "Add Fund"
         
         pickerViewHome()
     }

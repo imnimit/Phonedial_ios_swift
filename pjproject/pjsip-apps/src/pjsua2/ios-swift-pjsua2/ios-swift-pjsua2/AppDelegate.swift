@@ -58,6 +58,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     var timerMinCall = Timer()
     var callKitTimeShowNumber = ""
     var recentCallLogToDirectCall = ""
+    var counter = 0
+    var isVidoeCallIncomeing = false
+    var viewdisplayView = UIView ()
+    var viewwindowView = UIView()
+    var isVideoCallMute = false
 
 
     static var instance: AppDelegate {
@@ -446,6 +451,8 @@ extension AppDelegate {
                 OneTimeCreateLib = true
                 
                 CPPWrapper().incoming_call_wrapper(incoming_call_swift)
+                CPPWrapper().update_video_wrapper(update_video_swift)
+
                 //                CPPWrapper().update_video_wrapper(update_video_swift)
                 
                 //Register to the user

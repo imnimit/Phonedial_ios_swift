@@ -137,6 +137,9 @@
 		00B4B2FE29A9E48E00B24A03 /* CountryPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 00B4B2FD29A9E48E00B24A03 /* CountryPicker */; };
 		00BA7DC529961936009C2FA4 /* mp3SenderSideCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BA7DC429961936009C2FA4 /* mp3SenderSideCell.swift */; };
 		00BA7DC729967E3A009C2FA4 /* mp3ReceiverSideCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BA7DC629967E3A009C2FA4 /* mp3ReceiverSideCell.swift */; };
+		00C70E0E2A4BF413000204E7 /* VideoCallWaitVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C70E0C2A4BF412000204E7 /* VideoCallWaitVc.swift */; };
+		00C70E0F2A4BF413000204E7 /* VideoCallVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C70E0D2A4BF413000204E7 /* VideoCallVc.swift */; };
+		00C70E162A4C375A000204E7 /* libbcg729.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C70E152A4C3757000204E7 /* libbcg729.a */; };
 		00C99AEE298A32040052BA1A /* TextSenderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C99AED298A32040052BA1A /* TextSenderCell.swift */; };
 		00CA262E29A7281F006BDC31 /* ContryListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CA262D29A7281F006BDC31 /* ContryListCell.swift */; };
 		00CA263029A728DA006BDC31 /* NumberPuchaseTimeListCountyVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CA262F29A728DA006BDC31 /* NumberPuchaseTimeListCountyVc.swift */; };
@@ -360,6 +363,9 @@
 		00B4B2F729A9E1F400B24A03 /* NumberAddRegistrationVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberAddRegistrationVc.swift; sourceTree = "<group>"; };
 		00BA7DC429961936009C2FA4 /* mp3SenderSideCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mp3SenderSideCell.swift; sourceTree = "<group>"; };
 		00BA7DC629967E3A009C2FA4 /* mp3ReceiverSideCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mp3ReceiverSideCell.swift; sourceTree = "<group>"; };
+		00C70E0C2A4BF412000204E7 /* VideoCallWaitVc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCallWaitVc.swift; sourceTree = "<group>"; };
+		00C70E0D2A4BF413000204E7 /* VideoCallVc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCallVc.swift; sourceTree = "<group>"; };
+		00C70E152A4C3757000204E7 /* libbcg729.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbcg729.a; path = Libraries/libbcg729.a; sourceTree = "<group>"; };
 		00C99AED298A32040052BA1A /* TextSenderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSenderCell.swift; sourceTree = "<group>"; };
 		00CA262D29A7281F006BDC31 /* ContryListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContryListCell.swift; sourceTree = "<group>"; };
 		00CA262F29A728DA006BDC31 /* NumberPuchaseTimeListCountyVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberPuchaseTimeListCountyVc.swift; sourceTree = "<group>"; };
@@ -461,6 +467,7 @@
 				C351398225A5F70D00A090AA /* libgsmcodec.a in Frameworks */,
 				C351398325A5F70D00A090AA /* libilbccodec.a in Frameworks */,
 				C351398425A5F70D00A090AA /* libpj.a in Frameworks */,
+				00C70E162A4C375A000204E7 /* libbcg729.a in Frameworks */,
 				007724C8292E06D1000F1658 /* UIKit.framework in Frameworks */,
 				C351398525A5F70D00A090AA /* libpjlib-util.a in Frameworks */,
 				B1FDA21E2A31BA3800F2686E /* libopus.a in Frameworks */,
@@ -877,6 +884,8 @@
 		009C252629B21BAD00F27290 /* VedioCalling */ = {
 			isa = PBXGroup;
 			children = (
+				00C70E0D2A4BF413000204E7 /* VideoCallVc.swift */,
+				00C70E0C2A4BF412000204E7 /* VideoCallWaitVc.swift */,
 				009C252729B21C1600F27290 /* VedioCallShowVc.swift */,
 				00A5EF0929B5F28300483530 /* VedioCallVc.swift */,
 			);
@@ -1139,6 +1148,7 @@
 		C3B8521725A5EC380037A8AB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				00C70E152A4C3757000204E7 /* libbcg729.a */,
 				B1FDA21D2A31BA3500F2686E /* libopus.a */,
 				B1FDA21B2A31B97400F2686E /* libopenh264.a */,
 				002BF22A29B9BFA600FA7C66 /* StoreKit.framework */,
@@ -1473,6 +1483,7 @@
 				0062A0C329601C8C00AC5C0B /* SpeedDialVc.swift in Sources */,
 				C3B8520325A5EA6C0037A8AB /* ViewController.swift in Sources */,
 				00B08E88299375D700DB6ED5 /* VideoSenderSideCell.swift in Sources */,
+				00C70E0E2A4BF413000204E7 /* VideoCallWaitVc.swift in Sources */,
 				0092AE35294B48EA00D0FA25 /* AddFundsVctr.swift in Sources */,
 				006FBB3D2951E26800A3CB6F /* MyPurchaseNumberVc.swift in Sources */,
 				006FBB2329519B7900A3CB6F /* BlockCallsListCell.swift in Sources */,
@@ -1505,6 +1516,7 @@
 				00F9A44129B06E3600724DE2 /* PhoneDialUserListVc.swift in Sources */,
 				008C219E291BAB4C00831994 /* ipjsuaLoginVc.swift in Sources */,
 				006FBB372951D51900A3CB6F /* FavoriteListVc.swift in Sources */,
+				00C70E0F2A4BF413000204E7 /* VideoCallVc.swift in Sources */,
 				0022F6512970295A003DF5E7 /* OTDefaultAudioDevice.m in Sources */,
 				00F060CC296D29C2000A8778 /* tempViewController.swift in Sources */,
 				00697C33295586A400C5C621 /* APIsMain.swift in Sources */,

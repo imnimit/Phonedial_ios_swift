@@ -40,7 +40,7 @@
                 <constraint firstItem="21" firstAttribute="leading" secondItem="6" secondAttribute="leading" id="30"/>
                 <constraint firstItem="21" firstAttribute="top" secondItem="6" secondAttribute="top" id="31"/>
             </constraints>
-            <point key="canvasLocation" x="-61" y="-53"/>
+            <point key="canvasLocation" x="-75" y="-54"/>
         </view>
     </objects>
     <resources>

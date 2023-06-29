@@ -84,6 +84,12 @@ extension FindTheNumberVc:  UITableViewDataSource,UITableViewDelegate {
         cell.lblFlag.text = CountyInfo["Img"] as? String ?? ""
         cell.lblNumber.text = DicForData["friendlyName"] as? String ?? ""
         cell.lblCountryName.text = DicForData["isoCountry"] as? String ?? ""
+        cell.separatorVW.isHidden = false
+        if indexPath.row == FindTheNumber.count - 1 {
+            cell.separatorVW.isHidden = true
+        }
+
+        
         return cell
     }
     

@@ -40,7 +40,7 @@
                 <constraint firstAttribute="centerX" secondItem="8" secondAttribute="centerX" id="56"/>
                 <constraint firstAttribute="centerY" secondItem="21" secondAttribute="centerY" id="58"/>
             </constraints>
-            <point key="canvasLocation" x="-60" y="-53"/>
+            <point key="canvasLocation" x="-75" y="-53"/>
         </view>
     </objects>
     <resources>

@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-//#import "ipjsuaAppDelegate.h"
+#import "ipjsuaAppDelegate.h"
 
-//int main(int argc, char *argv[])
-//{
-//    @autoreleasepool {
-//        return UIApplicationMain(argc, argv, nil, NSStringFromClass([ipjsuaAppDelegate class]));
-//    }
-//}
+int main(int argc, char *argv[])
+{
+    @autoreleasepool {
+        return UIApplicationMain(argc, argv, nil, NSStringFromClass([ipjsuaAppDelegate class]));
+    }
+}

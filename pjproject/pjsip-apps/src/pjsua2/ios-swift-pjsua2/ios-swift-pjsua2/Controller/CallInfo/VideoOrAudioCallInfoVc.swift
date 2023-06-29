@@ -20,9 +20,11 @@ class VideoOrAudioCallInfoVc: UIViewController {
         let title = $0
         if title == "AUDIO CALLING" {
             let nextVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "phoneDIalersListVc") as! phoneDIalersListVc
+            nextVC.IsVideoLog = false
             return (menu: title, content: nextVC)
         }else{
-            let nextVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tempViewController") as! tempViewController
+            let nextVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "phoneDIalersListVc") as! phoneDIalersListVc
+            nextVC.IsVideoLog = false
             return (menu: title, content: nextVC)
         }
         

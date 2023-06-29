@@ -105,12 +105,15 @@ extension NumberPuchaseTimeListCountyVc:  UITableViewDataSource,UITableViewDeleg
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "ContryListCell", for: indexPath) as! ContryListCell
-            let lbl = hederDetail[indexPath.section]
-            cell.lblCountyName.text = lbl[indexPath.row]["name"] as? String ?? ""
-            cell.imgFlag.text = lbl[indexPath.row]["Img"] as? String ?? ""
-
-            return cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ContryListCell", for: indexPath) as! ContryListCell
+        let lbl = hederDetail[indexPath.section]
+        cell.lblCountyName.text = lbl[indexPath.row]["name"] as? String ?? ""
+        cell.imgFlag.text = lbl[indexPath.row]["Img"] as? String ?? ""
+        cell.separatorVW.isHidden = false
+        if indexPath.row == hederDetail[indexPath.section].count - 1 {
+            cell.separatorVW.isHidden = true
+        }
+        return cell
     }
    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

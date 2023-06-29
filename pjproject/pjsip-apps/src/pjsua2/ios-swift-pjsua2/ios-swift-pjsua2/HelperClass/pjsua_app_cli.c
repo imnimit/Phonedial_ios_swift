@@ -153,7 +153,7 @@ static pj_cli_sess	   *cli_cons_sess = NULL;
 static pj_cli_front_end	   *telnet_front_end = NULL;
 
 #ifdef USE_GUI
-void displayLog(const char *msg, int len);
+//void displayLog(const char *msg, int len);
 #endif
 
 /** Forward declaration **/
@@ -176,7 +176,7 @@ static void cli_log_writer(int level, const char *buffer, int len)
     if (cli)
         pj_cli_write_log(cli, level, buffer, len);
 #ifdef USE_GUI
-    displayLog(buffer, len);
+//    displayLog(buffer, len);
 #endif
 }
 

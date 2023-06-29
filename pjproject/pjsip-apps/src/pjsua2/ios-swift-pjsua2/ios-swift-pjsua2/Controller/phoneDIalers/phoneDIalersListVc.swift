@@ -14,6 +14,8 @@ class phoneDIalersListVc: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var callEmtyTimeShowVW: UIView!
+    
+    
     var callLogData = [[String:Any]]()
     var groupedUsers =  [Int : [[String : Any]]]()
     var indexContactsArray = [Int]()
@@ -22,7 +24,11 @@ class phoneDIalersListVc: UIViewController {
     var contactBook = KNContactBook(id: "allContacts")
     var dataContectInfo = [[String : Any]]()
     var IsAddContectInAudioLog = true
-    
+    var IsVideoLog = false
+    var groupedUsersVideo =  [Int : [[String : Any]]]()
+    var VidoecallLogData = [[String:Any]]()
+    var indexVideoContactsArray = [Int]()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(callLogUpdata), name: Notification.Name("callLogUpdata"), object: nil)
@@ -37,9 +43,43 @@ class phoneDIalersListVc: UIViewController {
     func CallLogReArrage(){
         groupedUsers.removeAll()
         indexContactsArray.removeAll()
-        callLogData = DBManager().getAllCallLog()
+        groupedUsersVideo.removeAll()
+        
+        let allcallLogData = DBManager().getAllCallLog()
+        //print(allcallLogData)
+        callLogData  =  allcallLogData.filter { $0["type_log"] as? String == "Call" }
+       // print(callLogData)
+        VidoecallLogData  =  allcallLogData.filter { $0["type_log"] as? String == "VidoeCall" }
+      //  print(VidoecallLogData)
+        
+        // Vidoe  Call Log Group
+        countNumber = 0
+        var dv = [[String:Any]]()
+        numberMange = ""
+        for i in VidoecallLogData {
+            if numberMange != "" &&  numberMange != (i["number"]  as! String).suffix(10) {
+                let gorup =  Dictionary(grouping: dv, by: numberManage)
+                groupedUsersVideo =  groupedUsersVideo.merging(gorup) { (current, _) in current }
+                countNumber = countNumber + 1
+                dv = [[String:Any]]()
+                numberMange =  String((i["number"]  as! String).suffix(10))
+                dv.append(i)
+            }else{
+                numberMange =  String((i["number"]  as! String).suffix(10))
+                dv.append(i)
+            }
+        }
+        
+        let gorupV =  Dictionary(grouping: dv, by: numberManage)
+        groupedUsersVideo =  groupedUsersVideo.merging(gorupV) { (current, _) in current }
+        
+        indexVideoContactsArray = [Int](groupedUsersVideo.keys)
+        indexVideoContactsArray = indexVideoContactsArray.sorted()
+        
+        // Audio Call Log Group
         countNumber = 0
         var d = [[String:Any]]()
+        numberMange = ""
         for i in callLogData {
             if numberMange != "" &&  numberMange != (i["number"]  as! String).suffix(10) {
                 let gorup =  Dictionary(grouping: d, by: numberManage)
@@ -60,9 +100,8 @@ class phoneDIalersListVc: UIViewController {
         indexContactsArray = [Int](groupedUsers.keys)
         indexContactsArray = indexContactsArray.sorted()
 
-        print(groupedUsers)
-        
-        tableView.reloadData()
+//        print(groupedUsers)
+        self.tableView.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -92,20 +131,39 @@ class phoneDIalersListVc: UIViewController {
 
 extension phoneDIalersListVc: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if groupedUsers.count == 0 {
-            callEmtyTimeShowVW.isHidden = false
-            tableView.isHidden = true
+        if IsVideoLog == true {
+            if UserDefaults.standard.object(forKey: "InAppPurchaseCheckVideoCall") == nil {
+                callEmtyTimeShowVW.isHidden = true
+                tableView.isHidden = true
+                return 0
+            }else {
+                if groupedUsersVideo.count == 0 {
+                    callEmtyTimeShowVW.isHidden = false
+                    tableView.isHidden = true
+                }else{
+                    callEmtyTimeShowVW.isHidden = true
+                    tableView.isHidden = false
+                }
+
+                return groupedUsersVideo.count
+            }
+           
         }else{
-            callEmtyTimeShowVW.isHidden = true
-            tableView.isHidden = false
+            if groupedUsers.count == 0 {
+                callEmtyTimeShowVW.isHidden = false
+                tableView.isHidden = true
+            }else{
+                callEmtyTimeShowVW.isHidden = true
+                tableView.isHidden = false
+            }
+            return groupedUsers.count
         }
-        return groupedUsers.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "phoneDIalersListCell", for: indexPath) as? phoneDIalersListCell else { return UITableViewCell() }
-        let dicForData = indexContactsArray[indexPath.row]
-        let infoContact = groupedUsers[dicForData]
+        let dicForData = (IsVideoLog == true) ? indexVideoContactsArray[indexPath.row] : indexContactsArray[indexPath.row]
+        let infoContact = (IsVideoLog == true) ? groupedUsersVideo[dicForData] :groupedUsers[dicForData]
         
         cell.lblNumber.text = infoContact?[0]["number"] as? String ?? ""
         cell.lblNameLetter.text = findNameFistORMiddleNameFistLetter(name: infoContact?[0]["contact_name"] as? String ?? "")

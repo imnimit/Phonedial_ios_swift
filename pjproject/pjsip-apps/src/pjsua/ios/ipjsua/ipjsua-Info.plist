@@ -33,8 +33,6 @@
 		<string>audio</string>
 		<string>voip</string>
 	</array>
-	<key>UILaunchStoryboardName</key>
-	<string>Main.storyboard</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

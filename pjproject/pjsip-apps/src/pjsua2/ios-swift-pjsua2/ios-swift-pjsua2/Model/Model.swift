@@ -41,18 +41,18 @@ func incoming_call_swift( call_answer_code: Int32) {
                 appDelegate.window?.rootViewController?.present(vcToPresent, animated: false)
             }
         } else {
-//            if appDelegate.appIsBaground == false &&  appDelegate.callComePushNotification == false {
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
-//                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//                    let vc = storyboard.instantiateViewController(withIdentifier: "dialpadVc")
-//                    let topVC = topMostController()
-//                    let vcToPresent = vc.storyboard!.instantiateViewController(withIdentifier: "VideoCallWaitVc") as! VideoCallWaitVc
-//                    vcToPresent.modalPresentationStyle = .overFullScreen //or .overFullScreen for transparency
-//                    vcToPresent.incomingCallId  = CPPWrapper().incomingCallInfoWrapper()
-//                    vcToPresent.mainTitle = "Incomeing Call"
-//                    topVC.present(vcToPresent, animated: true, completion: nil)
-//                })
-//            }
+            if appDelegate.appIsBaground == false &&  appDelegate.callComePushNotification == false {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let vc = storyboard.instantiateViewController(withIdentifier: "dialpadVc")
+                    let topVC = topMostController()
+                    let vcToPresent = vc.storyboard!.instantiateViewController(withIdentifier: "VideoCallWaitVc") as! VideoCallWaitVc
+                    vcToPresent.modalPresentationStyle = .overFullScreen //or .overFullScreen for transparency
+                    vcToPresent.incomingCallId  = CPPWrapper().incomingCallInfoWrapper()
+                    vcToPresent.mainTitle = "Incomeing Call"
+                    topVC.present(vcToPresent, animated: true, completion: nil)
+                })
+            }
         }
     }
 }
@@ -74,5 +74,29 @@ func call_status_listener_swift ( call_answer_code: Int32) {
     }
     else {
         print("ERROR CODE:")
+    }
+}
+func update_video_swift(window: UnsafeMutableRawPointer?) {
+    if AppDelegate.instance.counter == 1 {
+        DispatchQueue.main.async () {
+             let storyboard = UIStoryboard(name: "Main", bundle: nil)
+             let vc = storyboard.instantiateViewController(withIdentifier: "dialpadVc")
+             let activeVc = vc.storyboard!.instantiateViewController(withIdentifier: "VideoCallVc") as! VideoCallVc
+             let topVC = topMostController()
+             activeVc.number = CPPWrapper().incomingCallInfoWrapper()
+             activeVc.modalPresentationStyle = .overFullScreen //or .overFullScreen for transparency
+             topVC.present(activeVc, animated: true, completion: nil)
+             let vid_view:UIView =
+                 Unmanaged<UIView>.fromOpaque(window!).takeUnretainedValue();
+            activeVc.loadViewIfNeeded()
+            AppDelegate.instance.viewwindowView = vid_view
+            activeVc.updateVideo(vid_win:  AppDelegate.instance.viewdisplayView);
+            activeVc.updateDVideo(vid_win: vid_view)
+            AppDelegate.instance.counter = 0
+         }
+    } else {
+        AppDelegate.instance.viewdisplayView =
+                Unmanaged<UIView>.fromOpaque(window!).takeUnretainedValue();
+        AppDelegate.instance.counter = 1
     }
 }

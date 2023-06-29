@@ -75,6 +75,41 @@ class dialpadVc: UIViewController, UITextFieldDelegate {
         textSearchChange(txtnumber)
     }
     
+    func vidoeCall(){
+        
+        if(CPPWrapper().registerStateInfoWrapper() != false) {
+            CPPWrapper.clareAllData()
+            AppDelegate.instance.counter = 0
+
+            let nextVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "VideoCallWaitVc") as! VideoCallWaitVc
+            let num1 = (cpvMain.selectedCountry.phoneCode).replace(string: "+", replacement: "")
+            nextVC.phoneCode =  num1
+            nextVC.number = txtnumber.text ?? ""
+            nextVC.modalPresentationStyle = .overFullScreen //or .overFullScreen for transparency
+            nextVC.name = lblContectName.text ?? ""
+            self.present(nextVC, animated: true)
+            
+        }else {
+            let alert = UIAlertController(title: "Outgoing Call Error", message: "Please register to be able to make call", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+                switch action.style{
+                case .default:
+                    print("default")
+                    
+                case .cancel:
+                    print("cancel")
+                    
+                case .destructive:
+                    print("destructive")
+                    
+                @unknown default:
+                    fatalError()
+                }
+            }))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
     
     func logPressBtn(){
         for i in btnNumber {
@@ -113,6 +148,8 @@ class dialpadVc: UIViewController, UITextFieldDelegate {
         self.tabBarController!.tabBar.layer.borderWidth = 0.8
         
         CPPWrapper().incoming_call_wrapper(incoming_call_swift)
+        CPPWrapper().update_video_wrapper(update_video_swift)
+
         txtnumber.delegate = self
         appDelegate.sipRegistration()
         ConteactNoSave()
@@ -199,6 +236,11 @@ class dialpadVc: UIViewController, UITextFieldDelegate {
     }
     
 // MARK: - btn Click
+    @IBAction func btnClickVideoCall(_ sender: UIButton) {
+        vidoeCall()
+    }
+    
+    
     @IBAction func btnNumber(_ sender: UIButton) {
         if txtnumber.text?.count ?? 0 < 16 {
             txtnumber.text = (txtnumber.text ?? "") + "\(sender.tag)"

@@ -90,7 +90,9 @@ class CallKitDelegate: NSObject {
         update.supportsUngrouping = false
         update.supportsHolding = false
       
-        
+        appDelegate.sipRegistration()
+
+        sleep(3)
         self.uuid = UUID()
         self.provider?.reportNewIncomingCall(with: self.uuid!, update: update) { (error) in
 
@@ -150,9 +152,11 @@ class CallKitDelegate: NSObject {
         CXCallController().request(transaction) { (error) in
             if let _ = error {
                 self.provider?.reportCall(with: self.uuid!, endedAt: Date(), reason: .remoteEnded)
+                self.uuid = nil
                 return
             }
         }
+        
     }
 }
 extension CallKitDelegate: CXProviderDelegate {

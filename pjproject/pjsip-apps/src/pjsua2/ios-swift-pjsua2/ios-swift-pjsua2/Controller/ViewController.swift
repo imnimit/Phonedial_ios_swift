@@ -45,6 +45,7 @@ class ViewController: UIViewController {
         
         //Listen incoming call via function pointer
         CPPWrapper().incoming_call_wrapper(incoming_call_swift)
+        CPPWrapper().update_video_wrapper(update_video_swift)
 
         //Done button to the keyboard
         sipIpTField.addDoneButtonOnKeyboard()

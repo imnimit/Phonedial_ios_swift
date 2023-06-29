@@ -29,8 +29,8 @@
 #endif
 
 #ifdef USE_GUI
-void displayWindow(pjsua_vid_win_id wid);
-pj_bool_t displayWindow(pjsua_vid_win_id wid,pj_bool_t isPreview,pjsua_call_id call_id);
+//void displayWindow(pjsua_vid_win_id wid);
+//pj_bool_t displayWindow(pjsua_vid_win_id wid,pj_bool_t isPreview,pjsua_call_id call_id);
 #endif
 
 static char some_buf[SOME_BUF_SIZE];
@@ -259,7 +259,7 @@ void arrange_window(pjsua_vid_win_id wid)
 	pjsua_vid_win_set_pos(wid, &pos);
 
 #ifdef USE_GUI
-    displayWindow(wid);
+//    displayWindow(wid);
 #endif
 
 #else

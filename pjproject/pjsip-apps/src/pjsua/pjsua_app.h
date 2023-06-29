@@ -1,4 +1,3 @@
-/* $Id$ */
 /* 
  * Copyright (C) 2008-2011 Teluu Inc. (http://www.teluu.com)
  *
@@ -81,8 +80,8 @@ pj_status_t pjsua_app_run(pj_bool_t wait_telnet_cli);
 /**
  * This will destroy/cleanup the application library.
  */
-pj_status_t pjsua_app_destroy(void);
+pj_status_t pjsua_app_destroy();
 
 PJ_END_DECL
     
-#endif	/* __PJSUA_APP_H__ */
+#endif  /* __PJSUA_APP_H__ */

@@ -11,5 +11,6 @@ class ContryListCell: UITableViewCell {
 
     @IBOutlet weak var imgFlag: UILabel!
     @IBOutlet weak var lblCountyName: UILabel!
+    @IBOutlet weak var separatorVW: UIView!
     
 }

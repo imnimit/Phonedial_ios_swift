@@ -4833,7 +4833,7 @@
                                                                         </constraints>
                                                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                        <state key="normal" image="ic_dialogue_delete_black"/>
+                                                                        <state key="normal" image="ic_remove_speed_dial_number"/>
                                                                     </button>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Dharmik Jio" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MGD-H4-g75">
                                                                         <rect key="frame" x="6" y="75" width="91" height="21"/>
@@ -6723,7 +6723,6 @@
         <image name="ic_contact_fav_uncheck" width="48" height="48"/>
         <image name="ic_dec_amount_addd_fund" width="30" height="30"/>
         <image name="ic_delete_block_contact" width="22" height="22"/>
-        <image name="ic_dialogue_delete_black" width="120" height="120"/>
         <image name="ic_discover" width="47.5" height="28.5"/>
         <image name="ic_dtl_contact_call" width="55" height="55"/>
         <image name="ic_exclamation" width="80" height="80"/>

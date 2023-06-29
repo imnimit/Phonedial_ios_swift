@@ -37,6 +37,12 @@ class AddFundsVctr: UIViewController {
         if UserDefaults.standard.object(forKey: "CardDetils") != nil {
             arrayCard =  UserDefaults.standard.object(forKey: "CardDetils") as! [[String:Any]]
         }
+        if hightTableView.constant != 0 {
+            proccdVW.alpha = 1.0
+            if arrayCard.count == 0 {
+                proccdVW.alpha = 0.5
+            }
+        }
         tableView.reloadData()
     }
     
@@ -87,6 +93,8 @@ class AddFundsVctr: UIViewController {
         
         hightTableView.constant = 0.0
         
+        proccdVW.alpha = 1.0
+
     }
     
     @objc func backArrow() {
@@ -138,6 +146,12 @@ class AddFundsVctr: UIViewController {
             btnCredit.setTitleColor(#colorLiteral(red: 0.2361463308, green: 0.6436210275, blue: 0.7784664035, alpha: 1), for: .normal)
 
             addVW.isHidden = false
+            
+            proccdVW.alpha = 1.0
+            if arrayCard.count == 0 {
+                proccdVW.alpha = 0.5
+            }
+            
         }else  {
             hightTableView.constant = 0
             btnCreditCard.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
@@ -145,11 +159,17 @@ class AddFundsVctr: UIViewController {
             btnCredit.setTitleColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .normal)
             btnCreditCard.setTitleColor(#colorLiteral(red: 0.2361463308, green: 0.6436210275, blue: 0.7784664035, alpha: 1), for: .normal)
             addVW.isHidden = true
+            
+            proccdVW.alpha = 1.0
+           
         }
     }
     
     
     @IBAction func btnCallAddCardDetails(_ sender: UIButton) {
+        
+        
+        
         let nextVC = UIStoryboard(name: "Setting", bundle: nil).instantiateViewController(withIdentifier: "AddNewCardVCtr") as! AddNewCardVCtr
         self.navigationController?.pushViewController(nextVC, animated: true)
        // nextVC.modalPresentationStyle = .overFullScreen
@@ -158,6 +178,10 @@ class AddFundsVctr: UIViewController {
     
     
     @IBAction func btnProceed(_ sender: UIButton) {
+        if proccdVW.alpha == 0.5 {
+            return
+        }
+            
         if  hightTableView.constant == 0 {
             let nextVC = UIStoryboard(name: "Setting", bundle: nil).instantiateViewController(withIdentifier: "CardPaymentConfirmationVc") as! CardPaymentConfirmationVc
             nextVC.price = lblChargeValue.text ?? ""
@@ -181,6 +205,10 @@ class AddFundsVctr: UIViewController {
             UserDefaults.standard.setValue(temp, forKey: "CardDetils")
             if UserDefaults.standard.object(forKey: "CardDetils") != nil {
                 arrayCard =  UserDefaults.standard.object(forKey: "CardDetils") as! [[String:Any]]
+            }
+            proccdVW.alpha = 1.0
+            if arrayCard.count == 0 {
+                proccdVW.alpha = 0.5
             }
             tableView.reloadData()
         }))

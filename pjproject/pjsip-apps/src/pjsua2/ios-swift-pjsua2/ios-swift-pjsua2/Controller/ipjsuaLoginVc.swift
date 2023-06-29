@@ -266,6 +266,8 @@ class ipjsuaLoginVc: UIViewController ,TTTAttributedLabelDelegate {
             if AppDelegate.instance.OneTimeCreateLib == false {
                 CPPWrapper().createLibWrapper(Constant.GlobalConstants.PORT, "1")
                 CPPWrapper().incoming_call_wrapper(incoming_call_swift)
+                CPPWrapper().update_video_wrapper(update_video_swift)
+
             }
             
             AppDelegate.instance.OneTimeCreateLib = true

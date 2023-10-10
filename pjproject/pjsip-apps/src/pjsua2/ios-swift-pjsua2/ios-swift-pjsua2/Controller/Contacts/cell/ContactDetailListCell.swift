@@ -13,5 +13,6 @@ class ContactDetailListCell: UITableViewCell {
     @IBOutlet weak var btnClickAction: UIButton!
     @IBOutlet weak var imgVW: UIView!
     @IBOutlet weak var imgProperty: UIImageView!
+    @IBOutlet weak var contactListMainVW: UIView!
     
 }

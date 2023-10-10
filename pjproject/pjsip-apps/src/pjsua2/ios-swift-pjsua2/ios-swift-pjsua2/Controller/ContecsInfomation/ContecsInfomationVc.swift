@@ -29,8 +29,11 @@ class ContecsInfomationVc: UIViewController {
         }else if title == "FAVORITE" {
             let nextVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "FavoriteListVc") as! FavoriteListVc
             return (menu: title, content: nextVC)
-        } else {
+        }else if title == "PHONEDIALERS" {
             let nextVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PhoneDialUserListVc") as! PhoneDialUserListVc
+            return (menu: title, content: nextVC)
+        } else {
+            let nextVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "FavoriteListVc") as! FavoriteListVc
             return (menu: title, content: nextVC)
         }
     }
@@ -71,7 +74,7 @@ class ContecsInfomationVc: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        firstLoad?()
+        firstLoad?()    
     }
 
     override func didReceiveMemoryWarning() {

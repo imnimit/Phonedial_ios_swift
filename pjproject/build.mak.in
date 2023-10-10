@@ -57,6 +57,8 @@ endif
 endif
 endif
 
+
+
 APP_THIRD_PARTY_LIBS += -lvpx
 APP_THIRD_PARTY_LIB_FILES += $(PJ_DIR)/third_party/lib/libvpx.a
 

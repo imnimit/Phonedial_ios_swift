@@ -19,6 +19,7 @@ class AddFundsVctr: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     var cardSelection = 0
     @IBOutlet weak var hightTableView: NSLayoutConstraint!
+    @IBOutlet weak var topOfAddProceedVw: NSLayoutConstraint!
     
     var dataForResponce = [String:Any]()
     var IncreaseValue = 4
@@ -92,7 +93,7 @@ class AddFundsVctr: UIViewController {
         lblChargeValue.text = "$ 4.99"
         
         hightTableView.constant = 0.0
-        
+        topOfAddProceedVw.constant = 300
         proccdVW.alpha = 1.0
 
     }
@@ -139,7 +140,8 @@ class AddFundsVctr: UIViewController {
     @IBAction func btnClickPaymentType(_ sender: UIButton) {
         if sender.tag == 1 {
             hightTableView.constant = 350
-
+            
+            topOfAddProceedVw.constant = 0
             btnCreditCard.backgroundColor = #colorLiteral(red: 0.2361463308, green: 0.6436210275, blue: 0.7784664035, alpha: 1)
             btnCreditCard.setTitleColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .normal)
             btnCredit.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
@@ -159,7 +161,7 @@ class AddFundsVctr: UIViewController {
             btnCredit.setTitleColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .normal)
             btnCreditCard.setTitleColor(#colorLiteral(red: 0.2361463308, green: 0.6436210275, blue: 0.7784664035, alpha: 1), for: .normal)
             addVW.isHidden = true
-            
+            topOfAddProceedVw.constant = 300
             proccdVW.alpha = 1.0
            
         }

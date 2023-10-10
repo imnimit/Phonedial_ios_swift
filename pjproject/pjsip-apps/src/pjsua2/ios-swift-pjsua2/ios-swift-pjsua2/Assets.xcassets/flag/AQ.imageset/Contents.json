@@ -1,16 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "ic_contact_dtl_call.png",
+      "filename" : "AQ.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "ic_contact_dtl_call@2x.png",
+      "filename" : "AD@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "AD@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
@@ -18,8 +19,5 @@
   "info" : {
     "author" : "xcode",
     "version" : 1
-  },
-  "properties" : {
-    "template-rendering-intent" : "template"
   }
 }

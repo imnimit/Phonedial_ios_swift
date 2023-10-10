@@ -104,6 +104,12 @@ class BlockCallsVc: UIViewController {
                     return
                 }
                 blockContactNumber = Data
+                
+                var blockarray = [String]()
+                for i in blockContactNumber {
+                    blockarray.append((i["blocked_patterns"] as? String ?? ""))
+                }
+                UserDefaults.standard.set(blockarray, forKey: "BlockNumberKey")
                 tableView.reloadData()
                 print(Data)
             } else {
@@ -180,7 +186,10 @@ extension BlockCallsVc: UITableViewDataSource,UITableViewDelegate {
     @objc func connected(sender: UIButton){
         let alert = UIAlertController(title: "Alert", message: "Are your sure want to unblock this number??" , preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Yes", style: UIAlertAction.Style.default, handler: { [self]_ in
-            BlockCallUnBlock(Number: blockContactNumber[sender.tag]["blocked_patterns"] as? String ?? "")
+           BlockCallUnBlock(Number: blockContactNumber[sender.tag]["blocked_patterns"] as? String ?? "")
+//            blockContactNumber = blockContactNumber.filter(){$0 != blockContactNumber[sender.tag]}
+           
+            //blockContactNumber = (UserDefaults.standard.array(forKey: "BlockNumberKey") as? [String])!
         }))
         alert.addAction(UIAlertAction(title: "No", style: UIAlertAction.Style.cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)

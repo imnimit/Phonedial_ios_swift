@@ -24,7 +24,7 @@ class VideoOrAudioCallInfoVc: UIViewController {
             return (menu: title, content: nextVC)
         }else{
             let nextVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "phoneDIalersListVc") as! phoneDIalersListVc
-            nextVC.IsVideoLog = false
+            nextVC.IsVideoLog = true
             return (menu: title, content: nextVC)
         }
         

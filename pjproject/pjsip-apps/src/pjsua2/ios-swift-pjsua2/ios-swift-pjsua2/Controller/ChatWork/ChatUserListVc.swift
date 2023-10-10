@@ -18,7 +18,7 @@ class ChatUserListVc: UIViewController {
     let chat = ChatService()
     var RoomID = ""
     var FistTimeHistoyLoad = false
-    
+    var dataContectInfo = [[String:Any]]()
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -76,6 +76,8 @@ class ChatUserListVc: UIViewController {
             chatHistory.mSocketH.emit(ChatConstanct.EventListenerHistroy.HISTORY, requestData)
             SocketEvent()
         }
+        dataContectInfo = DBManager().getAllContact()
+
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -325,10 +327,14 @@ extension ChatUserListVc: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChatUserListCell", for: indexPath) as! ChatUserListCell
         let dicForData = RealmDatabaseeHelper.shared.getAllUserModall()[indexPath.row]
         var userLastMessageFind: Results<DataModel>
+        
+        cell.userImge.layer.cornerRadius = cell.userImge.layer.bounds.height/2
        
+        
         if dicForData.chatType == "group" {
             cell.userName.text = dicForData.contactName
             userLastMessageFind = RealmDatabaseeHelper.shared.FilterDataModelGroup(groupId: dicForData.roomID)
+            cell.userImge.image = UIImage(named: "group")
         }else{
             userLastMessageFind = RealmDatabaseeHelper.shared.FilterDataModel(ReciverId: dicForData.receiverIdForChat, SenderID:  dicForData.receiverIdForChat)
             if UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber) != nil {
@@ -342,6 +348,19 @@ extension ChatUserListVc: UITableViewDataSource, UITableViewDelegate {
                 }
             } else {
                 cell.userName.text = dicForData.contactNumber
+            }
+            if let student = dataContectInfo.first(where: {($0["phone"] as? String)?.digitsOnly == (dicForData["contactNumber"] as? String)?.digitsOnly}) {
+               print(student["phone"])
+                if student["imageData64"] as! String != "" {
+                    let dataDecoded:NSData = NSData(base64Encoded: student["imageData64"] as! String, options: NSData.Base64DecodingOptions(rawValue: 0))!
+                    let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
+                    cell.userImge.image = decodedimage
+                } else {
+                    cell.userImge.image = UIImage(named: "user_icon")
+                }
+            } else {
+                cell.userImge.image = UIImage(named: "user_icon")
+               print("not found")
             }
         }
         
@@ -397,6 +416,14 @@ extension ChatUserListVc: UITableViewDataSource, UITableViewDelegate {
                     let infoUser = contactList[index!]
                     nextVC.phoneNumber = dicForData.contactNumber
                     nextVC.Name = infoUser["name"] as? String ?? ""
+                    if infoUser["imageData64"] as! String != "" {
+                        
+                        let dataDecoded:NSData = NSData(base64Encoded: infoUser["imageData64"] as! String, options: NSData.Base64DecodingOptions(rawValue: 0))!
+                        let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
+                        nextVC.userContactImage = decodedimage
+                    } else {
+                        nextVC.userImage = UIImage(named: "user_icon")!
+                    }
                 }else{
                     nextVC.phoneNumber = dicForData.contactNumber
                     nextVC.Name = ""

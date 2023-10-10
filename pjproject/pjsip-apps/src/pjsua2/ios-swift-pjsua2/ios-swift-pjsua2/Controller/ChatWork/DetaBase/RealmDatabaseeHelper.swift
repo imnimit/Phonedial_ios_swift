@@ -210,6 +210,13 @@ class RealmDatabaseeHelper{
         }
     }
     
+    func deleteAlldata(){
+        let realm = try! Realm()
+        try! realm.write{
+            realm.deleteAll()
+        }
+    }
+    
     
     func objectExist (id: String) -> Bool {
             return realm.object(ofType: UserModal.self, forPrimaryKey: id) != nil

@@ -30,7 +30,7 @@ class PushKitDelegate: NSObject {
 
 extension PushKitDelegate: PKPushRegistryDelegate {
     
-    @available(iOS 8.0, *)
+    @available(iOS 8.0, *)   
     func pushRegistry(_ registry: PKPushRegistry, didUpdate credentials: PKPushCredentials, for type: PKPushType) {
         print(credentials.token)
         let deviceToken = credentials.token.map { String(format: "%02x", $0) }.joined()
@@ -46,11 +46,14 @@ extension PushKitDelegate: PKPushRegistryDelegate {
     }
     
     func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType, completion: @escaping () -> Void) {
+        print(payload.dictionaryPayload)
+        CPPWrapper.clareAllData()
+        appDelegate.providerDelegate = ProviderDelegate(callManager: appDelegate.callManager)
+        
         let callData = payload.dictionaryPayload
         let aps = callData["aps"] as! [String:Any]
         let alert = aps["alert"] as! [String:Any]
-//        print(alert)
-      //  print(UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber))
+        print(alert)
         if UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber) != nil {
             let contactList =  UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber) as! [[String:Any]]
             let index = contactList.firstIndex(where: {($0["phone"] as! String).suffix(10) == (alert["subtitle"] as? String ?? "").suffix(10)})
@@ -60,14 +63,24 @@ extension PushKitDelegate: PKPushRegistryDelegate {
         }
         
         appDelegate.callKitTimeShowNumber = (alert["subtitle"] as? String ?? "")
-        if appDelegate.isCallOngoing == false {
-            appDelegate.callComePushNotification = true
-            CallKitDelegate.sharedInstance.reportIncomingCall {
-                completion()
-            }
+        appDelegate.callComePushNotification = true
+        
+        //        let bgTaskID = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
+        
+        appDelegate.callComePushNotification = true
+        
+        appDelegate.displayIncomingCall(
+            uuid: UUID(),
+            handle: appDelegate.IncomeingCallInfo["name"] as? String ?? appDelegate.callKitTimeShowNumber,
+            hasVideo: true
+        ) { _ in
+            //                UIApplication.shared.endBackgroundTask(bgTaskID)
         }
         
     }
+    
+   
+    
 
     func pushRegistry(_ registry: PKPushRegistry, didInvalidatePushTokenFor type: PKPushType) {
         print("Invalidated for type: \(type)")

@@ -59,6 +59,7 @@ PODS:
     - GoogleUtilities/Reachability (~> 7.8)
     - GoogleUtilities/UserDefaults (~> 7.8)
     - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FlagKit (2.2)
   - GoogleAppMeasurement (10.2.0):
     - GoogleAppMeasurement/AdIdSupport (= 10.2.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
@@ -126,6 +127,12 @@ PODS:
   - OpenTok (2.24.0):
     - VonageWebRTC (= 99.2.39)
   - PagingKit (1.18.1)
+  - PhoneNumberKit (3.6.6):
+    - PhoneNumberKit/PhoneNumberKitCore (= 3.6.6)
+    - PhoneNumberKit/UIKit (= 3.6.6)
+  - PhoneNumberKit/PhoneNumberKitCore (3.6.6)
+  - PhoneNumberKit/UIKit (3.6.6):
+    - PhoneNumberKit/PhoneNumberKitCore
   - ProgressHUD (13.6)
   - PromisesObjC (2.1.1)
   - Realm (10.32.3):
@@ -151,6 +158,7 @@ DEPENDENCIES:
   - Firebase/Crashlytics
   - Firebase/Messaging
   - FirebaseAnalytics
+  - FlagKit
   - GradientProgress
   - GraphQLite
   - ImageViewer.swift
@@ -165,6 +173,7 @@ DEPENDENCIES:
   - NKVPhonePicker
   - OpenTok
   - PagingKit
+  - PhoneNumberKit
   - ProgressHUD
   - RealmSwift
   - SDWebImage
@@ -184,6 +193,7 @@ SPEC REPOS:
     - FirebaseCrashlytics
     - FirebaseInstallations
     - FirebaseMessaging
+    - FlagKit
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleUtilities
@@ -201,6 +211,7 @@ SPEC REPOS:
     - NKVPhonePicker
     - OpenTok
     - PagingKit
+    - PhoneNumberKit
     - ProgressHUD
     - PromisesObjC
     - Realm
@@ -223,6 +234,7 @@ SPEC CHECKSUMS:
   FirebaseCrashlytics: df7406152189d48346deafb716806d7bd9ebb573
   FirebaseInstallations: 004915af170935e3a583faefd5f8bc851afc220f
   FirebaseMessaging: cc9f40f5b7494680f3844d08e517e92aa4e8d9f7
+  FlagKit: eca7dc89064b0c986302ba9acefad1bf80a435b1
   GoogleAppMeasurement: 3bc3a6484b7bb20dd8489242c4dd3c92a3e5107b
   GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
   GoogleUtilities: bad72cb363809015b1f7f19beb1f1cd23c589f95
@@ -240,6 +252,7 @@ SPEC CHECKSUMS:
   NKVPhonePicker: c71b3e8e53ce74e0b4e4d5c5adf54cbb3dd16fd8
   OpenTok: 6995850a6a7a37464ffece03ae0b8563b0f5445d
   PagingKit: 0e7ec4e3791ab55887e129b27f7486a91b761129
+  PhoneNumberKit: 5b1be7ee4955dfeeb855f51eecdd829ab24b3484
   ProgressHUD: 4bdaa0d2ddf676b23324b199f9facffb5c3a1620
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   Realm: fdf6732924dc5e69e30e0db2c11e869f92b53f3d
@@ -252,6 +265,6 @@ SPEC CHECKSUMS:
   TTTAttributedLabel: 8cffe8e127e4e82ff3af1e5386d4cd0ad000b656
   VonageWebRTC: 4b57187170ef4ea435006e932600646a0521d6b0
 
-PODFILE CHECKSUM: ee5bc838e88a1f67f0ea76b4aa8d07763e9dc877
+PODFILE CHECKSUM: d79dd927795671a5f59a58c4a0332b9363f3eca0
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1

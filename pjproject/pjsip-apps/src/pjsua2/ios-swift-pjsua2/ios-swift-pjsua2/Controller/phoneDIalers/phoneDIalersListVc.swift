@@ -132,22 +132,14 @@ class phoneDIalersListVc: UIViewController {
 extension phoneDIalersListVc: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if IsVideoLog == true {
-            if UserDefaults.standard.object(forKey: "InAppPurchaseCheckVideoCall") == nil {
-                callEmtyTimeShowVW.isHidden = true
+            if groupedUsersVideo.count == 0 {
+                callEmtyTimeShowVW.isHidden = false
                 tableView.isHidden = true
-                return 0
-            }else {
-                if groupedUsersVideo.count == 0 {
-                    callEmtyTimeShowVW.isHidden = false
-                    tableView.isHidden = true
-                }else{
-                    callEmtyTimeShowVW.isHidden = true
-                    tableView.isHidden = false
-                }
-
-                return groupedUsersVideo.count
+            }else{
+                callEmtyTimeShowVW.isHidden = true
+                tableView.isHidden = false
             }
-           
+            return groupedUsersVideo.count
         }else{
             if groupedUsers.count == 0 {
                 callEmtyTimeShowVW.isHidden = false
@@ -225,8 +217,9 @@ extension phoneDIalersListVc: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let dicForData = indexContactsArray[indexPath.row]
-        let infoContact = groupedUsers[dicForData]
+        let dicForData = (IsVideoLog == true) ? indexVideoContactsArray[indexPath.row] : indexContactsArray[indexPath.row]
+        let infoContact = (IsVideoLog == true) ? groupedUsersVideo[dicForData] :groupedUsers[dicForData]
+       
         
         var findNumber  = [String:Any]()
         if dataContectInfo.count > 0 {
@@ -245,9 +238,11 @@ extension phoneDIalersListVc: UITableViewDataSource, UITableViewDelegate {
         if findNumber.count > 0 {
             nextVC.number = (findNumber["phone"] as! String).removeWhitespace()
             nextVC.name = findNumber["name"] as? String ?? ""
+            nextVC.checkVideoOrAudio = "Video"
         }else{
             nextVC.number = String((infoContact?[0]["number"] as? String ?? ""))
             nextVC.name = infoContact?[0]["contact_name"] as? String ?? ""
+            nextVC.checkVideoOrAudio = "Audio"
         }
         nextVC.dicCall = infoContact!
         nextVC.IsAddContectInAudioLog = self.IsAddContectInAudioLog
@@ -263,8 +258,9 @@ extension phoneDIalersListVc: UITableViewDataSource, UITableViewDelegate {
     
     @objc func GoDetailSection(_ sender: UIButton) {
         self.tabBarController?.tabBar.isHidden = true
-        let dicForData = indexContactsArray[sender.tag]
-        let infoContact = groupedUsers[dicForData]
+        let dicForData = (IsVideoLog == true) ? indexVideoContactsArray[sender.tag] : indexContactsArray[sender.tag]
+        let infoContact = (IsVideoLog == true) ? groupedUsersVideo[dicForData] :groupedUsers[dicForData]
+       
         
         var findNumber  = [String:Any]()
         if dataContectInfo.count > 0 {

@@ -349,7 +349,12 @@ class ContactsVc: UIViewController {
             tempContectInfo = dataContectInfo
             createNameDictionary()
         }else{
-            emtyVW.isHidden = false
+            if requestAccess() {
+                ProgressHUD.show()
+                self.ConteactNoSave()
+            }else{
+                emtyVW.isHidden = false
+            }
         }
         
         if isShowTopNavigationBar == true {
@@ -400,10 +405,15 @@ class ContactsVc: UIViewController {
                             strBase64 = vidoImageData!.base64EncodedString()
                         }
                         
-                        let dicContactData =  ["name": i.fullName(), "phone": i.getFirstPhoneNumber().removeWhitespace(), "imageDataAvailable": i.info.imageDataAvailable, "imageData64": strBase64, "Email": i.getFirstEmailAddress()] as [String : Any]
+                        let dicContactData =  ["name": i.fullName(), "phone": i.getFirstPhoneNumber().removeWhitespace(), "imageDataAvailable": i.info.imageDataAvailable, "imageData64": strBase64, "Email": i.getFirstEmailAddress(), "phoneDialers":"0", "newContact":"0"] as [String : Any]
                         
                         if isRefreshContact == false {
                             DBManager().insertcontact(dicContact: dicContactData)
+                        }
+                        else {
+                            if dataContectInfoOld.firstIndex(where: {$0["name"] as! String == data["name"] as! String}) != nil {
+                                DBManager().updateContact(dicContact: dicContactData, phoneNumber: data["phone"] as! String)
+                            }
                         }
                         
                         

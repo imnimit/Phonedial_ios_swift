@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/openid/AppAuth-iOS.git",
       "state" : {
-        "revision" : "3d36a58a2b736f7bc499453e996a704929b25080",
-        "version" : "1.6.0"
+        "revision" : "71cde449f13d453227e687458144bde372d30fc7",
+        "version" : "1.6.2"
       }
     },
     {
@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mobven/CountryPicker.git",
       "state" : {
-        "revision" : "e0d7944fc472dc564d35097aca32cb53420929dd",
-        "version" : "1.0.6"
+        "revision" : "fc84df8310daede33984f673b2b601b452433eec",
+        "version" : "1.0.9"
       }
     },
     {
@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/gtm-session-fetcher.git",
       "state" : {
-        "revision" : "96d7cc73a71ce950723aa3c50ce4fb275ae180b8",
-        "version" : "3.1.0"
+        "revision" : "d415594121c9e8a4f9d79cecee0965cf35e74dbd",
+        "version" : "3.1.1"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/stripe/stripe-ios-spm",
       "state" : {
-        "revision" : "5962472a1eec57ca7fdfa54ef2ef95d24d8bbc2e",
-        "version" : "23.4.0"
+        "revision" : "d3636bfbe174f4b71d3d447e0d8ad7e8abf99211",
+        "version" : "23.4.2"
       }
     }
   ],

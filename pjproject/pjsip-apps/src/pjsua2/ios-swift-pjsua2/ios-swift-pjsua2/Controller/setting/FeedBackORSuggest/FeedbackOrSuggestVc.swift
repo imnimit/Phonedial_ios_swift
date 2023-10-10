@@ -13,7 +13,7 @@ class FeedbackOrSuggestVc: UIViewController {
     @IBOutlet weak var txtTitleDesc: UITextField!
     @IBOutlet weak var txtDesc: UITextView!
     @IBOutlet weak var titileVW: UIView!
-    var feedBackVeiwOrNot = true
+    var feedBackVeiwOrNot = false
     override func viewDidLoad() {
         super.viewDidLoad()
         initCall()

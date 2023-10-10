@@ -115,6 +115,7 @@ extension MyAccountVc: CommonAlertVcDelegate {
         if Logout == true {
             User.sharedInstance.removeUserDetail()
             UserDefaults.standard.removeObject(forKey: "isAlreadyMember")
+            RealmDatabaseeHelper.shared.deleteAlldata()
             appDelegate.LoginPage()
         } else {
             deleteAccount()

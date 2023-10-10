@@ -15,12 +15,15 @@ class CallOptionPopupVc: UIViewController {
     @IBOutlet weak var lblCallNumber: UILabel!
     @IBOutlet weak var mainVW: UIView!
     @IBOutlet weak var AddcontactVW: UIView!
+    @IBOutlet weak var lblCall: UILabel!
+    
     var dicCall = [[String:Any]]()
     var IsAddContectInAudioLog = false
     var delegate: NewAddContact?
 
     var number = ""
     var name = ""
+    var checkVideoOrAudio = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         initCall()
@@ -35,6 +38,12 @@ class CallOptionPopupVc: UIViewController {
         if name != "Unknown" {
             AddcontactVW.isHidden = true
         }
+        
+        if checkVideoOrAudio == "Audio" {
+            lblCall.text = "Audio Call"
+        } else {
+            lblCall.text = "Video Call"
+        }
     }
     
     
@@ -42,16 +51,51 @@ class CallOptionPopupVc: UIViewController {
     @IBAction func clickBtn(_ sender: UIButton) {
         if sender.tag == 1 {
             //call
-            self.view.window?.rootViewController?.dismiss(animated: true, completion: { [self] in
-                if let tabBarController = appDelegate.window?.rootViewController as? UITabBarController {
-                    tabBarController.selectedIndex = 2
-                    let storyboard1 = UIStoryboard(name: "Main", bundle: nil)
-                    let dialPed = storyboard1.instantiateViewController(withIdentifier: "dialpadVc") as! dialpadVc
-                    dialPed.contectNumber = (lblCallNumber.text ?? "").replace(string: "-", replacement: "")
-                    dialPed.contectName = lblCallerName.text ?? ""
-                    tabBarController.viewControllers![2]  = dialPed
+            if lblCall.text == "Audio Call" {
+                self.view.window?.rootViewController?.dismiss(animated: true, completion: { [self] in
+                    if let tabBarController = appDelegate.window?.rootViewController as? UITabBarController {
+                        tabBarController.selectedIndex = 2
+                        let storyboard1 = UIStoryboard(name: "Main", bundle: nil)
+                        let dialPed = storyboard1.instantiateViewController(withIdentifier: "dialpadVc") as! dialpadVc
+                        dialPed.contectNumber = (lblCallNumber.text ?? "").replace(string: "-", replacement: "")
+                        dialPed.contectName = lblCallerName.text ?? ""
+                        tabBarController.viewControllers![2]  = dialPed
+                    }
+                })
+            } else {
+                if(CPPWrapper().registerStateInfoWrapper() != false) {
+                    CPPWrapper.clareAllData()
+                    AppDelegate.instance.counter = 0
+                    
+                   
+                    let nextVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "VideoCallWaitVc") as! VideoCallWaitVc
+                    nextVC.phoneCode =  ""
+                    nextVC.number = number
+                    nextVC.modalPresentationStyle = .overFullScreen //or .overFullScreen for transparency
+                    nextVC.name = name
+                    self.present(nextVC, animated: true)
+                    
+                }else {
+                    let alert = UIAlertController(title: "Outgoing Call Error", message: "Please register to be able to make call", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+                        switch action.style{
+                        case .default:
+                            print("default")
+                            
+                        case .cancel:
+                            print("cancel")
+                            
+                        case .destructive:
+                            print("destructive")
+                            
+                        @unknown default:
+                            fatalError()
+                        }
+                    }))
+                    self.present(alert, animated: true, completion: nil)
                 }
-            })
+            }
+            
         }else if sender.tag == 2 {
             //message
         }else if sender.tag == 3 {

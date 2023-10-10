@@ -21,6 +21,7 @@ class ChatVc: UIViewController {
     @IBOutlet weak var imgNavVW: UIView!
     @IBOutlet weak var tabelVW: UIView!
     @IBOutlet weak var navigationVW: UIView!
+    @IBOutlet weak var imageWithImageVW: UIImageView!
     
     var playerViewController = AVPlayerViewController()
     var playerView = AVPlayer()
@@ -41,8 +42,9 @@ class ChatVc: UIViewController {
     var last7Days = [String]()
     var isgroupchat = false
     var userGroupId = ""
-    
-      
+    var fromPhoneDialers = false
+    var userImage = UIImage()
+    var userContactImage:UIImage!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -104,12 +106,17 @@ class ChatVc: UIViewController {
             self.configureMessageInputBar()
             self.configureKeyboardActions()
         }
-        
-        
         imgNavVW.layer.cornerRadius = imgNavVW.layer.bounds.height/2
-        imgNavVW.layer.borderColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        imgNavVW.layer.borderWidth = 1
-        
+
+        if userContactImage == nil {
+            imgNavVW.layer.borderColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+            imgNavVW.layer.borderWidth = 1
+            imageWithImageVW.isHidden = true
+        } else {
+            imageWithImageVW.image = userContactImage
+            navImage.isHidden = true
+        }
+  
         DispatchQueue.main.async {
             self.SocketEvent()
         }
@@ -460,7 +467,13 @@ class ChatVc: UIViewController {
     
     //MARK: - btn Action
     @IBAction func btnBack(_ sender: UIButton) {
-        navigationController?.popToRootViewController(animated: true)
+        if fromPhoneDialers == true {
+            tabBarController?.selectedIndex = 1
+            navigationController?.popToRootViewController(animated: false)
+        } else {
+            navigationController?.popToRootViewController(animated: true)
+        }
+        
     }
     
     
@@ -476,6 +489,41 @@ class ChatVc: UIViewController {
                 tabBarController.viewControllers![2]  = dialPed
             }
         })
+    }
+    
+    
+    @IBAction func btnVideoCallNumber(_ sender: UIButton) {
+        if(CPPWrapper().registerStateInfoWrapper() != false) {
+            CPPWrapper.clareAllData()
+            AppDelegate.instance.counter = 0
+            
+           
+            let nextVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "VideoCallWaitVc") as! VideoCallWaitVc
+            nextVC.phoneCode =  ""
+            nextVC.number = phoneNumber
+            nextVC.modalPresentationStyle = .overFullScreen //or .overFullScreen for transparency
+            nextVC.name = Name
+            self.present(nextVC, animated: true)
+            
+        }else {
+            let alert = UIAlertController(title: "Outgoing Call Error", message: "Please register to be able to make call", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+                switch action.style{
+                case .default:
+                    print("default")
+                    
+                case .cancel:
+                    print("cancel")
+                    
+                case .destructive:
+                    print("destructive")
+                    
+                @unknown default:
+                    fatalError()
+                }
+            }))
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     
@@ -1556,7 +1604,7 @@ extension ChatVc: UIImagePickerControllerDelegate, UINavigationControllerDelegat
                         
                         dataMange()
                     }else{
-                        showToastMessage(message: "Some Think Wan't Worng")
+                        showToastMessage(message: "Some Think Went Worng")
                     }
                     
                 }

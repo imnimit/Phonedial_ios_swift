@@ -208,7 +208,7 @@ class dialpadVc: UIViewController, UITextFieldDelegate {
             CPPWrapper.clareAllData()
             
             let nextVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CallingDisplayVc") as! CallingDisplayVc
-            nextVC.number = txtnumber.text ?? "<SIP-NUMBER>"
+            nextVC.number = (txtnumber.text ?? "<SIP-NUMBER>").digitsOnly
             let num1 = (cpvMain.selectedCountry.phoneCode).replace(string: "+", replacement: "")
             nextVC.phoneCode =  num1
             nextVC.modalPresentationStyle = .overFullScreen //or .overFullScreen for transparency

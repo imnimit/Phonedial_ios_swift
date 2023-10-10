@@ -12,6 +12,7 @@ class FindTheNumberVc: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var btnSearch: UIButton!
+    @IBOutlet weak var trailingOfSearchBar: NSLayoutConstraint!
     
     var isTollFree = false
     var CountyInfo = [String:Any]()
@@ -23,9 +24,9 @@ class FindTheNumberVc: UIViewController {
         self.title = "Search by area code"
         GetNumberByAreaCodeAPI()
         searchBar.placeholder = "Enter \(CountyInfo["name"] as? String ?? "") area code"
-        btnSearch.layer.cornerRadius = btnSearch.layer.bounds.height/2
+        btnSearch.layer.cornerRadius = 10
         searchBar.delegate = self
-        
+        trailingOfSearchBar.constant = 0
         self.hideKeybordTappedAround()
     }
     
@@ -85,9 +86,9 @@ extension FindTheNumberVc:  UITableViewDataSource,UITableViewDelegate {
         cell.lblNumber.text = DicForData["friendlyName"] as? String ?? ""
         cell.lblCountryName.text = DicForData["isoCountry"] as? String ?? ""
         cell.separatorVW.isHidden = false
-        if indexPath.row == FindTheNumber.count - 1 {
-            cell.separatorVW.isHidden = true
-        }
+//        if indexPath.row == FindTheNumber.count - 1 {
+//            cell.separatorVW.isHidden = true
+//        }
 
         
         return cell
@@ -107,9 +108,16 @@ extension FindTheNumberVc:  UITableViewDataSource,UITableViewDelegate {
 extension FindTheNumberVc : UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         btnSearch.isHidden = false
+        trailingOfSearchBar.constant = 95
         if searchBar.text == "" {
             GetNumberByAreaCodeAPI()
             btnSearch.isHidden = true
+            trailingOfSearchBar.constant = 0
+            dismissKeyboard()
         }
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
 }

@@ -38,7 +38,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     var hud = LottieHUD("animation_1")
     var window: UIWindow?
     var callObserver = CXCallObserver()
-
+    var chekcOneTime = 0
+    var phoneHoldCheck = false
+    let callManager = CallManager()
+    var providerDelegate: ProviderDelegate!
+    var OneTimeCreateLib = false
     var isCallOngoing = false
     var callComePushNotification = false
     var appIsBaground = false
@@ -54,7 +58,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     var ChatGroupID = ""
     let chatService = ChatService()
     var loginSocialMediaUsed = ""
-    var OneTimeCreateLib = false
     var timerMinCall = Timer()
     var callKitTimeShowNumber = ""
     var recentCallLogToDirectCall = ""
@@ -97,7 +100,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
                 UserDefaults.standard.set("phoneDial", forKey: "CountrySet")
             })
         }
-        
+        registerForPushNotification()
         
         let notificationSettings  = UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil)
         application.registerUserNotificationSettings(notificationSettings)
@@ -105,7 +108,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         UIApplication.shared.registerForRemoteNotifications()
         
         
-        registerForPushNotification()
         
         PushKitDelegate.sharedInstance.registerPushKit()
         
@@ -121,7 +123,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         return true
     }
     
-  
+    func displayIncomingCall(
+         uuid: UUID,
+         handle: String,
+         hasVideo: Bool = false,
+         completion: ((Error?) -> Void)?
+       ) {
+         providerDelegate.reportIncomingCall(
+           uuid: uuid,
+           handle: handle,
+           hasVideo: hasVideo,
+           completion: completion)
+       }
         
 //    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
 //        let sourceApplication: String? = options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String
@@ -270,11 +283,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     func applicationDidBecomeActive(_ application: UIApplication) {
         isCallOngoing = true
         print("4")
-        chatService.establishConnection()
-        chatService.mSocket.on(clientEvent: .connect){ [self]data, ack in
-            print("socket connected")
-          
-        }
+//        chatService.establishConnection()
+//        chatService.mSocket.on(clientEvent: .connect){ [self]data, ack in
+//            print("socket connected")
+//          
+//        }
         
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
       
@@ -452,7 +465,7 @@ extension AppDelegate {
                 
                 CPPWrapper().incoming_call_wrapper(incoming_call_swift)
                 CPPWrapper().update_video_wrapper(update_video_swift)
-
+                CPPWrapper().call_listener_wrapper(call_status_listener_swift)
                 //                CPPWrapper().update_video_wrapper(update_video_swift)
                 
                 //Register to the user
@@ -496,7 +509,20 @@ extension AppDelegate {
         vcToPresent.isDeviceLock = checkLockOrUnlock
         appDelegate.window?.rootViewController?.present(vcToPresent, animated: false)
     }
+    
+    func loadvideoCall(){
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "dialpadVc")
+        let topVC = topMostController()
+        let vcToPresent = vc.storyboard!.instantiateViewController(withIdentifier: "VideoCallWaitVc") as! VideoCallWaitVc
+        vcToPresent.modalPresentationStyle = .overFullScreen //or .overFullScreen for transparency
+        vcToPresent.incomingCallId  = CPPWrapper().incomingCallInfoWrapper()
+        vcToPresent.mainTitle = "Incomeing Call"
+        topVC.present(vcToPresent, animated: true, completion: nil)
+    }
 }
+
+
 
 
 extension AppDelegate: UNUserNotificationCenterDelegate {

@@ -80,7 +80,8 @@ class CallingDisplayVc: UIViewController {
     var numberStoreinDB = ""
     var isMargeCallDone = false
     var OnetimeUsed = false
-    
+    var callManager: CallManager!
+
     
     var isBluetoothPermissionGranted: Bool {
         if #available(iOS 13.1, *) {
@@ -103,6 +104,7 @@ class CallingDisplayVc: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        callManager = appDelegate.callManager
         CallInit()
         setAudioOutputSpeaker(enabled: false)
         callAddTimeHigtht.constant = 0.0
@@ -112,6 +114,8 @@ class CallingDisplayVc: UIViewController {
         recodingAnimaion.play()
         recodingAnimaion.isHidden = true
         btncallinfo.isHidden = true
+        
+
         
     }
     
@@ -140,16 +144,22 @@ class CallingDisplayVc: UIViewController {
             }
             
             if isDeviceLock == false {
-                Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [self] timer in
-                    if (CPPWrapper().registerStateInfoWrapper()){
-                        timer.invalidate()
-                        if isDeviceLock == false {
-                            CPPWrapper().answerCall()
-                            CPPWrapper().call_listener_wrapper(call_status_listener_swift)
+                if (CPPWrapper().registerStateInfoWrapper()) {
+                    if isDeviceLock == false {
+                        if (appDelegate.isCallOngoing == true) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                CPPWrapper().answerCall()
+                                CPPWrapper().call_listener_wrapper(call_status_listener_swift)
+                            }
+                        }else{
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                CPPWrapper().answerCall()
+                                CPPWrapper().call_listener_wrapper(call_status_listener_swift)
+                            }
                         }
                     }
-                    print("Timer fired!")
                 }
+                print("Timer fired!")
             }
         }
         else {
@@ -157,13 +167,19 @@ class CallingDisplayVc: UIViewController {
 //                let dictValue = UserDefaults.standard.value(forKey: "loginCheckKey") as? [String: Any]
 //                print(dictValue!)
                 
-                lblDialNumber.text = number
+                lblDialNumber.text = phoneCode + number
+                lblName.text = (nameDisplay == "") ? "Unkown" : nameDisplay
+                
+                callManager.startCall(handle: (lblName.text ?? "" == "Unkown" ? number : lblName.text ?? ""), videoEnabled: false)
+
                 imcomeingCallVW.isHidden = true
-                if (CPPWrapper().registerStateInfoWrapper()){
-                    CPPWrapper().outgoingCall("sip:\(phoneCode)" + number + "@\(Constant.GlobalConstants.SERVERNAME)" + ":" + "\(Constant.GlobalConstants.PORT)", "0")
-                    CPPWrapper().call_listener_wrapper(call_status_listener_swift)
-                }else {
-                    self.showToast(message: "Sip Status: NOT REGISTERED")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [self] in
+                    if (CPPWrapper().registerStateInfoWrapper()) {
+                        CPPWrapper().outgoingCall("sip:\(phoneCode)" + number + "@\(Constant.GlobalConstants.SERVERNAME)" + ":" + "\(Constant.GlobalConstants.PORT)", "0")
+                        CPPWrapper().call_listener_wrapper(call_status_listener_swift)
+                    } else {
+                        self.showToast(message: "Sip Status: NOT REGISTERED")
+                    }
                 }
                 
                 if UserDefaults.standard.value(forKey: Constant.ValueStoreName.ContactNumber) != nil {
@@ -176,10 +192,20 @@ class CallingDisplayVc: UIViewController {
                 lblName.text = (nameDisplay == "") ? "Unknown" : nameDisplay
                 
                 
-                numberStoreinDB = number
+                numberStoreinDB = phoneCode + number
                 allbtnDisalbe()
             }
             else{
+                
+                lblNameCallingTime.text = "Unkown"
+                lblName.text = "Unkown"
+//                if  appDelegate.IncomeingCallInfo.count > 0 {
+//                    lblIncomeingNumber.text = appDelegate.IncomeingCallInfo["phone"] as? String ?? ""
+//                    lblNameCallingTime.text = appDelegate.IncomeingCallInfo["name"] as? String ?? "Unkown"
+//                    
+//                    lblDialNumber.text = appDelegate.IncomeingCallInfo["phone"] as? String ?? ""
+//                    lblName.text = appDelegate.IncomeingCallInfo["name"] as? String ?? "Unkown"
+//                }
                 
                 let maistr = incomingCallId.components(separatedBy: "<")
                 let newString = maistr[1].replacingOccurrences(of: "sip:", with: "", options: .literal, range: nil)
@@ -213,6 +239,12 @@ class CallingDisplayVc: UIViewController {
                 lblDialNumber.text = phonenumber[0]
                 lblName.text = (appDelegate.IncomeingCallInfo["name"] as? String ?? "" == "") ? "Unknown" : (appDelegate.IncomeingCallInfo["name"] as? String ?? "")
                 
+                appDelegate.displayIncomingCall(
+                    uuid: UUID(),
+                    handle: lblName.text ?? "",
+                    hasVideo: false
+                ) { _ in
+                }
             }
         }
         
@@ -668,7 +700,7 @@ class CallingDisplayVc: UIViewController {
             return
         }
         
-        CallKitDelegate.sharedInstance.endCall()
+//        CallKitDelegate.sharedInstance.endCall()
 
         appDelegate.callComePushNotification = false
 
@@ -678,6 +710,10 @@ class CallingDisplayVc: UIViewController {
         UIDevice.current.isProximityMonitoringEnabled = false
         self.dismiss(animated: true,completion: {
             CPPWrapper().hangupCall()
+            for call in self.callManager.calls {
+                self.callManager.end(call: call)
+                self.callManager.remove(call: call)
+            }
             CPPWrapper.clareAllData()
         })
     }
@@ -996,19 +1032,32 @@ class CallingDisplayVc: UIViewController {
     
     @IBAction func btnDeclineCall(_ sender: UIButton) {
 //        callEndFind()
-        CallKitDelegate.sharedInstance.endCall()
-
-        timerNumberGet.invalidate()
-        callLogStore()
-        
-        appDelegate.callComePushNotification = false
-
+//        CallKitDelegate.sharedInstance.endCall()
+//
+//        timerNumberGet.invalidate()
+//        callLogStore()
+//
+//        appDelegate.callComePushNotification = false
+//
+//        CPPWrapper().hangupCall();
+//        CPPWrapper.clareAllData()
+//
+//        UIDevice.current.isProximityMonitoringEnabled = false
+//
+//        dismiss(animated: true)
         CPPWrapper().hangupCall();
-        CPPWrapper.clareAllData()
+                //        CallKitDelegate.sharedInstance.endCall()
+                
+                for call in callManager.calls {
+                    callManager.end(call: call)
+                    callManager.remove(call: call)
+                }
 
-        UIDevice.current.isProximityMonitoringEnabled = false
-
-        dismiss(animated: true)
+                
+                UIDevice.current.isProximityMonitoringEnabled = false
+                dismiss(animated: true)
+                
+                appDelegate.callComePushNotification = false
         
     }
     

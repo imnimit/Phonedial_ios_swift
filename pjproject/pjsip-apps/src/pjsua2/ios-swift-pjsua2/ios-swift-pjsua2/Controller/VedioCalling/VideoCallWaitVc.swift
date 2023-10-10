@@ -126,6 +126,10 @@ class VideoCallWaitVc: UIViewController {
         
         self.dismiss(animated: true,completion: {
             CPPWrapper().hangupCall()
+            for call in appDelegate.callManager.calls {
+                appDelegate.callManager.end(call: call)
+                appDelegate.callManager.remove(call: call)
+            }
         })
     }
 

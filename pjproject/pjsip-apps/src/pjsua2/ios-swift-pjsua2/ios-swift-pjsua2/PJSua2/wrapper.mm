@@ -31,8 +31,8 @@
 #include <pj/types.h>
 #include <pj/compat/string.h>
 
-#include "/Users/magictech/Desktop/VoizCall-iOS/pjproject/pjsip-apps/src/pjsua/pjsua_app.h"
-#include "/Users/magictech/Desktop/VoizCall-iOS/pjproject/pjsip-apps/src/pjsua/pjsua_app_config.h"
+#include "/Volumes/Secondary/Projects/Phonedial_ios_swift/pjproject/pjsip-apps/src/pjsua/pjsua_app.h"
+#include "/Volumes/Secondary/Projects/Phonedial_ios_swift/pjproject/pjsip-apps/src/pjsua/pjsua_app_config.h"
 
 
 #define THIS_FILE    "ipjsuaAppDelegate.m"

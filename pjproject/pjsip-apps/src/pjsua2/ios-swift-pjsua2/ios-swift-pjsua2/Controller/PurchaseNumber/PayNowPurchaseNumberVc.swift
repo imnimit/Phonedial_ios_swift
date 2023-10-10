@@ -15,6 +15,15 @@ class PayNowPurchaseNumberVc: UIViewController {
     @IBOutlet var viewInfo: [UIView]!
     @IBOutlet weak var btnPayAmount: UIButton!
     @IBOutlet weak var lblExpiryDate: UILabel!
+    @IBOutlet weak var hashView: UIView!
+    @IBOutlet weak var calenderView: UIView!
+    @IBOutlet weak var phoneView: UIView!
+    @IBOutlet weak var numberView: UIView!
+    @IBOutlet weak var expiryDateIView: UIView!
+    @IBOutlet weak var voiceMailView: UIView!
+    @IBOutlet weak var numberSubView: UIView!
+    @IBOutlet weak var expiryDateSubView: UIView!
+    @IBOutlet weak var voiceMailSubView: UIView!
     var payemntData = [String:Any]()
     var CountyInfo = [String:Any]()
     
@@ -33,6 +42,19 @@ class PayNowPurchaseNumberVc: UIViewController {
         dateComponent.day = 20
         let futureDate = Calendar.current.date(byAdding: dateComponent, to: currentDate)
         lblExpiryDate.text =  futureDate?.getFormattedDate(format: "yyyy-MMM-d")
+        
+        hashView.layer.cornerRadius = hashView.layer.bounds.height/2
+        calenderView.layer.cornerRadius = hashView.layer.bounds.height/2
+        phoneView.layer.cornerRadius = hashView.layer.bounds.height/2
+        
+        numberView.layer.cornerRadius = 10
+        expiryDateIView.layer.cornerRadius = 10
+        voiceMailView.layer.cornerRadius = 10
+        
+        numberSubView.layer.cornerRadius = 10
+        expiryDateSubView.layer.cornerRadius = 10
+        voiceMailSubView.layer.cornerRadius = 10
+ 
     }
     
     override func viewWillAppear(_ animated: Bool) {

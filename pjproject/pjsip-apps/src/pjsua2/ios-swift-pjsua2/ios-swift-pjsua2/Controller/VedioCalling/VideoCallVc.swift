@@ -176,6 +176,10 @@ class VideoCallVc: UIViewController {
         callLogStore()
         
         CPPWrapper().hangupCall()
+        for call in appDelegate.callManager.calls {
+            appDelegate.callManager.end(call: call)
+            appDelegate.callManager.remove(call: call)
+        }
         
 //        callDismiss()
     }

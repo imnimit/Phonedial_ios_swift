@@ -175,6 +175,11 @@ class ipjsuaLoginVc: UIViewController ,TTTAttributedLabelDelegate {
         }
     }
     
+    @IBAction func btnClickEye(_ sender: UIButton) {
+        sender.isSelected = !sender.isSelected
+        txtPassword.isSecureTextEntry = !txtPassword.isSecureTextEntry
+    }
+    
     func FbLogin() {
         let loginManager = LoginManager()
         loginManager.logIn(permissions: ["public_profile", "email"], from: self) { (result, error) in

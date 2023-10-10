@@ -149,7 +149,7 @@ extension UIViewController {
 
         // this is just one of many style options
         style.messageColor = .white
-        style.backgroundColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
+        style.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.8470588235)
         // present the toast with the new style
         self.view.makeToast(message, duration: 3.0, position: .bottom, style: style)
 
@@ -478,7 +478,7 @@ func findExpiryData(FindExData:String) -> String {
     }
     
     if components.second ?? 0 > 0{
-        return "\(String(describing: components.second!)) scond ago"
+        return "\(String(describing: components.second!)) second ago"
     }
     
     return "Timer not Found"
@@ -703,4 +703,21 @@ extension Date {
         dateformat.dateFormat = format
         return dateformat.string(from: self)
     }
+}
+
+extension RangeReplaceableCollection where Self: StringProtocol {
+    mutating func removeAllNonNumeric() {
+        removeAll { !$0.isWholeNumber }
+    }
+}
+
+extension RangeReplaceableCollection where Self: StringProtocol {
+    var digits: Self { filter(\.isWholeNumber) }
+}
+
+extension Character {
+    var isDecimalOrPeriod: Bool { "0"..."9" ~= self || self == "." }
+}
+extension RangeReplaceableCollection where Self: StringProtocol {
+    var digitsAndPeriods: Self { filter(\.isDecimalOrPeriod) }
 }

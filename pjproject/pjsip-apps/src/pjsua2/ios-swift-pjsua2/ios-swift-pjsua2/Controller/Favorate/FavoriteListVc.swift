@@ -59,6 +59,7 @@ class FavoriteListVc: UIViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        self.searchBar.tintColor = UIColor.black
     }
 
     func initCall() {
@@ -70,6 +71,7 @@ class FavoriteListVc: UIViewController {
 //        else{
 //            checkPermissionToDeviceContacts()
 //        }
+        self.searchBar.tintColor = UIColor.black
     }
     
     func ConteactNoSave()  {
@@ -308,16 +310,37 @@ extension FavoriteListVc: UITableViewDataSource, UITableViewDelegate {
 extension FavoriteListVc : UISearchBarDelegate{
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchActive = true
+       // searchBar.showsCancelButton = true
     }
 
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        searchBar.setShowsCancelButton(true, animated: true)
+        return true
+    }
+    
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchActive = false
+        searchBar.setShowsCancelButton(false, animated: true)
+        searchBar.endEditing(true)
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchActive = false
+        searchBar.setShowsCancelButton(false, animated: true)
+        searchBar.endEditing(true)
     }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchActive = false
+        searchBar.resignFirstResponder()
+    }
+    
+    func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+    }
+    
+    func didPresentSearchController(searchController: UISearchController) {
+        searchBar.showsCancelButton = false
+        searchController.searchBar.becomeFirstResponder()
+        searchController.searchBar.showsCancelButton = true
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -332,6 +355,10 @@ extension FavoriteListVc : UISearchBarDelegate{
             searchActive = true
         }
         createNameDictionary()
+    }
+    
+    func didDismissSearchController(_ searchController: UISearchController) {
+        searchController.searchBar.showsCancelButton = false
     }
 }
 

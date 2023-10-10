@@ -64,7 +64,6 @@ class CallKitDelegate: NSObject {
     func reportIncomingCall(completionHandler: @escaping ()->Void) {
         configureAudioSession()
         
-        CPPWrapper().call_listener_wrapper(call_status_listener_swift)
         
         let config = CXProviderConfiguration(localizedName: "CallDirectoryExtension")
         config.iconTemplateImageData = UIImage(named: "call_deactivate_icon")!.pngData()
@@ -73,8 +72,8 @@ class CallKitDelegate: NSObject {
             config.includesCallsInRecents = true
         }
         config.supportsVideo = false
-        config.maximumCallGroups = 1
-        config.maximumCallsPerCallGroup = 1
+        config.maximumCallGroups = 5
+        config.maximumCallsPerCallGroup = 5
         config.supportedHandleTypes = [.phoneNumber,.generic]
 
         self.provider = CXProvider(configuration: config)
@@ -90,9 +89,7 @@ class CallKitDelegate: NSObject {
         update.supportsUngrouping = false
         update.supportsHolding = false
       
-        appDelegate.sipRegistration()
-
-        sleep(3)
+        
         self.uuid = UUID()
         self.provider?.reportNewIncomingCall(with: self.uuid!, update: update) { (error) in
 
@@ -110,7 +107,7 @@ class CallKitDelegate: NSObject {
         }
     }
     
-    func callsInRecentsContactInLogAdd(){
+    func callsInRecentsContactInLogAdd() {
         let endCallAction = CXEndCallAction(call: UUID())
         let transaction = CXTransaction(action: endCallAction)
 
@@ -124,26 +121,26 @@ class CallKitDelegate: NSObject {
     }
     
     func dialCall(phoneNumber: String) {
-
-            let handle = CXHandle(type: .generic, value: phoneNumber)
-            let startCallAction = CXStartCallAction(call: UUID(), handle: handle)
-
-            let transaction = CXTransaction(action: startCallAction)
-
+        
+        let handle = CXHandle(type: .generic, value: phoneNumber)
+        let startCallAction = CXStartCallAction(call: UUID(), handle: handle)
+        
+        let transaction = CXTransaction(action: startCallAction)
+        
         callKitCallController.request(transaction) { error in
-                if let error = error {
-                    print("Error requesting transaction: \(error)")
-                } else {
-                    print("Call started successfully")
-                }
+            if let error = error {
+                print("Error requesting transaction: \(error)")
+            } else {
+                print("Call started successfully")
             }
         }
+    }
     
     
     @objc func endCall() {
 //        guard uuid != nil else {return}
         if uuid == nil {
-           return
+            uuid = UUID()
         }
         let handle = CXHandle(type: .generic, value: appDelegate.IncomeingCallInfo["phone"] as? String ?? appDelegate.callKitTimeShowNumber)
         let startCallAction = CXStartCallAction(call: uuid!, handle: handle)
@@ -152,11 +149,10 @@ class CallKitDelegate: NSObject {
         CXCallController().request(transaction) { (error) in
             if let _ = error {
                 self.provider?.reportCall(with: self.uuid!, endedAt: Date(), reason: .remoteEnded)
-                self.uuid = nil
                 return
             }
         }
-        
+ 
     }
 }
 extension CallKitDelegate: CXProviderDelegate {
@@ -195,6 +191,7 @@ extension CallKitDelegate: CXProviderDelegate {
     func provider(_ provider: CXProvider, perform action: CXEndCallAction) {
         CPPWrapper().hangupCall()
         endCall()
+        sleep(1)
         UIDevice.current.isProximityMonitoringEnabled = false
         action.fulfill()
     }
@@ -208,11 +205,11 @@ extension CallKitDelegate: CXProviderDelegate {
         if IsHold == false {
             IsHold = true
             sleep(1);
-//            CPPWrapper().holdCall(0)
+            CPPWrapper().holdCall(appDelegate.IncomeingCallInfo["phone"] as? String  ?? "")
         }else {
             IsHold = false
             sleep(1);
-//            CPPWrapper().unholdCall(0)
+            CPPWrapper().unholdCall(appDelegate.IncomeingCallInfo["phone"] as? String  ?? "")
         }
     }
     
@@ -289,7 +286,6 @@ class CustomCallDirectoryProvider: CXCallDirectoryProvider {
         for (phoneNumber, label) in labelsKeyedByPhoneNumber.sorted(by: <) {
             context.addIdentificationEntry(withNextSequentialPhoneNumber: phoneNumber, label: label)
         }
-
         context.completeRequest()
     }
 }

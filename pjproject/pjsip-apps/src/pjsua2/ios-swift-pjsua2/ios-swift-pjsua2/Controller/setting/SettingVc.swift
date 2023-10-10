@@ -175,11 +175,13 @@ extension SettingVc:  UITableViewDataSource,UITableViewDelegate {
         let lbl = hederDetail[indexPath.section]
         let title = lbl[indexPath.row]["name"] as? String ?? ""
         
-        if title != "Rate PhoneDial" {
-            self.tabBarController?.tabBar.isHidden = true
+        if title == "Rate PhoneDial" {
+            if let url = URL(string: "itms-apps://itunes.apple.com/app/id1498923143") {
+                UIApplication.shared.open(url)
+            }
         }
         
-        if title == "My Account" {
+        else if title == "My Account" {
             isCallUserBalance = true
             let nextVC = UIStoryboard(name: "Setting", bundle: nil).instantiateViewController(withIdentifier: "MyAccountVc") as! MyAccountVc
             navigationController?.pushViewController(nextVC, animated: true)

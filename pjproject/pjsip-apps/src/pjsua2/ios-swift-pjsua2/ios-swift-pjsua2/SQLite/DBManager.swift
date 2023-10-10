@@ -48,7 +48,7 @@ class DBManager {
     // MARK: - table contact_list
      
     func insertcontact(dicContact: [String:Any]) {
-        let insertStatementString = "insert into contact_list(name,phone,imageDataAvailable,imageData64,Email) values(?,?,?,?,?);"
+        let insertStatementString = "insert into contact_list(name,phone,imageDataAvailable,imageData64,Email,phoneDialers,newContact) values(?,?,?,?,?,?,?);"
         var insertStatement: OpaquePointer? = nil
         if sqlite3_prepare_v2(db, insertStatementString, -1, &insertStatement, nil) == SQLITE_OK {
             sqlite3_bind_text(insertStatement, 1, ((dicContact["name"] as? String ?? "") as NSString).utf8String, -1, nil)
@@ -56,7 +56,9 @@ class DBManager {
             sqlite3_bind_text(insertStatement, 3, ((dicContact["imageDataAvailable"] as? String ?? "") as NSString).utf8String, -1, nil)
             sqlite3_bind_text(insertStatement, 4, ((dicContact["imageData64"] as? String ?? "") as NSString).utf8String, -1, nil)
             sqlite3_bind_text(insertStatement, 5, ((dicContact["Email"] as? String ?? "") as NSString).utf8String, -1, nil)
-
+            sqlite3_bind_text(insertStatement, 6, ((dicContact["phoneDialers"] as? String ?? "") as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStatement, 7, ((dicContact["newContact"] as? String ?? "") as NSString).utf8String, -1, nil)
+            
             if sqlite3_step(insertStatement) == SQLITE_DONE {
                 print("Successfully inserted row.")
             } else {
@@ -68,8 +70,64 @@ class DBManager {
         sqlite3_finalize(insertStatement)
     }
     
+    func updatePhoneDialerContact(phoneNumber: String) {
+        let updateStatementString = "UPDATE contact_list SET phoneDialers = '1' WHERE phone = '\(phoneNumber)';"
+         var updateStatement: OpaquePointer? = nil
+         if sqlite3_prepare_v2(db, updateStatementString, -1, &updateStatement, nil) == SQLITE_OK {
+                if sqlite3_step(updateStatement) == SQLITE_DONE {
+                       print("Successfully updated row.")
+                } else {
+                       print("Could not update row.")
+                }
+              } else {
+                    print("UPDATE statement could not be prepared")
+              }
+              sqlite3_finalize(updateStatement)
+    }
+    
+    func updateContact(dicContact: [String:Any],phoneNumber: String){
+            let updateStatementString = "UPDATE contact_list SET phone = '\(phoneNumber)',imageDataAvailable = '\(dicContact["imageDataAvailable"] as? String ?? "")',imageData64 = '\(dicContact["imageData64"] as? String ?? "")',Email = '\(dicContact["Email"] as? String ?? "")' WHERE name = '\(dicContact["name"] as? String ?? "")';"
+             var updateStatement: OpaquePointer? = nil
+             if sqlite3_prepare_v2(db, updateStatementString, -1, &updateStatement, nil) == SQLITE_OK {
+                    if sqlite3_step(updateStatement) == SQLITE_DONE {
+                           print("Successfully updated row.")
+                    } else {
+                           print("Could not update row.")
+                    }
+                  } else {
+                        print("UPDATE statement could not be prepared")
+                  }
+                  sqlite3_finalize(updateStatement)
+        }
+        
+    
     func getAllContact() -> [[String:Any]]{
         let queryStatementString = "select * from contact_list ORDER BY id DESC;"
+        var queryStatement: OpaquePointer? = nil
+        var dicDataContact = [[String:Any]]()
+        if sqlite3_prepare_v2(db, queryStatementString, -1, &queryStatement, nil) == SQLITE_OK {
+            while sqlite3_step(queryStatement) == SQLITE_ROW {
+                let id = String(describing: String(cString: sqlite3_column_text(queryStatement, 0)))
+                let name = String(describing: String(cString: sqlite3_column_text(queryStatement, 1)))
+                let phone = String(describing: String(cString: sqlite3_column_text(queryStatement, 2)))
+                let imageDataAvailable = String(describing: String(cString: sqlite3_column_text(queryStatement, 3)))
+                let imageData64 = String(describing: String(cString: sqlite3_column_text(queryStatement, 4)))
+                let Email = String(describing: String(cString: sqlite3_column_text(queryStatement, 5)))
+             //   print("Query Result:")
+                let dic = ["name":name,"phone":phone,"imageDataAvailable":imageDataAvailable,"imageData64":imageData64,"Email":Email] as! [String:Any]
+                dicDataContact.append(dic)
+            }
+        } else {
+            print("SELECT statement could not be prepared")
+        }
+        sqlite3_finalize(queryStatement)
+        
+        return dicDataContact
+
+    }
+    
+    func getAllPhoneDialer() -> [[String:Any]]{
+        let queryStatementString = "select * from contact_list WHERE phoneDialers = '1' ORDER BY id DESC;"
         var queryStatement: OpaquePointer? = nil
         var dicDataContact = [[String:Any]]()
         if sqlite3_prepare_v2(db, queryStatementString, -1, &queryStatement, nil) == SQLITE_OK {

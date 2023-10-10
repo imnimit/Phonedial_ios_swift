@@ -20,6 +20,8 @@ class ContactDetailVc: UIViewController {
     @IBOutlet weak var imgContact: UIImageView!
     @IBOutlet weak var letterImgeVW: UIView!
     @IBOutlet weak var imgFavorite: UIImageView!
+    @IBOutlet weak var lblBlock: UILabel!
+    @IBOutlet weak var imgBlock: UIImageView!
     var mulipleContact = [String]()
     
     
@@ -29,11 +31,11 @@ class ContactDetailVc: UIViewController {
     var iscallAddSpeedDial = false
     var contactDetail = [String:Any]()
     var Favourite = [[String : Any]]()
-
+    var blockArray = [String]()
     var store = CNContactStore()
     var contactBook = KNContactBook(id: "allContacts")
     var dataContectInfo = [[String : Any]]()
-    
+    var number1 = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         initCall()
@@ -78,6 +80,20 @@ class ContactDetailVc: UIViewController {
         }else{
             imgFavorite.image = #imageLiteral(resourceName: "ic_contact_fav_uncheck.png")
         }
+        
+        if UserDefaults.standard.object(forKey: "BlockNumberKey") != nil {
+            blockArray = (UserDefaults.standard.array(forKey: "BlockNumberKey") as? [String])!
+            print(blockArray)
+        }
+        
+        if blockArray.contains(contactDetail["phone"] as? String ?? "") {
+            lblBlock.text = "unblock"
+           // imgBlock.image = #imageLiteral(resourceName: "ic_block_user.png")
+        }
+        else {
+            lblBlock.text = "Block"
+            //imgBlock.image = #imageLiteral(resourceName: "ic_block_user.png")
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -92,6 +108,31 @@ class ContactDetailVc: UIViewController {
         navigationController?.navigationBar.isHidden = true
         NotificationCenter.default.post(name: Notification.Name("callListUpdata"), object: self, userInfo: nil)
     }
+    
+    func updateContactNumber() {
+//           let index = dataContectInfo.firstIndex(where: {$0["name"] as! String == contactDetail["name"] as? String ?? ""})
+//
+//           if index == -1 {
+//               return
+//           }
+           
+           let identifier = dataContectInfo[0]["identifier"] as? String ?? ""
+              let store = CNContactStore()
+              do {
+                 let contactToEdit = try store.unifiedContact(withIdentifier: identifier, keysToFetch: [CNContactViewController.descriptorForRequiredKeys()])
+                  let mutableContact = contactToEdit.mutableCopy() as! CNMutableContact
+                  let editViewController = CNContactViewController(for: mutableContact)
+                  editViewController.delegate = self
+                   UINavigationBar.appearance().tintColor = UIColor.white
+                   UINavigationBar.appearance().backgroundColor = #colorLiteral(red: 0.1033737585, green: 0.6896910071, blue: 0.8629385829, alpha: 1)
+                   UINavigationBar.appearance().titleTextAttributes =  [.foregroundColor: UIColor.white]
+                  let navigationController = UINavigationController(rootViewController: editViewController)
+                  navigationController.modalPresentationStyle = .overFullScreen
+                  self.present(navigationController, animated: true, completion: nil)
+              } catch {
+                  print(error)
+              }
+       }
     
     
     func ConteactNoSave()  {
@@ -120,15 +161,15 @@ class ContactDetailVc: UIViewController {
         for  i  in contactBook.contacts {
             print(i.fullName())
             print(i.getFirstEmailAddress())
-
+            
             print(i.getFirstPhoneNumber())
             print(i.info.phoneNumbers)
             var data = [String: Any]()
-            if i.fullName() == lblName.text {
+            if i.fullName() == (lblName.text ?? "").components(separatedBy:.whitespacesAndNewlines).filter({ $0.count > 0 }).joined(separator: " ") || i.getFirstPhoneNumber().digitsOnly == number1.digitsOnly{
                 if i.info.imageDataAvailable as? Bool == true {
-                    data = ["name":i.fullName(),"phone":i.getFirstPhoneNumber().removeWhitespace(),"imageDataAvailable": i.info.imageDataAvailable as? Bool ?? false ,"imageData": i.info.imageData!,"Email":i.getFirstEmailAddress()]
+                    data = ["name":i.fullName(),"phone":i.getFirstPhoneNumber().removeWhitespace(),"imageDataAvailable": i.info.imageDataAvailable as? Bool ?? false ,"imageData": i.info.imageData!,"Email":i.getFirstEmailAddress(),"identifier":i.info.identifier]
                 }else {
-                    data = ["name":i.fullName(),"phone":i.getFirstPhoneNumber().removeWhitespace(),"imageDataAvailable": i.info.imageDataAvailable as? Bool ?? false ,"imageData":i.info.imageData ?? Data(),"Email":i.getFirstEmailAddress()]
+                    data = ["name":i.fullName(),"phone":i.getFirstPhoneNumber().removeWhitespace(),"imageDataAvailable": i.info.imageDataAvailable as? Bool ?? false ,"imageData":i.info.imageData ?? Data(),"Email":i.getFirstEmailAddress(),"identifier":i.info.identifier]
                 }
                 
                 if dataContectInfo.firstIndex(where: {$0["phone"] as! String == i.getFirstPhoneNumber().removeWhitespace() }) != nil {
@@ -148,11 +189,11 @@ class ContactDetailVc: UIViewController {
             if i["phone"] as? String != "" {
                 if mulipleContact.count > 0 {
                     for i in mulipleContact {
-                        let dic = ["heder":"Mobile","Info":i,"img": #imageLiteral(resourceName: "ic_call_dtl.png")] as! [String: Any]
+                        let dic = ["heder":"Mobile","Info":i,"img": #imageLiteral(resourceName: "ic_contact_dtl_call")] as! [String: Any]
                         infoContactNumber.append(dic)
                     }
                 }else{
-                    let dic = ["heder":"Mobile","Info":i["phone"] as? String,"img": #imageLiteral(resourceName: "ic_call_dtl.png")] as! [String: Any]
+                    let dic = ["heder":"Mobile","Info":i["phone"] as? String,"img": #imageLiteral(resourceName: "ic_contact_dtl_call")] as! [String: Any]
                     infoContactNumber.append(dic)
                 }
                
@@ -170,30 +211,7 @@ class ContactDetailVc: UIViewController {
     
     //MARK: - btn Click
     @IBAction func btnClickAditContact(_ sender: UIButton) {
-        let contact = CNMutableContact()
-
-        let localizedLabelString = CNLabeledValue<NSString>.localizedString(forLabel: CNLabelPhoneNumberMobile)
-        let phoneNumber = CNPhoneNumber(stringValue: (contactDetail["phone"] as? String ?? ""))
-        let labeledPhoneNumber = CNLabeledValue(label: localizedLabelString, value: phoneNumber)
-        contact.phoneNumbers.append(labeledPhoneNumber)
-        contact.givenName.append(contactDetail["name"] as? String ?? "")
-        let workemail = contactDetail["Email"] as? String ?? "" //Your Input goes here
-        let WorkEmail = CNLabeledValue(label:CNLabelWork, value: workemail as NSString)
-        contact.emailAddresses = [WorkEmail]
-        if contactDetail["imageData64"] as! String != "" {
-            let dataDecoded:NSData = NSData(base64Encoded: contactDetail["imageData64"] as! String, options: NSData.Base64DecodingOptions(rawValue: 0))!
-            contact.imageData = dataDecoded as Data
-        }
-
-
-        let controller = CNContactViewController(forNewContact: contact)
-        controller.delegate = self
-        controller.displayedPropertyKeys = [CNContactPhoneNumbersKey, CNContactGivenNameKey]
-        let nav = UINavigationController(rootViewController: controller)
-        UINavigationBar.appearance().tintColor = UIColor.white
-        nav.modalPresentationStyle = .overFullScreen //or .overFullScreen for transparency
-        self.present(nav, animated: true, completion: nil)
-        
+        updateContactNumber()
     }
     
     @IBAction func btnClickBack(_ sender: UIButton) {
@@ -242,9 +260,6 @@ class ContactDetailVc: UIViewController {
         dialogMessage.addAction(ok)
         dialogMessage.addAction(cancel)
         self.present(dialogMessage, animated: true, completion: nil)
-        
-        
-        
 
     }
     
@@ -263,7 +278,55 @@ class ContactDetailVc: UIViewController {
     }
     
     @IBAction func btnCallAddBlock(_ sender: UIButton) {
-        blockContact()
+   
+        var PopupTextAlert = ""
+        var PopupTextMessage = ""
+        
+        if lblBlock.text == "Block" {
+            PopupTextAlert = "Block - \(contactDetail["phone"] as? String ?? "")"
+            PopupTextMessage = "You will no longer receive calls from this number"
+        }else{
+            PopupTextAlert = "UnBlock - \(contactDetail["phone"] as? String ?? "")"
+        }
+        
+        let dialogMessage = UIAlertController(title: PopupTextAlert, message: PopupTextMessage, preferredStyle: .alert)
+        
+        let ok = UIAlertAction(title: ((lblBlock.text == "Block") ? "Block": "UnBlock") , style: .default, handler: { [self] (action) -> Void in
+            var blockNumber = [String]()
+            number1 = (contactDetail["phone"] as? String ?? "").digitsOnly
+            if UserDefaults.standard.object(forKey: "BlockNumberKey") != nil {
+                blockNumber = UserDefaults.standard.array(forKey: "BlockNumberKey") as! [String]
+//                let dictValueLogin = UserDefaults.standard.value(forKey: "loginCheckKey") as? [String: Any]
+
+                if lblBlock.text == "Block" {
+                    blockNumber.append(number1)
+                    //imgBlock.image = #imageLiteral(resourceName: "ic_block_user.png")
+                    lblBlock.text = "unblock"
+                    blockContact()
+//                    CPPWrapper.bolockContact(number1)
+                } else {
+                   // imgBlock.image = #imageLiteral(resourceName: "ic_block_user.png")
+                    lblBlock.text = "Block"
+                    blockNumber = blockNumber.filter(){$0 != number1}
+//                    CPPWrapper.unBolockContact(number1)
+                }
+            }
+            else{
+                blockNumber.append(number1)
+            }
+            UserDefaults.standard.set(blockNumber, forKey: "BlockNumberKey")
+        })
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) -> Void in
+            print("Cancel button tapped")
+        }
+
+        //Add OK and Cancel button to an Alert object
+        dialogMessage.addAction(ok)
+        dialogMessage.addAction(cancel)
+
+        // Present alert message to user
+        self.present(dialogMessage, animated: false, completion: nil)
     }
     
     @IBAction func btnClickMessage(_ sender: UIButton) {
@@ -299,7 +362,7 @@ class ContactDetailVc: UIViewController {
         let requestData : [String : String] = ["Token":User.sharedInstance.getUser_token(),
                                                "Device_id":appDelegate.diviceID
                                                ,"request":"add_blockcode"
-                                               ,"code":lblContactNumber.text ?? ""]
+                                               ,"code":number1]
         print(requestData)
         APIsMain.apiCalling.callData(credentials: requestData,requstTag : "", withCompletionHandler: { [self] (result) in
             print(result)
@@ -307,7 +370,7 @@ class ContactDetailVc: UIViewController {
             let diddata : [String: Any] = (result as! [String: Any])
             if diddata["status"] as! String == "1" {
                 let Data : [[String: Any]] = (diddata["response"] as! [[String: Any]])
-                self.dismiss(animated: false)
+               // self.dismiss(animated: false)
             } else {
                 self.showToastMessage(message: diddata["message"] as? String)
             }
@@ -327,10 +390,15 @@ extension ContactDetailVc: UITableViewDataSource, UITableViewDelegate {
         cell.lblHeder.text = dicData["heder"] as? String ?? ""
         cell.lblInfo.text = dicData["Info"] as? String ?? ""
         cell.imgProperty.image = dicData["img"] as? UIImage
+        cell.contactListMainVW.layer.cornerRadius = 10
         cell.btnClickAction.tag = indexPath.row
         cell.btnClickAction.setTitle(String(format: "%@ %@" , String(indexPath.section) , String(indexPath.row)), for:.disabled)
         cell.btnClickAction.addTarget(self, action: #selector(self.callInvitePopup(_:)), for: .touchUpInside)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 75
     }
     
     @objc func callInvitePopup(_ sender: UIButton){	

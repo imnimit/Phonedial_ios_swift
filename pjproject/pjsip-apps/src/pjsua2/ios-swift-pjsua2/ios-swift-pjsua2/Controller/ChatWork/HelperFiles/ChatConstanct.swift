@@ -9,7 +9,7 @@ import Foundation
 
 class ChatConstanct: NSObject {
     struct URLChat {
-        static let SocketURL = "http://socket.nyerhosmobile.com:7000/"
+        static let SocketURL = "https://chat.voizcall.com:7000/" //"http://socket.nyerhosmobile.com:7000/"
     }
     
     struct EventListener {
@@ -30,7 +30,7 @@ class ChatConstanct: NSObject {
     //-----------------------------------------------------------------------------------------------------------------------------------------------
     struct App {
         static let DefaultTab        = 0
-        static let MaxVideoDuration    = TimeInterval(10)
+        static let MaxVideoDuration    = TimeInterval(30)
         static let TextShareApp        = "Check out https://related.chat"
     }
     

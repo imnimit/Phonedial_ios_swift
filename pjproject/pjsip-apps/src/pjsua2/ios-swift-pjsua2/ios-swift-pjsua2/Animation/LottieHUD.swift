@@ -47,7 +47,7 @@ public final class LottieHUD {
     
     public var maskType: LottieHUDMaskType = .solid
 
-    public var size: CGSize = CGSize(width: 200, height: 200)
+    public var size: CGSize = CGSize(width: 170, height: 170)
     
     
     init(_ name: String, loop: Bool = true) {

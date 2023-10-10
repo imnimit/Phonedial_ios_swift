@@ -7,10 +7,11 @@ var appDelegate: AppDelegate {
 }
 
 struct API_URL {
-    static let LIVE_URL = "https://switch.nyerhosmobile.com/Dialer_API_23717/api.php"
+    //http://45.77.46.154:8089/
+    static let LIVE_URL = "https://45.77.46.154:8089/Dialer_API_23717/api.php?"    //"https://switch.nyerhosmobile.com/Dialer_API_23717/api.php"
     static let BASEURL = LIVE_URL
     static let URLAUDIODOWNLOAD = "https://switch.nyerhosmobile.com/voicemail/"
-    static let SoketAPIURL = "http://socket.nyerhosmobile.com:7000/"
+    static let SoketAPIURL = "https://chat.voizcall.com:7000/" //"http://socket.nyerhosmobile.com:7000/"
 }
 
 struct APISoketName {
@@ -43,8 +44,8 @@ class Constant: NSObject {
         static let POPUP_ALERT = "Alert"
         static let GOOGLE_API_KEY = "AIzaSyAOFFQ4jMVhXoAnam1hfzHLngCutNlbzY4"
         
-        static let SERVERNAME = "switch.nyerhosmobile.com"
-        static let PORT = "5060"
+        static let SERVERNAME =  "45.77.46.154:8089/" //"switch.nyerhosmobile.com"
+        static let PORT = "8089" //5060"
         
         static let pushToken = "NXMPushToken"
         static let fromKeyPath = "nexmo.push_info.from_user.name"
@@ -65,6 +66,11 @@ class Constant: NSObject {
         static let DeleteAccountDis = "Are You Sure Want To Delete Account! Erase all Relevant data for account & not get back!"
         static let DeleteAccountTitle = "Alert!"
     }
+    
+    struct CallConfig {
+          static var mute = false
+          static var Specaker = false
+      }
     
     struct ViewControllerTitle {
         static let MyAccount = "My Account"

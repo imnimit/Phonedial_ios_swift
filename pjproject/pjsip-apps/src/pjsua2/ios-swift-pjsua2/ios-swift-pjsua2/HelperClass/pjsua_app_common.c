@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
  */
 
-#include "/Users/magictech/Desktop/Phonedial_ios_swift/pjproject/pjsip-apps/src/pjsua/pjsua_app_common.h"
+#include "/Volumes/Secondary/Projects/Phonedial_ios_swift/pjproject/pjsip-apps/src/pjsua/pjsua_app_common.h"
 
 #define THIS_FILE	"pjsua_app_common.c"
 

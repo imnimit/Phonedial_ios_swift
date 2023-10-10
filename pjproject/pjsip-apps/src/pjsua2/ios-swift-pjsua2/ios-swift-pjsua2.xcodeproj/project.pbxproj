@@ -170,13 +170,22 @@
 		00F9A44129B06E3600724DE2 /* PhoneDialUserListVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9A44029B06E3600724DE2 /* PhoneDialUserListVc.swift */; };
 		00F9A44329B072F400724DE2 /* PhoneDialerUserListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9A44229B072F400724DE2 /* PhoneDialerUserListCell.swift */; };
 		154019EBBD0808B65A31688C /* Pods_ios_swift_pjsua2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A91B19AF8B702A61C411653C /* Pods_ios_swift_pjsua2.framework */; };
+		B10BEB4C2A5FC8AC007ACEDC /* CountryPickerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10BEB4B2A5FC8AC007ACEDC /* CountryPickerVC.swift */; };
+		B10BEB512A5FCA6A007ACEDC /* countryPickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10BEB502A5FCA6A007ACEDC /* countryPickerCell.swift */; };
 		B1F368672A38493500EEA198 /* CreateParticipantVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F368662A38493500EEA198 /* CreateParticipantVC.swift */; };
 		B1F368692A384DCA00EEA198 /* CreateParticipantCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F368682A384DCA00EEA198 /* CreateParticipantCell.swift */; };
 		B1F3686B2A38815A00EEA198 /* ContactAddCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F3686A2A38815A00EEA198 /* ContactAddCell.swift */; };
+		B1F3E4B02A4D7E5000D0A697 /* data.db in Resources */ = {isa = PBXBuildFile; fileRef = B1F3E4AF2A4D7E5000D0A697 /* data.db */; };
+		B1F40FAD2A614FA100E1EAF1 /* CountryCodes.json in Resources */ = {isa = PBXBuildFile; fileRef = B1F40FAC2A614FA100E1EAF1 /* CountryCodes.json */; };
+		B1F5E2EE2A653F4D00D5B998 /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F5E2ED2A653F4D00D5B998 /* Audio.swift */; };
+		B1F5E2F22A653F6600D5B998 /* Call.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F5E2EF2A653F6600D5B998 /* Call.swift */; };
+		B1F5E2F32A653F6600D5B998 /* CallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F5E2F02A653F6600D5B998 /* CallManager.swift */; };
+		B1F5E2F42A653F6600D5B998 /* ProviderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F5E2F12A653F6600D5B998 /* ProviderDelegate.swift */; };
+		B1FA5B732A558AEA0062998F /* libopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0008CA2129263F2C001CAEF5 /* libopus.a */; };
+		B1FA5B742A558AEC0062998F /* libopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0008CA2129263F2C001CAEF5 /* libopus.a */; };
+		B1FA5B752A558B4D0062998F /* libopenh264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0008CA23292644B7001CAEF5 /* libopenh264.a */; };
 		B1FBFA4D2A49BCF600D290D2 /* AddContactsListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FBFA4C2A49BCF600D290D2 /* AddContactsListCell.swift */; };
-		B1FDA21A2A31B0B300F2686E /* data.db in Resources */ = {isa = PBXBuildFile; fileRef = B1FDA2192A31B0B300F2686E /* data.db */; };
 		B1FDA21C2A31B97B00F2686E /* libopenh264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B1FDA21B2A31B97400F2686E /* libopenh264.a */; };
-		B1FDA21E2A31BA3800F2686E /* libopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B1FDA21D2A31BA3500F2686E /* libopus.a */; };
 		B1FE7AFD2A3988670000E2BB /* CreateGroupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FE7AFC2A3988670000E2BB /* CreateGroupVC.swift */; };
 		B1FE7AFF2A398A100000E2BB /* CreateGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FE7AFE2A398A100000E2BB /* CreateGroupCell.swift */; };
 		C337417325BADEEE007785D7 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = C337417225BADEEE007785D7 /* Model.swift */; };
@@ -391,15 +400,23 @@
 		00F060CB296D29C2000A8778 /* tempViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tempViewController.swift; sourceTree = "<group>"; };
 		00F060CD296D379F000A8778 /* LogoutPopupVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoutPopupVc.swift; sourceTree = "<group>"; };
 		00F9A43E29B0681B00724DE2 /* PurchaseNumberListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseNumberListCell.swift; sourceTree = "<group>"; };
-		00F9A44029B06E3600724DE2 /* PhoneDialUserListVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneDialUserListVc.swift; sourceTree = "<group>"; };
+		00F9A44029B06E3600724DE2 /* PhoneDialUserListVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneDialUserListVc.swift; sourceTree = "<group>"; wrapsLines = 1; };
 		00F9A44229B072F400724DE2 /* PhoneDialerUserListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneDialerUserListCell.swift; sourceTree = "<group>"; };
 		5288C9243E4A8376B9239B9C /* Pods-ios-swift-pjsua2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ios-swift-pjsua2.debug.xcconfig"; path = "Target Support Files/Pods-ios-swift-pjsua2/Pods-ios-swift-pjsua2.debug.xcconfig"; sourceTree = "<group>"; };
 		A91B19AF8B702A61C411653C /* Pods_ios_swift_pjsua2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ios_swift_pjsua2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B10BEB4B2A5FC8AC007ACEDC /* CountryPickerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryPickerVC.swift; sourceTree = "<group>"; };
+		B10BEB502A5FCA6A007ACEDC /* countryPickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = countryPickerCell.swift; sourceTree = "<group>"; };
 		B1F368662A38493500EEA198 /* CreateParticipantVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateParticipantVC.swift; sourceTree = "<group>"; };
 		B1F368682A384DCA00EEA198 /* CreateParticipantCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateParticipantCell.swift; sourceTree = "<group>"; };
 		B1F3686A2A38815A00EEA198 /* ContactAddCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactAddCell.swift; sourceTree = "<group>"; };
+		B1F3E4AF2A4D7E5000D0A697 /* data.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = data.db; sourceTree = "<group>"; };
+		B1F40FAC2A614FA100E1EAF1 /* CountryCodes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = CountryCodes.json; path = Pods/CountryPickerView/CountryPickerView/Resources/Data/CountryCodes.json; sourceTree = SOURCE_ROOT; };
+		B1F5E2ED2A653F4D00D5B998 /* Audio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
+		B1F5E2EF2A653F6600D5B998 /* Call.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Call.swift; sourceTree = "<group>"; };
+		B1F5E2F02A653F6600D5B998 /* CallManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallManager.swift; sourceTree = "<group>"; };
+		B1F5E2F12A653F6600D5B998 /* ProviderDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProviderDelegate.swift; sourceTree = "<group>"; };
+		B1FA5B722A5587D90062998F /* libbcg729.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbcg729.a; path = ../../../../third_party/lib/libbcg729.a; sourceTree = "<group>"; };
 		B1FBFA4C2A49BCF600D290D2 /* AddContactsListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddContactsListCell.swift; sourceTree = "<group>"; };
-		B1FDA2192A31B0B300F2686E /* data.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = data.db; sourceTree = "<group>"; };
 		B1FDA21B2A31B97400F2686E /* libopenh264.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopenh264.a; path = Libraries/libopenh264.a; sourceTree = "<group>"; };
 		B1FDA21D2A31BA3500F2686E /* libopus.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopus.a; path = Libraries/libopus.a; sourceTree = "<group>"; };
 		B1FE7AFC2A3988670000E2BB /* CreateGroupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroupVC.swift; sourceTree = "<group>"; };
@@ -470,7 +487,6 @@
 				00C70E162A4C375A000204E7 /* libbcg729.a in Frameworks */,
 				007724C8292E06D1000F1658 /* UIKit.framework in Frameworks */,
 				C351398525A5F70D00A090AA /* libpjlib-util.a in Frameworks */,
-				B1FDA21E2A31BA3800F2686E /* libopus.a in Frameworks */,
 				C351398625A5F70D00A090AA /* libpjmedia-audiodev.a in Frameworks */,
 				00CDDFEB29AF1B1000DBD58C /* GoogleSignIn in Frameworks */,
 				0090DDDD293F0799005B6115 /* PushKit.framework in Frameworks */,
@@ -500,7 +516,10 @@
 				B1FDA21C2A31B97B00F2686E /* libopenh264.a in Frameworks */,
 				00B4B2FE29A9E48E00B24A03 /* CountryPicker in Frameworks */,
 				0075101329AE209E004545EA /* FacebookCore in Frameworks */,
+				B1FA5B752A558B4D0062998F /* libopenh264.a in Frameworks */,
+				B1FA5B742A558AEC0062998F /* libopus.a in Frameworks */,
 				00A6EF1A29A8968900E69CE4 /* StripeCardScan in Frameworks */,
+				B1FA5B732A558AEA0062998F /* libopus.a in Frameworks */,
 				C3B8524425A5EC940037A8AB /* Foundation.framework in Frameworks */,
 				00A6EF2429A8968900E69CE4 /* StripePaymentsUI in Frameworks */,
 				154019EBBD0808B65A31688C /* Pods_ios_swift_pjsua2.framework in Frameworks */,
@@ -568,6 +587,10 @@
 		002330FF293A03C000BD5232 /* callkit */ = {
 			isa = PBXGroup;
 			children = (
+				B1F5E2EF2A653F6600D5B998 /* Call.swift */,
+				B1F5E2F02A653F6600D5B998 /* CallManager.swift */,
+				B1F5E2F12A653F6600D5B998 /* ProviderDelegate.swift */,
+				B1F5E2ED2A653F4D00D5B998 /* Audio.swift */,
 				00152233293DD39C0080963E /* PushKitDelegate.swift */,
 				00152235293DD3A00080963E /* CallKitDelegate.swift */,
 			);
@@ -729,7 +752,7 @@
 		0082B72129542B5700A2B5D7 /* SQLiteDB-Swift */ = {
 			isa = PBXGroup;
 			children = (
-				B1FDA2192A31B0B300F2686E /* data.db */,
+				B1F3E4AF2A4D7E5000D0A697 /* data.db */,
 				0082B72429542B5E00A2B5D7 /* CloudDB.swift */,
 				0082B72329542B5E00A2B5D7 /* SQLiteBase.swift */,
 				0082B72529542B5E00A2B5D7 /* SQLiteDB.swift */,
@@ -1048,6 +1071,31 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		B10BEB4E2A5FC8C0007ACEDC /* countryPickerViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				B10BEB4F2A5FC9E6007ACEDC /* cell */,
+				B10BEB4B2A5FC8AC007ACEDC /* CountryPickerVC.swift */,
+			);
+			path = countryPickerViewControllers;
+			sourceTree = "<group>";
+		};
+		B10BEB4F2A5FC9E6007ACEDC /* cell */ = {
+			isa = PBXGroup;
+			children = (
+				B10BEB502A5FCA6A007ACEDC /* countryPickerCell.swift */,
+			);
+			path = cell;
+			sourceTree = "<group>";
+		};
+		B1F40FAB2A614F8D00E1EAF1 /* json */ = {
+			isa = PBXGroup;
+			children = (
+				B1F40FAC2A614FA100E1EAF1 /* CountryCodes.json */,
+			);
+			path = json;
+			sourceTree = "<group>";
+		};
 		C337417125BADEB3007785D7 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -1125,6 +1173,8 @@
 		C3B851FD25A5EA6C0037A8AB /* ios-swift-pjsua2 */ = {
 			isa = PBXGroup;
 			children = (
+				B1F40FAB2A614F8D00E1EAF1 /* json */,
+				B10BEB4E2A5FC8C0007ACEDC /* countryPickerViewControllers */,
 				00960CE32A0CD2C5005283F6 /* PermitionVC */,
 				00A6EF2C29A89A9000E69CE4 /* InappPerchase */,
 				003A784A2963ED5700212E88 /* Animation */,
@@ -1149,6 +1199,7 @@
 			isa = PBXGroup;
 			children = (
 				00C70E152A4C3757000204E7 /* libbcg729.a */,
+				B1FA5B722A5587D90062998F /* libbcg729.a */,
 				B1FDA21D2A31BA3500F2686E /* libopus.a */,
 				B1FDA21B2A31B97400F2686E /* libopenh264.a */,
 				002BF22A29B9BFA600FA7C66 /* StoreKit.framework */,
@@ -1324,8 +1375,9 @@
 				000DB8B02983F650009D3174 /* AudioView.xib in Resources */,
 				0073A40A2952EC7700B6107E /* CallInfo.storyboard in Resources */,
 				003A78512963ED8500212E88 /* custom_load.json in Resources */,
+				B1F40FAD2A614FA100E1EAF1 /* CountryCodes.json in Resources */,
 				0038077B2A4AB0B800FA7C1F /* recording.json in Resources */,
-				B1FDA21A2A31B0B300F2686E /* data.db in Resources */,
+				B1F3E4B02A4D7E5000D0A697 /* data.db in Resources */,
 				C3B8520625A5EA6C0037A8AB /* Main.storyboard in Resources */,
 				000DB8B92983FF0F009D3174 /* rckit_incoming.aiff in Resources */,
 			);
@@ -1391,14 +1443,17 @@
 				00CCD8A229879594009DDC7A /* RealmDatabaseeHelper.swift in Sources */,
 				009AB14B294C33310042E4FE /* MyAccountVc.swift in Sources */,
 				000DB8AC2983F516009D3174 /* ImagePicker.swift in Sources */,
+				B1F5E2F32A653F6600D5B998 /* CallManager.swift in Sources */,
 				00A5EF0829B5F19B00483530 /* VideoContainerHelper.swift in Sources */,
 				0049083E29AA44B7004E7CE4 /* OtpVerficationVc.swift in Sources */,
 				0075100C29ADC594004545EA /* ListOFPurchaseNumberCell.swift in Sources */,
 				00BA7DC529961936009C2FA4 /* mp3SenderSideCell.swift in Sources */,
+				B10BEB512A5FCA6A007ACEDC /* countryPickerCell.swift in Sources */,
 				005F6E2D2997B9BE00A4C6CC /* DocReceiverSideCell.swift in Sources */,
 				B1F3686B2A38815A00EEA198 /* ContactAddCell.swift in Sources */,
 				00D339CA2988E08900AC8E9A /* RCMessage.swift in Sources */,
 				0075C46D2934BE5B00DC8C93 /* pjsua_app_cli.c in Sources */,
+				B10BEB4C2A5FC8AC007ACEDC /* CountryPickerVC.swift in Sources */,
 				00697C2F2955765C00C5C621 /* InviteContactPopup.swift in Sources */,
 				0073A40C2952ED9A00B6107E /* VideoOrAudioCallInfoVc.swift in Sources */,
 				005F6E332997C6EF00A4C6CC /* MediaDownload.swift in Sources */,
@@ -1426,6 +1481,7 @@
 				0075C4712934BE5B00DC8C93 /* pjsua_app_common.c in Sources */,
 				008B7924296304E200A2FD06 /* JKCircularView.swift in Sources */,
 				008BBE1F2927631B00F8184B /* CallingDisplayVc.swift in Sources */,
+				B1F5E2F22A653F6600D5B998 /* Call.swift in Sources */,
 				000DB8B52983F6EF009D3174 /* NavController.swift in Sources */,
 				00C99AEE298A32040052BA1A /* TextSenderCell.swift in Sources */,
 				0075100A29ADC397004545EA /* FindTheNumberVc.swift in Sources */,
@@ -1440,6 +1496,7 @@
 				0075C46F2934BE5B00DC8C93 /* pjsua_app.c in Sources */,
 				0062A0C629601CCC00AC5C0B /* speedDialListCell.swift in Sources */,
 				B1FE7AFD2A3988670000E2BB /* CreateGroupVC.swift in Sources */,
+				B1F5E2EE2A653F4D00D5B998 /* Audio.swift in Sources */,
 				000DB8B12983F651009D3174 /* AudioView.swift in Sources */,
 				000DB8A62983AD96009D3174 /* ChatService.swift in Sources */,
 				005F6E2B2997586B00A4C6CC /* DocSenderSideCell.swift in Sources */,
@@ -1513,6 +1570,7 @@
 				00E9EE3329372BA600EFA999 /* callSwipCell.swift in Sources */,
 				00D651252959BE63009FEEEF /* RecordingListVc.swift in Sources */,
 				006FBB3F2951E39E00A3CB6F /* SelectNumberTypeVc.swift in Sources */,
+				B1F5E2F42A653F6600D5B998 /* ProviderDelegate.swift in Sources */,
 				00F9A44129B06E3600724DE2 /* PhoneDialUserListVc.swift in Sources */,
 				008C219E291BAB4C00831994 /* ipjsuaLoginVc.swift in Sources */,
 				006FBB372951D51900A3CB6F /* FavoriteListVc.swift in Sources */,

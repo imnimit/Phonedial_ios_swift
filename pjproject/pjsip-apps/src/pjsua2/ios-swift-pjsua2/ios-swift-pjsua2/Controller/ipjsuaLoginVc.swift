@@ -23,6 +23,7 @@ class ipjsuaLoginVc: UIViewController ,TTTAttributedLabelDelegate {
     @IBOutlet weak var btnLogin: UIButton!
     @IBOutlet weak var viewSIPPort: UIView!
     @IBOutlet weak var lblTermOrCondiation: TTTAttributedLabel!
+    @IBOutlet weak var viewSIPIP: UIView!
     
 
     var ontTimeTap = false
@@ -33,6 +34,7 @@ class ipjsuaLoginVc: UIViewController ,TTTAttributedLabelDelegate {
         Init()
         
         viewSIPPort.isHidden = true
+        viewSIPIP.isHidden = true
         
 //        SIPIP.text = Constant.GlobalConstants.SERVERNAME
 //        SIPPort.text = Constant.GlobalConstants.PORT

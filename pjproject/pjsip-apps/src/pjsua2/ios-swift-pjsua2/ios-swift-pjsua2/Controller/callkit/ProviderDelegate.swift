@@ -111,8 +111,8 @@ extension ProviderDelegate: CXProviderDelegate {
         if (CPPWrapper().registerStateInfoWrapper()) {
             if CPPWrapper().checkCallConnected() == true {
 //                if appDelegate.appIsBaground != false {
-//                    appDelegate.loadCallerController(checkLockOrUnlock: false) // Change
-                appDelegate.loadvideoCall()
+                    appDelegate.loadCallerController(checkLockOrUnlock: false) // Change
+//                appDelegate.loadvideoCall()
 //                }
             }
         } else {

@@ -107,7 +107,7 @@ class ChatUserListVc: UIViewController {
             let dicData = data as? [[String:Any]]
             
             if FistTimeHistoyLoad == true && dicData?[0]["status"] as? String != "Fail" {
-                ProgressHUD.show(interaction: false)
+              //  ProgressHUD.show(interaction: false)
             }
             let time = getLastSyncTime(LastSyncTimeKey: "last_sync_time")
             
@@ -228,7 +228,7 @@ class ChatUserListVc: UIViewController {
         let strReq = API_URL.SoketAPIURL + APISoketName.Login
         print(strReq)
 
-        ProgressHUD.show(interaction: false)
+    //    ProgressHUD.show(interaction: false)
 
         let requestData : [String : String] = ["device_token":appDelegate.notificationTokan,
                                                "mobile_no":User.sharedInstance.getContactNumber()]    //,"is_replace_token":"1"]

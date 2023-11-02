@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="doY-tp-RgH">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="doY-tp-RgH">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -21,6 +21,9 @@
         </array>
         <array key="HelveticaNeue.ttc">
             <string>HelveticaNeue</string>
+        </array>
+        <array key="OpenSans-Light.ttf">
+            <string>OpenSans-Light</string>
         </array>
         <array key="Poppins-Medium.ttf">
             <string>Poppins-Medium</string>
@@ -103,7 +106,7 @@
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a4S-Mq-TOK">
                                                                 <rect key="frame" x="0.0" y="0.0" width="374" height="40"/>
                                                                 <subviews>
-                                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="938007008585" placeholder="Email Id/Mobile number" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="F5n-VQ-ANc">
+                                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="918849872821" placeholder="Email Id/Mobile number" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="F5n-VQ-ANc">
                                                                         <rect key="frame" x="20" y="5" width="334" height="30"/>
                                                                         <color key="tintColor" red="0.98039215690000003" green="0.80000000000000004" blue="0.12941176469999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <constraints>
@@ -124,7 +127,7 @@
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nzb-up-d0x">
                                                                 <rect key="frame" x="0.0" y="58" width="374" height="40"/>
                                                                 <subviews>
-                                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="nL5jXFCikEM4G" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4S2-1S-bCE">
+                                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="123456" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4S2-1S-bCE">
                                                                         <rect key="frame" x="20" y="5" width="334" height="30"/>
                                                                         <color key="backgroundColor" red="0.99607843139999996" green="0.8980392157" blue="0.41568627450000001" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <color key="tintColor" red="0.98039215690000003" green="0.80000000000000004" blue="0.12941176469999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -160,7 +163,7 @@
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HJl-dj-pGb">
                                                                 <rect key="frame" x="0.0" y="116" width="374" height="40"/>
                                                                 <subviews>
-                                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="45.77.46.154:8089" placeholder="SIP IP" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Qtb-ib-BIk">
+                                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="phonedial.netcitrus.com" placeholder="SIP IP" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Qtb-ib-BIk">
                                                                         <rect key="frame" x="20" y="5" width="334" height="30"/>
                                                                         <color key="tintColor" red="0.98039215690000003" green="0.80000000000000004" blue="0.12941176469999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <constraints>
@@ -181,7 +184,7 @@
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LeZ-rY-cdS">
                                                                 <rect key="frame" x="0.0" y="174" width="374" height="40"/>
                                                                 <subviews>
-                                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="8089" placeholder="SIP PORT" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DzA-kw-KEr">
+                                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="5060" placeholder="SIP PORT" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DzA-kw-KEr">
                                                                         <rect key="frame" x="20" y="5" width="334" height="30"/>
                                                                         <color key="tintColor" red="0.98039215690000003" green="0.80000000000000004" blue="0.12941176469999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <constraints>
@@ -419,6 +422,7 @@
                         <outlet property="lblTermOrCondiation" destination="Ms2-Px-IKS" id="GOb-gB-aCM"/>
                         <outlet property="txtPassword" destination="4S2-1S-bCE" id="n7w-1D-CSJ"/>
                         <outlet property="txtUserName" destination="F5n-VQ-ANc" id="TKu-nv-Etj"/>
+                        <outlet property="viewSIPIP" destination="HJl-dj-pGb" id="I7Q-cq-Hal"/>
                         <outlet property="viewSIPPort" destination="LeZ-rY-cdS" id="g68-zq-5iX"/>
                         <outletCollection property="commonAllVW" destination="a4S-Mq-TOK" collectionClass="NSMutableArray" id="7zV-pt-TnH"/>
                         <outletCollection property="commonAllVW" destination="Nzb-up-d0x" collectionClass="NSMutableArray" id="Qh0-Tq-jBe"/>
@@ -690,8 +694,8 @@
                                                 </state>
                                                 <variation key="default">
                                                     <mask key="constraints">
-                                                        <exclude reference="AUc-os-2YO"/>
                                                         <exclude reference="HnI-A8-mx9"/>
+                                                        <exclude reference="AUc-os-2YO"/>
                                                     </mask>
                                                 </variation>
                                                 <connections>
@@ -782,10 +786,10 @@
                                             <mask key="constraints">
                                                 <exclude reference="IEm-3H-5U6"/>
                                                 <exclude reference="aij-mO-zu9"/>
-                                                <exclude reference="ZJA-gq-L5R"/>
                                                 <exclude reference="i3O-9G-Fgq"/>
-                                                <exclude reference="a94-fO-5QQ"/>
+                                                <exclude reference="ZJA-gq-L5R"/>
                                                 <exclude reference="yKM-my-VcV"/>
+                                                <exclude reference="a94-fO-5QQ"/>
                                             </mask>
                                         </variation>
                                     </view>
@@ -806,8 +810,8 @@
                                                 </state>
                                                 <variation key="default">
                                                     <mask key="constraints">
-                                                        <exclude reference="Prb-op-Vb5"/>
                                                         <exclude reference="bGa-97-lVA"/>
+                                                        <exclude reference="Prb-op-Vb5"/>
                                                     </mask>
                                                 </variation>
                                                 <connections>
@@ -907,10 +911,10 @@
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
-                                                <exclude reference="3jV-W6-at6"/>
                                                 <exclude reference="XTi-F9-laX"/>
-                                                <exclude reference="1eU-ai-nGl"/>
+                                                <exclude reference="3jV-W6-at6"/>
                                                 <exclude reference="KFy-Kq-PbB"/>
+                                                <exclude reference="1eU-ai-nGl"/>
                                                 <exclude reference="g8a-Ck-YCd"/>
                                                 <exclude reference="ykd-Hz-wRv"/>
                                             </mask>
@@ -1030,10 +1034,10 @@
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
-                                                <exclude reference="exI-8V-j1d"/>
                                                 <exclude reference="w5c-Ye-nCt"/>
-                                                <exclude reference="P7n-0z-ged"/>
+                                                <exclude reference="exI-8V-j1d"/>
                                                 <exclude reference="Ttx-Vh-Bcp"/>
+                                                <exclude reference="P7n-0z-ged"/>
                                                 <exclude reference="3G4-iP-cLg"/>
                                                 <exclude reference="goj-d9-bMC"/>
                                             </mask>
@@ -1118,8 +1122,8 @@
                                                 <exclude reference="geb-MS-QaL"/>
                                                 <exclude reference="AeH-45-o0c"/>
                                                 <exclude reference="uhU-UL-58y"/>
-                                                <exclude reference="MGM-cu-ado"/>
                                                 <exclude reference="pl3-HZ-2xO"/>
+                                                <exclude reference="MGM-cu-ado"/>
                                             </mask>
                                         </variation>
                                     </view>
@@ -1152,9 +1156,9 @@
                                                 </state>
                                                 <variation key="default">
                                                     <mask key="constraints">
-                                                        <exclude reference="MxC-GD-vOZ"/>
                                                         <exclude reference="T4k-3G-vo3"/>
                                                         <exclude reference="iGV-Mn-D0w"/>
+                                                        <exclude reference="MxC-GD-vOZ"/>
                                                     </mask>
                                                 </variation>
                                                 <connections>
@@ -5370,8 +5374,8 @@
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
-                                                <exclude reference="cBi-0X-bZq"/>
                                                 <exclude reference="he9-f3-e9l"/>
+                                                <exclude reference="cBi-0X-bZq"/>
                                             </mask>
                                         </variation>
                                     </view>
@@ -6008,8 +6012,8 @@
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
-                                                <exclude reference="7sR-J2-w8K"/>
                                                 <exclude reference="lrI-ox-y9s"/>
+                                                <exclude reference="7sR-J2-w8K"/>
                                             </mask>
                                         </variation>
                                     </view>
@@ -6529,7 +6533,7 @@
                                 <rect key="frame" x="25" y="309.5" width="61" height="60"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar.badge.plus" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="OUM-ri-iPF">
-                                        <rect key="frame" x="13" y="14" width="36.5" height="34"/>
+                                        <rect key="frame" x="13" y="14" width="36.5" height="35"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="35" id="CQS-pS-zMU"/>
                                             <constraint firstAttribute="height" constant="35" id="fC5-xM-bcD"/>
@@ -9732,7 +9736,7 @@
         <image name="audio_mute" width="20" height="21"/>
         <image name="audio_mute_bg" width="276" height="276"/>
         <image name="audio_play" width="96" height="96"/>
-        <image name="calendar.badge.plus" catalog="system" width="128" height="108"/>
+        <image name="calendar.badge.plus" catalog="system" width="128" height="109"/>
         <image name="call_bg_image" width="640" height="1136"/>
         <image name="call_icon" width="90" height="63"/>
         <image name="call_swipe" width="180" height="180"/>
@@ -9785,7 +9789,7 @@
         <image name="ic_speaker" width="20" height="21"/>
         <image name="ic_speaker_on" width="276" height="276"/>
         <image name="ic_tab_settings_normal" width="28" height="25"/>
-        <image name="ic_twitter" width="1669" height="1221"/>
+        <image name="ic_twitter" width="993" height="980"/>
         <image name="ic_user_john_smith" width="86.5" height="86.5"/>
         <image name="ic_video" width="25" height="13.5"/>
         <image name="ic_video-bg" width="276" height="276"/>
@@ -9821,7 +9825,7 @@
             <color red="0.32899999618530273" green="0.32400000095367432" blue="0.4779999852180481" alpha="0.33000001311302185" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="labelColor">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

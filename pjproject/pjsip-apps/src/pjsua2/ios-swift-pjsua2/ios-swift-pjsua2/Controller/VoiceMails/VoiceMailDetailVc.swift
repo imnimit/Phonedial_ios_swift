@@ -49,7 +49,7 @@ class VoiceMailDetailVc: UIViewController, AVAudioPlayerDelegate {
         
         ProgressHUD.colorAnimation = .systemBlue
         ProgressHUD.colorProgress = .systemBlue
-        ProgressHUD.animationType = .circleSpinFade
+        ProgressHUD.animationType = .circleDotSpinFade
         
         
         letterOrImgVW.layer.cornerRadius = letterOrImgVW.layer.bounds.height/2
@@ -202,7 +202,7 @@ class VoiceMailDetailVc: UIViewController, AVAudioPlayerDelegate {
 //            let duration = Double(item.asset.duration.value) / Double(item.asset.duration.timescale)
 //            customJKView.animationDuration = duration
 //            addFullCircleView()
-            ProgressHUD.show();
+          //  ProgressHUD.show();
             download()
         }
     }

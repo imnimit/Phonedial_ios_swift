@@ -25,11 +25,11 @@ class NumberPuchaseTimeListCountyVc: UIViewController {
         super.viewDidLoad()
         if tollFreeCity == true {
             hederTbl.removeAll()
-            hederDetail =  [[["name":"Canaada","Img": flag(country: "CA"),"Code":"+1","iso":"CA"]]
+            hederDetail =  [[["name":"Canada","Img": flag(country: "CA"),"Code":"+1","iso":"CA"]]
                             ,[["name":"United States","Img": flag(country: "US"),"Code":"+1","iso":"US"]]]
             hederTbl  =  ["C","U"]
         }else {
-            hederDetail =  [[["name":"Canaada","Img": flag(country: "CA"),"Code":"+1","iso":"CA"]]
+            hederDetail =  [[["name":"Canada","Img": flag(country: "CA"),"Code":"+1","iso":"CA"]]
                                 ,[["name":"Israel","Img": flag(country: "IL"),"Code":"+972","iso":"IL"]]
                                 ,[["name":"New Zealand","Img": flag(country: "NZ"),"Code":"+64","iso":"NZ"]]
                                 ,[["name":"Puerto Rico","Img": flag(country: "PR"),"Code":"+1","iso":"PR"]]

@@ -350,7 +350,7 @@ class ContactsVc: UIViewController {
             createNameDictionary()
         }else{
             if requestAccess() {
-                ProgressHUD.show()
+              //  ProgressHUD.show()
                 self.ConteactNoSave()
             }else{
                 emtyVW.isHidden = false
@@ -469,7 +469,7 @@ class ContactsVc: UIViewController {
             tempContectInfo = dataContectInfo
             createNameDictionary()
             
-            ProgressHUD.showSucceed()
+        //    ProgressHUD.showSucceed()
 //            ProgressHUD.dismiss()
             HelperClassAnimaion.hideProgressHud()
         }
@@ -1396,8 +1396,8 @@ extension ContactsVc: MFMessageComposeViewControllerDelegate{
 
 extension ContactsVc : ContactsPermitionDelegate {
     func contectPermtion(){
-//        HelperClassAnimaion.showProgressHud()
-        ProgressHUD.show()
+        HelperClassAnimaion.showProgressHud()
+       // ProgressHUD.show()
 
         dismiss(animated: false, completion: {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: { [self] in

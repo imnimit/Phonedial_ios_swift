@@ -78,13 +78,15 @@ class OtpVerficationVc: SuperViewController {
         
         
         let arrayofstring = otpId.map { String($0) }
-
-        tf1.text = arrayofstring[0]
-        tf2.text = arrayofstring[1]
-        tf3.text = arrayofstring[2]
-        tf4.text = arrayofstring[3]
-        tf5.text = arrayofstring[4]
-        tf6.text = arrayofstring[5]
+        if arrayofstring.count == 6 {
+            tf1.text = arrayofstring[0]
+            tf2.text = arrayofstring[1]
+            tf3.text = arrayofstring[2]
+            tf4.text = arrayofstring[3]
+            tf5.text = arrayofstring[4]
+            tf6.text = arrayofstring[5]
+        }
+        
         
         
   

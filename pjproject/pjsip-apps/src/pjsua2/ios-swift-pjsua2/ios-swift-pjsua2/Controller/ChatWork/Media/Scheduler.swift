@@ -202,7 +202,7 @@ extension Scheduler {
 	//-------------------------------------------------------------------------------------------------------------------------------------------
 	private func uploadAuth(_ data: Data, _ mimeType: String, _ completion: @escaping (String?, String?, Error?) -> Void) {
 
-		ProgressHUD.show(interaction: false)
+	//	ProgressHUD.show(interaction: false)
         let auth = ["user_id":appDelegate.ChatTimeUserUserID,"room_id":appDelegate.ChatGroupID,"msg_type":ChatConstanct.FileTypes.IMAGE_MESSAGE,"unique_id":"casdfasdf"]
         self.upload(auth, data, mimeType, completion)
 	}

@@ -36,7 +36,7 @@ public final class LottieHUD {
     // Not implemeted yet :)
     //    public var blurMaskType: UIBlurEffect = UIBlurEffect(style: .dark)
     
-    private var _lottie: AnimationView!
+    private var _lottie: LottieAnimationView!
     private var _lottieBackGround: UIView!
     
     public var contentMode: UIView.ContentMode = .scaleAspectFit {
@@ -51,11 +51,11 @@ public final class LottieHUD {
     
     
     init(_ name: String, loop: Bool = true) {
-        self._lottie = AnimationView(name: name)
+        self._lottie = LottieAnimationView(name: name)
 //        self._lottie.loopAnimation = loop
     }
     
-    init(_ lottie: AnimationView) {
+    init(_ lottie: LottieAnimationView) {
         self._lottie = lottie
     }
     

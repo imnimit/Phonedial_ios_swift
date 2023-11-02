@@ -72,7 +72,7 @@ extension PushKitDelegate: PKPushRegistryDelegate {
         appDelegate.displayIncomingCall(
             uuid: UUID(),
             handle: appDelegate.IncomeingCallInfo["name"] as? String ?? appDelegate.callKitTimeShowNumber,
-            hasVideo: true
+            hasVideo: false
         ) { _ in
             //                UIApplication.shared.endBackgroundTask(bgTaskID)
         }

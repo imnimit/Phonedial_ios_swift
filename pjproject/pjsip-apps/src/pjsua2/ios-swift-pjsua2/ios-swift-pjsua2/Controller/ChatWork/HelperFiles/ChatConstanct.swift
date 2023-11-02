@@ -6,10 +6,11 @@
 //
 
 import Foundation
+import UIKit
 
 class ChatConstanct: NSObject {
     struct URLChat {
-        static let SocketURL = "https://chat.voizcall.com:7000/" //"http://socket.nyerhosmobile.com:7000/"
+        static let SocketURL = "http://chat.voizcall.com:7000/" //"http://socket.nyerhosmobile.com:7000/"
     }
     
     struct EventListener {

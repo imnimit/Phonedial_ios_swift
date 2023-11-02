@@ -8,10 +8,10 @@ var appDelegate: AppDelegate {
 
 struct API_URL {
     //http://45.77.46.154:8089/
-    static let LIVE_URL = "https://45.77.46.154:8089/Dialer_API_23717/api.php?"    //"https://switch.nyerhosmobile.com/Dialer_API_23717/api.php"
+    static let LIVE_URL = "https://phonedial.netcitrus.com/Dialer_API_23717/api.php?"    //"https://switch.nyerhosmobile.com/Dialer_API_23717/api.php"
     static let BASEURL = LIVE_URL
     static let URLAUDIODOWNLOAD = "https://switch.nyerhosmobile.com/voicemail/"
-    static let SoketAPIURL = "https://chat.voizcall.com:7000/" //"http://socket.nyerhosmobile.com:7000/"
+    static let SoketAPIURL = "http://chat.voizcall.com:7000/" //"http://socket.nyerhosmobile.com:7000/"
 }
 
 struct APISoketName {
@@ -44,8 +44,8 @@ class Constant: NSObject {
         static let POPUP_ALERT = "Alert"
         static let GOOGLE_API_KEY = "AIzaSyAOFFQ4jMVhXoAnam1hfzHLngCutNlbzY4"
         
-        static let SERVERNAME =  "45.77.46.154:8089/" //"switch.nyerhosmobile.com"
-        static let PORT = "8089" //5060"
+        static let SERVERNAME =  "phonedial.netcitrus.com" //"switch.nyerhosmobile.com"
+        static let PORT = "5060" //5060"
         
         static let pushToken = "NXMPushToken"
         static let fromKeyPath = "nexmo.push_info.from_user.name"

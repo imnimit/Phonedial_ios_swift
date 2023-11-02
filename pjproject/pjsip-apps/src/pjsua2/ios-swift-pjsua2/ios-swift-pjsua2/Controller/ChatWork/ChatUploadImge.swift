@@ -65,7 +65,7 @@ class uploadImge: NSObject {
   
     func uploadAuth(_ auth: [String: String],_ data: Data, _ mimeType: String, _ completion: @escaping ([String: Any]?, String?, Error?) -> Void) {
         
-        ProgressHUD.show(interaction: false)
+     //   ProgressHUD.show(interaction: false)
 //        let auth = ["user_id":appDelegate.Ch`atTimeUserUserID,"room_id":appDelegate.ChatGroupID,"msg_type":ChatConstanct.FileTypes.IMAGE_MESSAGE,"unique_id":"casdfasdf"]
         self.upload(auth, data, mimeType, completion)
     }

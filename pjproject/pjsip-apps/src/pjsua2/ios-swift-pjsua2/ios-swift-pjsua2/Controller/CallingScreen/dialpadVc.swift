@@ -379,7 +379,8 @@ class dialpadVc: UIViewController, UITextFieldDelegate {
                 optionMenu.addAction(cancelAction)
                 self.present(optionMenu, animated: true, completion: nil)
             }else{
-                DialCall()
+             //  DialCall()
+                vidoeCall()
             }
         })
     }

@@ -72,9 +72,8 @@ extension PushKitDelegate: PKPushRegistryDelegate {
         appDelegate.displayIncomingCall(
             uuid: UUID(),
             handle: appDelegate.IncomeingCallInfo["name"] as? String ?? appDelegate.callKitTimeShowNumber,
-            hasVideo: false
+            hasVideo:((alert["calltype"] as? String ?? "" ) == "audio" ) ? false : true
         ) { _ in
-            //                UIApplication.shared.endBackgroundTask(bgTaskID)
         }
         
     }

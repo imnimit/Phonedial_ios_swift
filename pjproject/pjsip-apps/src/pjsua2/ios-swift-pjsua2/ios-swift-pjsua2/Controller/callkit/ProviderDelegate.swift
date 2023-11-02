@@ -33,7 +33,7 @@ import UIKit
 class ProviderDelegate: NSObject {
     private let callManager: CallManager
     private let provider: CXProvider
-    
+    var isVideoCall = false
     init(callManager: CallManager) {
         self.callManager = callManager
         provider = CXProvider(configuration: ProviderDelegate.providerConfiguration)
@@ -63,6 +63,7 @@ class ProviderDelegate: NSObject {
         let update = CXCallUpdate()
         update.remoteHandle = CXHandle(type: .phoneNumber, value: handle)
         update.hasVideo = hasVideo
+        isVideoCall = hasVideo
 //        update.supportsHolding = false
         
         provider.reportNewIncomingCall(with: uuid, update: update) { error in
@@ -101,27 +102,31 @@ extension ProviderDelegate: CXProviderDelegate {
     
     
     func provider(_ provider: CXProvider, perform action: CXAnswerCallAction) {
-        guard let call = callManager.callWithUUID(uuid: action.callUUID) else {
-            action.fail()
-            return
-        }
-        configureAudioSession()
-        
-        appDelegate.callComePushNotification = true
-        if (CPPWrapper().registerStateInfoWrapper()) {
-            if CPPWrapper().checkCallConnected() == true {
-//                if appDelegate.appIsBaground != false {
-                    appDelegate.loadCallerController(checkLockOrUnlock: false) // Change
-//                appDelegate.loadvideoCall()
-//                }
+            guard let call = callManager.callWithUUID(uuid: action.callUUID) else {
+                action.fail()
+                return
             }
-        } else {
-            print("Sip Status: NOT REGISTERED")
+            configureAudioSession()
+            
+            appDelegate.callComePushNotification = true
+            if (CPPWrapper().registerStateInfoWrapper()) {
+                if CPPWrapper().checkCallConnected() == true {
+    //                if appDelegate.appIsBaground != false {
+                    if(isVideoCall == false){
+                        appDelegate.loadCallerController(checkLockOrUnlock: false) // Change
+                    }else{
+                        appDelegate.loadvideoCall()
+                    }
+    //                appDelegate.loadvideoCall()
+    //                }
+                }
+            } else {
+                print("Sip Status: NOT REGISTERED")
+            }
+            call.answer()
+            
+            action.fulfill()
         }
-        call.answer()
-        
-        action.fulfill()
-    }
     func provider(_ provider: CXProvider, didActivate audioSession: AVAudioSession) {
         print("Received \(#function)")
         startAudio()

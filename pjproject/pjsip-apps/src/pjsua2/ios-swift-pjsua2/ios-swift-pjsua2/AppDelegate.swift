@@ -66,7 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     var viewdisplayView = UIView ()
     var viewwindowView = UIView()
     var isVideoCallMute = false
-
+    var videoCallingTime = false
 
     static var instance: AppDelegate {
         return UIApplication.shared.delegate as! AppDelegate
@@ -518,6 +518,7 @@ extension AppDelegate {
         vcToPresent.modalPresentationStyle = .overFullScreen //or .overFullScreen for transparency
         vcToPresent.incomingCallId  = CPPWrapper().incomingCallInfoWrapper()
         vcToPresent.mainTitle = "Incomeing Call"
+        vcToPresent.calldireactAns = true
         topVC.present(vcToPresent, animated: true, completion: nil)
     }
 }

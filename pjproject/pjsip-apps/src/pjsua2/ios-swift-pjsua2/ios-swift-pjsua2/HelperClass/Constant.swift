@@ -45,7 +45,7 @@ class Constant: NSObject {
         static let GOOGLE_API_KEY = "AIzaSyAOFFQ4jMVhXoAnam1hfzHLngCutNlbzY4"
         
         static let SERVERNAME =  "phonedial.netcitrus.com" //"switch.nyerhosmobile.com"
-        static let PORT = "5060" //5060"
+        static let PORT = "5081" //5060"
         
         static let pushToken = "NXMPushToken"
         static let fromKeyPath = "nexmo.push_info.from_user.name"

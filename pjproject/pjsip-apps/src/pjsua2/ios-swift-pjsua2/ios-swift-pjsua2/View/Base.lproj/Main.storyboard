@@ -9309,13 +9309,21 @@
                                         <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" highlighted="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U6E-JS-kro" userLabel="Call Title">
+                                        <rect key="frame" x="145" y="748" width="124.5" height="33"/>
+                                        <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="28"/>
+                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="vdE-sN-SVj" firstAttribute="centerX" secondItem="fhy-na-CVd" secondAttribute="centerX" id="AYX-XT-iP2"/>
+                                    <constraint firstItem="U6E-JS-kro" firstAttribute="centerX" secondItem="fhy-na-CVd" secondAttribute="centerX" id="C8X-L6-gTc"/>
                                     <constraint firstItem="BRh-AM-nDw" firstAttribute="centerX" secondItem="i0o-pp-uK3" secondAttribute="centerX" id="CkN-mo-KpQ"/>
                                     <constraint firstItem="0Nf-Ag-6gM" firstAttribute="centerX" secondItem="vdE-sN-SVj" secondAttribute="centerX" id="RJ9-b3-Av4"/>
                                     <constraint firstItem="0Nf-Ag-6gM" firstAttribute="top" secondItem="vdE-sN-SVj" secondAttribute="bottom" constant="5" id="ZuC-tW-cCN"/>
+                                    <constraint firstAttribute="bottom" secondItem="U6E-JS-kro" secondAttribute="bottom" constant="115" id="dvc-FE-7xs"/>
                                     <constraint firstItem="1vo-T9-w06" firstAttribute="centerX" secondItem="vdE-sN-SVj" secondAttribute="centerX" id="kF9-Yi-kor"/>
                                     <constraint firstItem="vdE-sN-SVj" firstAttribute="centerY" secondItem="fhy-na-CVd" secondAttribute="centerY" constant="-50" id="nn9-kg-myH"/>
                                     <constraint firstItem="BRh-AM-nDw" firstAttribute="top" secondItem="i0o-pp-uK3" secondAttribute="bottom" constant="5" id="oGN-mg-joa"/>
@@ -9398,7 +9406,10 @@
                     </view>
                     <connections>
                         <outlet property="btnCallAnswer" destination="RFP-HT-j2W" id="ez5-Pn-ZvK"/>
+                        <outlet property="btnCallCut" destination="bgF-1C-l4B" id="zIZ-9J-lhE"/>
+                        <outlet property="btnMute" destination="JSm-jc-yjk" id="pWs-3U-6cc"/>
                         <outlet property="downSideVW" destination="8cG-RJ-5ZU" id="oBv-9w-NHJ"/>
+                        <outlet property="lblLoding" destination="U6E-JS-kro" id="eyU-NV-zu4"/>
                         <outlet property="lblName" destination="0Nf-Ag-6gM" id="t12-4A-DAj"/>
                         <outlet property="lblNameLetter" destination="1zf-OZ-Ld1" id="eWX-W1-ajX"/>
                         <outlet property="lblNumber" destination="1vo-T9-w06" id="w3i-Ju-IIH"/>
@@ -9409,7 +9420,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nFH-kr-ZHx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4649" y="-1227"/>
+            <point key="canvasLocation" x="4647.826086956522" y="-1227.4553571428571"/>
         </scene>
         <!--Video Call Vc-->
         <scene sceneID="bIO-8c-ab1">

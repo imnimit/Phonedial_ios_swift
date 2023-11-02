@@ -18,6 +18,9 @@ class VideoCallWaitVc: UIViewController {
     @IBOutlet weak var btnCallAnswer: UIButton!
     @IBOutlet weak var downSideVW: UIView!
     @IBOutlet weak var lblTitle: UILabel!
+    @IBOutlet weak var btnMute: UIButton!
+    @IBOutlet weak var btnCallCut: UIButton!
+    @IBOutlet weak var lblLoding: UILabel!
     
     
     var seconds  = 0
@@ -29,7 +32,7 @@ class VideoCallWaitVc: UIViewController {
     var name = ""
     var incomingCallId = ""
     var mainTitle = ""
-
+    var calldireactAns = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +61,16 @@ class VideoCallWaitVc: UIViewController {
                     name = appDelegate.IncomeingCallInfo["name"] as? String ?? "Unknown"
                 }
             }
+            if(calldireactAns){
+                lblLoding.isHidden = false
+                btnCallAnswer.isHidden = true
+                btnMute.isHidden = true
+                btnCallCut.isHidden = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+                    CPPWrapper().answerCall()
+                })
+                
+            }
         }
         else{
             appDelegate.isVidoeCallIncomeing = false
@@ -65,6 +78,7 @@ class VideoCallWaitVc: UIViewController {
             CPPWrapper().outgoingCall("sip:\(phoneCode)" + (number) + "@\(Constant.GlobalConstants.SERVERNAME)" + ":" + "\(Constant.GlobalConstants.PORT)", "1")
             CPPWrapper().call_listener_wrapper(call_status_listener_swift)
             lblNumber.text = phoneCode + number
+            appDelegate.videoCallingTime = true
         }
         
         

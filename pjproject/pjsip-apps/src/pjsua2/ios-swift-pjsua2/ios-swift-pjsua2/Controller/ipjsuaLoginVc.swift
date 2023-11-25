@@ -284,7 +284,7 @@ class ipjsuaLoginVc: UIViewController ,TTTAttributedLabelDelegate {
                 txtUserName.text,
                 txtPassword.text,
                 SIPIP.text,
-                SIPPort.text)
+                Constant.GlobalConstants.PORT)
         } else {
             let alert = UIAlertController(title: "SIP SETTINGS ERROR", message: "Please fill the form / Logout", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in

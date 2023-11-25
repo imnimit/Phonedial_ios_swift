@@ -11,7 +11,7 @@ struct API_URL {
     static let LIVE_URL = "https://phonedial.netcitrus.com/Dialer_API_23717/api.php?"    //"https://switch.nyerhosmobile.com/Dialer_API_23717/api.php"
     static let BASEURL = LIVE_URL
     static let URLAUDIODOWNLOAD = "https://switch.nyerhosmobile.com/voicemail/"
-    static let SoketAPIURL = "http://chat.voizcall.com:7000/" //"http://socket.nyerhosmobile.com:7000/"
+    static let SoketAPIURL = "http://192.168.1.76:7000/" //"http://socket.nyerhosmobile.com:7000/"
 }
 
 struct APISoketName {

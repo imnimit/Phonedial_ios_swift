@@ -95,12 +95,12 @@ public:
     /**
      Hold the call
      */
-    void holdCall(int passid);
+    void holdCall(long passid);
     
     /**
      unhold the call
      */
-    void unholdCall(int passid);
+    void unholdCall(long passid);
     
     
     /**

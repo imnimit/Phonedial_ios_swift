@@ -33,10 +33,12 @@ class VideoCallWaitVc: UIViewController {
     var incomingCallId = ""
     var mainTitle = ""
     var calldireactAns = false
+    var callManager: CallManager!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+       
+        callManager = appDelegate.callManager
         downSideVW.clipsToBounds = true
         downSideVW.layer.cornerRadius = 50
         downSideVW.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
@@ -79,6 +81,7 @@ class VideoCallWaitVc: UIViewController {
             CPPWrapper().call_listener_wrapper(call_status_listener_swift)
             lblNumber.text = phoneCode + number
             appDelegate.videoCallingTime = true
+            callManager.startCall(handle: (lblNumber.text ?? ""), videoEnabled: false)
         }
         
         

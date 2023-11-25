@@ -571,7 +571,7 @@ func generateThumbnailVideo(path: URL, completion: @escaping (UIImage?) -> Void)
         let asset = AVURLAsset(url: path, options: nil)
         let imgGenerator = AVAssetImageGenerator(asset: asset)
         imgGenerator.appliesPreferredTrackTransform = true
-        let cgImage = try imgGenerator.copyCGImage(at: CMTimeMake(value: 0, timescale: 1), actualTime: nil)
+        let cgImage = try imgGenerator.copyCGImage(at: CMTimeMake(value: 2, timescale: 1), actualTime: nil)
         let thumbnail = UIImage(cgImage: cgImage)
         completion(thumbnail)
     } catch let error {
@@ -721,3 +721,27 @@ extension Character {
 extension RangeReplaceableCollection where Self: StringProtocol {
     var digitsAndPeriods: Self { filter(\.isDecimalOrPeriod) }
 }
+
+
+//extension UITabBarController {
+//    func showTabBar(){
+//        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.7, options: .curveEaseOut) {
+//            if let tabBarFrame = self.tabBarController?.tabBar.frame {
+//                self.tabBarController?.tabBar.frame.origin.y = self.navigationController!.view.frame.maxY - tabBarFrame.height
+//            }
+//            self.tabBarController?.tabBar.isHidden = false
+//            self.navigationController!.view.layoutIfNeeded()
+//        }
+//    }
+//    
+//    func hideTabBar() {
+//        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.7, options: .curveEaseOut) {
+//            if let tabBarFrame = self.tabBarController?.tabBar.frame {
+//                self.tabBarController?.tabBar.frame.origin.y = self.navigationController!.view.frame.maxY + tabBarFrame.height
+//            }
+//            self.navigationController?.view.layoutIfNeeded()
+//        } completion: { _ in
+//            self.tabBarController?.tabBar.isHidden = true
+//        }
+//    }
+//}

@@ -406,6 +406,10 @@
 		A91B19AF8B702A61C411653C /* Pods_ios_swift_pjsua2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ios_swift_pjsua2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B10BEB4B2A5FC8AC007ACEDC /* CountryPickerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryPickerVC.swift; sourceTree = "<group>"; };
 		B10BEB502A5FCA6A007ACEDC /* countryPickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = countryPickerCell.swift; sourceTree = "<group>"; };
+		B1F2D39E2AF4D4CE00976476 /* Poppins-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Light.ttf"; sourceTree = "<group>"; };
+		B1F2D39F2AF4D4CE00976476 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Medium.ttf"; sourceTree = "<group>"; };
+		B1F2D3A02AF4D4CE00976476 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Regular.ttf"; sourceTree = "<group>"; };
+		B1F2D3A12AF4D4CE00976476 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		B1F368662A38493500EEA198 /* CreateParticipantVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateParticipantVC.swift; sourceTree = "<group>"; };
 		B1F368682A384DCA00EEA198 /* CreateParticipantCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateParticipantCell.swift; sourceTree = "<group>"; };
 		B1F3686A2A38815A00EEA198 /* ContactAddCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactAddCell.swift; sourceTree = "<group>"; };
@@ -1088,6 +1092,18 @@
 			path = cell;
 			sourceTree = "<group>";
 		};
+		B1F2D3A22AF4D4CE00976476 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				B1F2D39E2AF4D4CE00976476 /* Poppins-Light.ttf */,
+				B1F2D39F2AF4D4CE00976476 /* Poppins-Medium.ttf */,
+				B1F2D3A02AF4D4CE00976476 /* Poppins-Regular.ttf */,
+				B1F2D3A12AF4D4CE00976476 /* Poppins-SemiBold.ttf */,
+			);
+			name = Font;
+			path = "/Volumes/Secondary/Projects/Phonedial_ios_swift/pjproject/pjsip-apps/src/pjsua2/ios-swift-pjsua2/ios-swift-pjsua2/Font";
+			sourceTree = "<absolute>";
+		};
 		B1F40FAB2A614F8D00E1EAF1 /* json */ = {
 			isa = PBXGroup;
 			children = (
@@ -1173,6 +1189,7 @@
 		C3B851FD25A5EA6C0037A8AB /* ios-swift-pjsua2 */ = {
 			isa = PBXGroup;
 			children = (
+				B1F2D3A22AF4D4CE00976476 /* Font */,
 				B1F40FAB2A614F8D00E1EAF1 /* json */,
 				B10BEB4E2A5FC8C0007ACEDC /* countryPickerViewControllers */,
 				00960CE32A0CD2C5005283F6 /* PermitionVC */,

@@ -186,7 +186,7 @@ class ContactDetailVc: UIViewController {
         
         
         for i in dataContectInfo {
-            if i["phone"] as? String != "" {
+            if i["phone"] as? String != "" && (i["phone"] as? String ?? "") != "undefined" {
                 if mulipleContact.count > 0 {
                     for i in mulipleContact {
                         let dic = ["heder":"Mobile","Info":i,"img": #imageLiteral(resourceName: "ic_contact_dtl_call")] as! [String: Any]

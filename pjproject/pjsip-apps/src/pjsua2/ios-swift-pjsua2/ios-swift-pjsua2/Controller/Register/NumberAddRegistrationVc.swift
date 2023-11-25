@@ -136,7 +136,7 @@ class NumberAddRegistrationVc: UIViewController {
         }
         
         let requestData : [String : String] = [:]
-        let url = "?request=verification_api&Country_id=\(countryID)&Device_id=\(appDelegate.diviceID)&Phone=\(txtPhoneNumber.text ?? "")&Mobile_type=ios"
+        let url = "request=verification_api&Country_id=\(countryID)&Device_id=\(appDelegate.diviceID)&Phone=\(txtPhoneNumber.text ?? "")&Mobile_type=ios"
         print(requestData)
         APIsMain.apiCalling.callData(credentials: requestData,requstTag : url, withCompletionHandler: { [self] (result) in
             print(result)

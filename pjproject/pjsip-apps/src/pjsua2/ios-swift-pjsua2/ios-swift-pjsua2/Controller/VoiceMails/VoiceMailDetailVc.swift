@@ -94,9 +94,10 @@ class VoiceMailDetailVc: UIViewController, AVAudioPlayerDelegate {
 //                audioPlayer.prepareToPlay()
 //                audioPlayer.play()
 //
-                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
-                try AVAudioSession.sharedInstance().setActive(true)
-
+//                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+//                try AVAudioSession.sharedInstance().setActive(true)
+                try! AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category(rawValue: convertFromAVAudioSessionCategory(AVAudioSession.Category.playback)))
+                try! AVAudioSession.sharedInstance().setActive(true)
                 /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
                 audioPlayer = try AVAudioPlayer(contentsOf: fullDestPath, fileTypeHint: AVFileType.mp3.rawValue)
 
@@ -140,12 +141,10 @@ class VoiceMailDetailVc: UIViewController, AVAudioPlayerDelegate {
             }
         }
         
-      
-        
-        
-       
-       
-      
+    }
+    
+    fileprivate func convertFromAVAudioSessionCategory(_ input: AVAudioSession.Category) -> String {
+        return input.rawValue
     }
     
    

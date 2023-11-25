@@ -81,7 +81,7 @@ class CardPaymentConfirmationVc: UIViewController {
     // MARK: Api Calling
     func createInappPurechase(json: String) {
         let rmeoveotherString = price.replace(string: "$", replacement: "").removeWhitespace()
-        let requestData : [String : String] = ["Token":User.sharedInstance.getUser_token()
+        let requestData : [String : String] = ["token":User.sharedInstance.getUser_token()
                                                ,"request":"account_recharge_IAP"
                                                ,"device_id": appDelegate.diviceID
                                                ,"amount":rmeoveotherString
@@ -92,7 +92,7 @@ class CardPaymentConfirmationVc: UIViewController {
         APIsMain.apiCalling.callData(credentials: requestData,requstTag : "", withCompletionHandler: { [self] (result) in
             print(result)
             let diddata : [String: Any] = (result as! [String: Any])
-            if diddata["status"] as? Bool == true {
+            if diddata["status"] as? String ?? "" == "1" {
                 self.navigationController?.popToRootViewController(animated: true)
             }
             print(diddata)

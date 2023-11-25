@@ -29,6 +29,15 @@ class BlockCallsVc: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
+      
+        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.7, options: .curveEaseOut) {
+            if let tabBarFrame = self.tabBarController?.tabBar.frame {
+                self.tabBarController?.tabBar.frame.origin.y = self.navigationController!.view.frame.maxY + tabBarFrame.height
+            }
+            self.navigationController!.view.layoutIfNeeded()
+        } completion: { _ in
+            self.tabBarController?.tabBar.isHidden = true
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

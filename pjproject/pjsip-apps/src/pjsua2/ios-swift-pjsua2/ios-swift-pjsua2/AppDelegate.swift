@@ -108,7 +108,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         UIApplication.shared.registerForRemoteNotifications()
         
         
-        
+        providerDelegate = ProviderDelegate(callManager: callManager)
         PushKitDelegate.sharedInstance.registerPushKit()
         
         navigationBarApperance()

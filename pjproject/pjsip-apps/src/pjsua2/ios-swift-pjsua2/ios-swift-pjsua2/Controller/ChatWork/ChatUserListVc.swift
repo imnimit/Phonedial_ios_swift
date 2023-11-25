@@ -269,44 +269,42 @@ class ChatUserListVc: UIViewController {
                 appDelegate.ChatTimeUserUserID = "\(Data["id"] as? Int ?? 0)"
                 let time = getLastSyncTime(LastSyncTimeKey: "last_sync_time")
                 SocketHInit(Time: time)
-                ProgressHUD.dismiss()
-            } else {
-                ProgressHUD.dismiss()
             }
+            ProgressHUD.dismiss()
         })
     }
     
-    func SocketTimeCreateUser() {
-        let isONN : Bool = APIsMain.apiCalling.isConnectedToNetwork()
-        if(isONN == false) {
-            let alert = UIAlertController(title: Constant.GlobalConstants.APPNAME, message: "No Internet connection", preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.cancel, handler:{ (UIAlertAction)in
-            }))
-            alert.present(animated: true, completion: nil)
-            return
-        }
-        let strReq = API_URL.SoketAPIURL + APISoketName.CreateUser
-        print(strReq)
-
-        let requestData : [String : String] = ["user_name":User.sharedInstance.getFullName() ,"mobile_no":User.sharedInstance.getContactNumber(),"device_token":appDelegate.notificationTokan,"is_replace_token":"1"]
-        print(requestData)
-        APIsMain.apiCalling.callDataWithoutLoaderSoket(credentials: requestData,requstTag : strReq, withCompletionHandler: { [self] (result) in
-            print(result)
-            let diddata : [String: Any] = (result as! [String: Any])
-            if diddata["status"] as! String == "Success" {
-                let Response: [String: Any]  = (diddata["Response"] as! [String: Any])
-                let Data = Response["data"] as! [String:Any]
-                userData = Data
-                appDelegate.ChatTimeUserUserID = "\(Data["id"] as? Int ?? 0)"
-                let time = getLastSyncTime(LastSyncTimeKey: "last_sync_time")
-                SocketHInit(Time: time)
-                ProgressHUD.dismiss()
-            } else {
-                ProgressHUD.dismiss()
-
-            }
-        })
-    }
+//    func SocketTimeCreateUser() {
+//        let isONN : Bool = APIsMain.apiCalling.isConnectedToNetwork()
+//        if(isONN == false) {
+//            let alert = UIAlertController(title: Constant.GlobalConstants.APPNAME, message: "No Internet connection", preferredStyle: UIAlertController.Style.alert)
+//            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.cancel, handler:{ (UIAlertAction)in
+//            }))
+//            alert.present(animated: true, completion: nil)
+//            return
+//        }
+//        let strReq = API_URL.SoketAPIURL + APISoketName.CreateUser
+//        print(strReq)
+//
+//        let requestData : [String : String] = ["user_name":User.sharedInstance.getFullName() ,"mobile_no":User.sharedInstance.getContactNumber(),"device_token":appDelegate.notificationTokan,"is_replace_token":"1"]
+//        print(requestData)
+//        APIsMain.apiCalling.callDataWithoutLoaderSoket(credentials: requestData,requstTag : strReq, withCompletionHandler: { [self] (result) in
+//            print(result)
+//            let diddata : [String: Any] = (result as! [String: Any])
+//            if diddata["status"] as! String == "Success" {
+//                let Response: [String: Any]  = (diddata["Response"] as! [String: Any])
+//                let Data = Response["data"] as! [String:Any]
+//                userData = Data
+//                appDelegate.ChatTimeUserUserID = "\(Data["id"] as? Int ?? 0)"
+//                let time = getLastSyncTime(LastSyncTimeKey: "last_sync_time")
+//                SocketHInit(Time: time)
+//                ProgressHUD.dismiss()
+//            } else {
+//                ProgressHUD.dismiss()
+//
+//            }
+//        })
+//    }
     
     func DeleteUser(roomId: String,userID: String) {
         let requestData : [String : String] = ["user_id":appDelegate.ChatTimeUserUserID,"room_id":roomId]

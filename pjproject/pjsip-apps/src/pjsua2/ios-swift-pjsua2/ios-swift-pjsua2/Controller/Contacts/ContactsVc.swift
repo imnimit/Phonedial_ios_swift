@@ -447,7 +447,18 @@ class ContactsVc: UIViewController {
                     }else{
                         print("Add Contarct")
                         print(i["name"] as! String)
-                        DBManager().insertcontact(dicContact: i)
+                        
+                        var strBase64  = ""
+                        if i["imageDataAvailable"] as! Bool == true {
+                            let img = UIImage(data:i["imageData"] as? Data ?? Data())!
+                            let vidoImageData = img.pngData()
+                            strBase64 = vidoImageData!.base64EncodedString()
+                        }
+                        
+                        
+                        let dicContactData =  ["name": i["name"] as! String, "phone": i["phone"] as! String, "imageDataAvailable": i["imageDataAvailable"] as! Bool, "imageData64": strBase64, "Email": i["Email"] as! String, "phoneDialers":"0", "newContact":"0"] as [String : Any]
+                        
+                        DBManager().insertcontact(dicContact: dicContactData)
                     }
                 }
             }

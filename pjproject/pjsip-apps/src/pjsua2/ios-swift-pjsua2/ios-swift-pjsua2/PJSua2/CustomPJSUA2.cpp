@@ -717,7 +717,7 @@ void PJSua2::pertiqulerhangupCall(std::string passid) {
 /**
  Hold the call
  */
-void PJSua2::holdCall(int passid) {
+void PJSua2::holdCall(long passid) {
     
     for (unsigned i = 0 ; i< Callarray.size() ; ++i) {
         if (Callarray[i] != NULL && Callarray[i]->isActive() == true) {
@@ -754,7 +754,7 @@ void PJSua2::holdCall(int passid) {
 /**
  Unhold the call
  */
-void PJSua2::unholdCall(int passid) {
+void PJSua2::unholdCall(long passid) {
     
     for (unsigned i = 0 ; i< Callarray.size() ; ++i) {
         if (Callarray[i] != NULL && Callarray[i]->isActive() == true) {

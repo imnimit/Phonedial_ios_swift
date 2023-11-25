@@ -7,6 +7,7 @@
 
 import UIKit
 import AVFAudio
+import AVFoundation
 
 
 class RecordingDetailVc: UIViewController {
@@ -58,6 +59,8 @@ class RecordingDetailVc: UIViewController {
         let fullDestPath = URL(fileURLWithPath: destPath).appendingPathComponent(soundDetail["audio_name"] as? String ?? "")
         if fileManager.fileExists(atPath: fullDestPath.path){
             do {
+                try! AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category(rawValue: convertFromAVAudioSessionCategory(AVAudioSession.Category.playback)))
+                try! AVAudioSession.sharedInstance().setActive(true)
                 audioPlayer = try AVAudioPlayer(contentsOf: fullDestPath)
                 let duration = audioPlayer.duration
                 lblTotalLenthOfSound.text = "\(duration)"
@@ -99,6 +102,10 @@ class RecordingDetailVc: UIViewController {
                 imgLetter.image =  #imageLiteral(resourceName: "call_bg_image")
             }
         }
+    }
+    
+    fileprivate func convertFromAVAudioSessionCategory(_ input: AVAudioSession.Category) -> String {
+        return input.rawValue
     }
     
     //this runs the do try statement

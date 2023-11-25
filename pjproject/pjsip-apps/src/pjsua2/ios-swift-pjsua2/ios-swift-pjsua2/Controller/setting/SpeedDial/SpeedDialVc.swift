@@ -73,15 +73,36 @@ class SpeedDialVc: UIViewController {
             var data = [String: Any]()
             if i.fullName() != "" {
                 if i.info.imageDataAvailable as? Bool == true {
-                    data = ["name":i.fullName(),"phone":i.getFirstPhoneNumber().removeWhitespace(),"imageDataAvailable": i.info.imageDataAvailable as? Bool ?? false ,"imageData": i.info.imageData!,"Email":i.getFirstEmailAddress()]
+                    data = ["name":i.fullName(),"phone":[i.getFirstPhoneNumber().removeWhitespace()],"imageDataAvailable": i.info.imageDataAvailable as? Bool ?? false ,"imageData": i.info.imageData!,"Email":i.getFirstEmailAddress()]
                 }else {
-                    data = ["name":i.fullName(),"phone":i.getFirstPhoneNumber().removeWhitespace(),"imageDataAvailable": i.info.imageDataAvailable as? Bool ?? false ,"imageData":i.info.imageData ?? Data(),"Email":i.getFirstEmailAddress()]
+                    data = ["name":i.fullName(),"phone":[i.getFirstPhoneNumber().removeWhitespace()],"imageDataAvailable": i.info.imageDataAvailable as? Bool ?? false ,"imageData":i.info.imageData ?? Data(),"Email":i.getFirstEmailAddress()]
                 }
                 
-                if dataContectInfo.firstIndex(where: {$0["phone"] as! String == i.getFirstPhoneNumber().removeWhitespace() }) != nil {
+                if dataContectInfo.firstIndex(where: {
+                  let num =   $0["phone"] as! [String]
+                    for j in num {
+                        if j == i.getFirstPhoneNumber().removeWhitespace() {
+                            return  true
+                        }
+                    }
+                    return  false
+                }) != nil {
                     
                 } else {
-                    dataContectInfo.append(data)
+                    var phoneNumber = [String]()
+                    if i.info.phoneNumbers.count >= 2 {
+                        for j in i.info.phoneNumbers {
+                            phoneNumber.append(j.value.stringValue)
+                        }
+                    }
+                    if((phoneNumber.count) != 0) {
+                        data["phone"] = phoneNumber
+                        dataContectInfo.append(data)
+
+                    }else{
+                        dataContectInfo.append(data)
+
+                    }
                 }
             }
         }
@@ -89,6 +110,10 @@ class SpeedDialVc: UIViewController {
         dataContectInfo.sort {
             (($0 as! Dictionary<String, AnyObject>)["name"] as! String) < (($1 as! Dictionary<String, AnyObject>)["name"] as! String)
         }
+        
+        
+        print(dataContectInfo)
+        print(dataContectInfo)
     }
     
     
@@ -151,11 +176,22 @@ extension SpeedDialVc:  UICollectionViewDataSource, UICollectionViewDelegate,UIC
         cell.deletContactList.isHidden = !isEdit
         cell.btnSelectionNumber.isHidden  = isEdit
         cell.imgContact.layer.cornerRadius =  cell.imgContact.layer.bounds.height/2
+        print(dic["number"] as? String ?? "")
         if dataContectInfo.count > 0 && (dic["number"] as? String ?? "") != "" {
             if let index = dataContectInfo.firstIndex(where: {
-                let phone = ($0["phone"] as! String).removeWhitespace()
-                return phone.suffix(10) == String((dic["number"] as? String ?? "").suffix(10))
-            }) {
+                let num = $0["phone"] as! [String]
+                print(num)
+                for i in num {
+                    print(num)
+                    print(dic["number"] as? String ?? "")
+                    if i.suffix(10) == String((dic["number"] as? String ?? "").suffix(10)){
+                        return true
+                    }
+                }
+                
+                return false
+            })
+            {
                 cell.detailVW.isHidden = false
                 let findNumber = dataContectInfo[index]
                 

@@ -49,7 +49,14 @@ class SettingVc: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
-        self.tabBarController?.tabBar.isHidden = false
+        //self.tabBarController?.tabBar.isHidden = false
+        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.7, options: .curveEaseOut) {
+            if let tabBarFrame = self.tabBarController?.tabBar.frame {
+                self.tabBarController?.tabBar.frame.origin.y = self.navigationController!.view.frame.maxY - tabBarFrame.height
+            }
+            self.tabBarController?.tabBar.isHidden = false
+            self.navigationController!.view.layoutIfNeeded()
+        }
         appDelegate.sipRegistration()
         
         if isCallUserBalance == true {
@@ -83,6 +90,8 @@ class SettingVc: UIViewController {
             let diddata : [String: Any] = (result as! [String: Any])
             if diddata["status"] as? String ?? "" == "1" {
                 dataForResponce = (diddata["response"] as! [String: Any])
+                User.sharedInstance.setBalance(value: dataForResponce["Balance"] as? String ?? "")
+                lblVoletBelance.text = User.sharedInstance.getBalance()
                 print(dataForResponce)
             }else if diddata["status"] as? String ?? "" == "4" {
                 let nextVC = UIStoryboard(name: "Setting", bundle: nil).instantiateViewController(withIdentifier: "LogoutPopupVc") as! LogoutPopupVc

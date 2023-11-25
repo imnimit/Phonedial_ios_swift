@@ -104,6 +104,12 @@ final class User {
         return ""
     }
     
+    func setBalance(value:String) {
+        var newData = UserDefaults.standard.object(forKey: "UserData") as! [String:Any]
+        newData["Balance"] = value
+        UserDefaults.standard.setValue(newData, forKey: "UserData")
+    }
+    
     func  getsipPassWord() -> String {
         if UserDefaults.standard.object(forKey: "UserData") != nil {
             let rawData = UserDefaults.standard.object(forKey: "UserData") as! [String : Any]

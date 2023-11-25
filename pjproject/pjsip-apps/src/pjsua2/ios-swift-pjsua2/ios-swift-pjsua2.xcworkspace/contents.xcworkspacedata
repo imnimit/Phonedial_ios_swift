@@ -4,6 +4,22 @@
    <FileRef
       location = "group:ios-swift-pjsua2.xcodeproj">
    </FileRef>
+   <Group
+      location = "group:/Volumes/Secondary/Projects/Phonedial_ios_swift/pjproject/pjsip-apps/src/pjsua2/ios-swift-pjsua2/ios-swift-pjsua2/Font"
+      name = "Font">
+      <FileRef
+         location = "group:Poppins-Light.ttf">
+      </FileRef>
+      <FileRef
+         location = "group:Poppins-Medium.ttf">
+      </FileRef>
+      <FileRef
+         location = "group:Poppins-Regular.ttf">
+      </FileRef>
+      <FileRef
+         location = "group:Poppins-SemiBold.ttf">
+      </FileRef>
+   </Group>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
    </FileRef>

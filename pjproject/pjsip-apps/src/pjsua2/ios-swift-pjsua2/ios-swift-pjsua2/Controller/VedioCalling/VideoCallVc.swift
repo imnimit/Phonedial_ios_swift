@@ -38,12 +38,11 @@ class VideoCallVc: UIViewController {
     var holdFlag = false
     var IsHold  = false
     var IsMuted = false
-    var IsSpeaker = false
+    var IsSpeaker = true
     var number = ""
     var phoneCode = ""
     var timerStore = ""
     var name = ""
-    
     
     var seconds  = 0
     var minutes = 0
@@ -66,6 +65,11 @@ class VideoCallVc: UIViewController {
         
         mainVWPriview.layer.borderColor = #colorLiteral(red: 0.01609096117, green: 0.4797518253, blue: 0.6173341274, alpha: 1)
         mainVWPriview.layer.borderWidth = 1.5
+        
+        configureAudio()
+       // CPPWrapper().callunmute()
+        
+        setAudioOutputSpeaker(enabled: true)
         
         if AppDelegate.instance.isVideoCallMute == true {
             IsMuted = false
@@ -93,6 +97,8 @@ class VideoCallVc: UIViewController {
         nameVW.layer.cornerRadius = nameVW.layer.bounds.height/2
         
         lblPreViewBoxNumber.text = lblNumber.text
+        
+        
         
     }
     
@@ -180,8 +186,6 @@ class VideoCallVc: UIViewController {
             appDelegate.callManager.end(call: call)
             appDelegate.callManager.remove(call: call)
         }
-        
-//        callDismiss()
     }
     
     @IBAction func btnPriviewHideShow(_ sender: UIButton) {
@@ -224,10 +228,10 @@ class VideoCallVc: UIViewController {
             CPPWrapper().callunmute()
         }
         
-        do {
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
-            try AVAudioSession.sharedInstance().setActive(!IsMuted)
-        } catch { print(error.localizedDescription) }
+//        do {
+//            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
+//            try AVAudioSession.sharedInstance().setActive(!IsMuted)
+//        } catch { print(error.localizedDescription) }
     }
     
     @IBAction func btnHold(_ sender: UIButton) {

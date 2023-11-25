@@ -17,6 +17,7 @@ class PhoneDialUserListVc: UIViewController {
     var dataContectInfo = [[String : Any]]()
     var tempPhoneDialerContect = [[String : Any]]()
     var phoneDialerContactsData = [[String : Any]]()
+    var NewContactsData = [[String : Any]]()
     var number = ""
     var numbers = [String]()
     var pullControl = UIRefreshControl()
@@ -61,19 +62,34 @@ class PhoneDialUserListVc: UIViewController {
     
     @objc func refresh(_ sender: AnyObject) {
        
-        if storeCount != dataContectInfo.count {
-            for _ in 0..<countManage() {
-                var number1 = (dataContectInfo[storeCount]["phone"] as? String ?? "").digitsOnly
+//        if storeCount != dataContectInfo.count {
+//            for _ in 0..<countManage() {
+//                var number1 = (dataContectInfo[storeCount]["phone"] as? String ?? "")
+//                numbers.append(number1)
+//                
+//                storeCount += 1
+//                UserDefaults.standard.set(storeCount, forKey: "storeCount")
+//            }
+//            getSipContact()
+//            
+//        } else {
+//            showToastMessage(message: "All number are sync")
+//            pullControl.endRefreshing()
+//        }
+        NewContactsData = DBManager().getAllNewContact()
+        print(NewContactsData)
+        
+        if NewContactsData.count  != 0  {
+            for i in NewContactsData {
+                var number1 = (i["phone"] as? String ?? "")
                 numbers.append(number1)
-                storeCount += 1
-                UserDefaults.standard.set(storeCount, forKey: "storeCount")
             }
             getSipContact()
-            
         } else {
             showToastMessage(message: "All number are sync")
             pullControl.endRefreshing()
         }
+        
         
     }
     
@@ -144,17 +160,22 @@ class PhoneDialUserListVc: UIViewController {
         APIsMain.apiCalling.callData(credentials: requestData,requstTag : "", withCompletionHandler: { [self] (result) in
             print(result)
             let diddata : [String: Any] = (result as! [String: Any])
+            for i in numbers {
+                DBManager().updateNewContact(phoneNumber: i)
+            }
+            
+            
             if diddata["status"] as? String ?? "" == "0" {
                 self.showToastMessage(message: diddata["message"] as? String)
+                
                 pullControl.endRefreshing()
             } else {
                 let Data : [String: Any] = (diddata["response"] as! [String: Any])
-              
                 let phoneDialerContact = Data["contacts"] as? String ?? ""
-                    
+                
                 if phoneDialerContact != "" {
                     arrOfPhoneDialercontact = phoneDialerContact.components(separatedBy: ",")
-         
+                    
                     for i in arrOfPhoneDialercontact {
                         if dataContectInfo.contains(where: { ($0["phone"] as? String) == i }) {
                             DBManager().updatePhoneDialerContact(phoneNumber: i)

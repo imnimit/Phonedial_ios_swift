@@ -15,7 +15,7 @@ import AuthenticationServices
 class MyAccountVc: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
-    var lblMyaccount = [["title":"Speed Dial","Disciption":"Set your favorite contact", "image": #imageLiteral(resourceName: "ic_speed_dial.png")],["title":"Delete Account","Disciption":"Remove account from PhoneDial", "image": #imageLiteral(resourceName: "ic_delete_account.png")],["title":"Log Out","Disciption":"Are you sure want to logout?", "image": #imageLiteral(resourceName: "ic_log_out.pdf")]]
+    var lblMyaccount = [["title":"Speed Dial","Disciption":"Set your favorite contact", "image": #imageLiteral(resourceName: "ic_speed_dial.png")],["title":"Delete Account","Disciption":"Remove account from Vuetel", "image": #imageLiteral(resourceName: "ic_delete_account.png")],["title":"Log Out","Disciption":"Are you sure want to logout?", "image": #imageLiteral(resourceName: "ic_log_out.pdf")]]
     
     var Logout = false
     

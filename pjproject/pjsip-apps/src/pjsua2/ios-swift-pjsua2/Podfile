@@ -22,11 +22,8 @@ target 'ios-swift-pjsua2' do
   pod 'Socket.IO-Client-Swift'
   pod 'InputBarAccessoryView'
   pod 'RealmSwift'
-  pod 'Firebase'
-  pod 'Firebase/Messaging'
-  pod 'FirebaseAnalytics'
+
   pod 'MessageKit'
-  pod 'Firebase/Crashlytics'
   pod 'Alamofire'
   pod 'GraphQLite'
   pod 'SDWebImage'
@@ -35,8 +32,29 @@ target 'ios-swift-pjsua2' do
   pod 'TTTAttributedLabel'
   pod 'PhoneNumberKit'
   pod 'FlagKit'
-  pod 'Firebase/Auth'
 
+  pod 'Firebase'
+  pod 'Firebase/Messaging'
+  pod 'FirebaseAnalytics'
+  pod 'Firebase/Crashlytics'
+  pod 'Firebase/Auth'
+  pod 'AdvancedPageControl'
+  pod 'ImageViewer.swift', '~> 3.0'
+  pod 'ImageViewer.swift/Fetcher', '~> 3.0'
+  pod 'SoundWave'
+
+
+#  post_install do |installer|
+#       installer.generated_projects.each do |project|
+#             project.targets.each do |target|
+#                 target.build_configurations.each do |config|
+#                     config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+#                  end
+#             end
+#      end
+#   end
+  
+  
   
   # Pods for ios-swift-pjsua2
   

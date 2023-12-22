@@ -156,7 +156,6 @@ class VideoCallWaitVc: UIViewController {
         AppDelegate.instance.isVideoCallMute = sender.isSelected
     }
     
-    
     @IBAction func btnCallAnwnser(_ sender: UIButton) {
        CPPWrapper().answerCall()
      }

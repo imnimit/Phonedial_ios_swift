@@ -16,12 +16,13 @@ class SettingVc: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var lblSharAppLink: UILabel!
     @IBOutlet weak var btnShareLink: UIButton!
+    @IBOutlet weak var iconVW: UIView!
     var dataForResponce = [String:Any]()
     var isCallUserBalance = false
     
     var hederTbl = ["ACCOUNT","REVIEW","LEGAL","CONNECT WITH US"]
-    var hederDetail = [[["name":"My Account","Img": #imageLiteral(resourceName: "ic_my_account.pdf")],["name":"Referral Points","Img": #imageLiteral(resourceName: "ic_referral.pdf")],["name":"Blocked Contact's","Img": #imageLiteral(resourceName: "ic_call_settings.pdf")],["name":"Invite Friends","Img": #imageLiteral(resourceName: "ic_setting_invite.pdf")],["name":"PhoneDial Promo Code","Img": #imageLiteral(resourceName: "ic_redeem_voucher.pdf")]]
-                        ,[["name":"Suggest Features","Img": #imageLiteral(resourceName: "ic_suggestions.pdf")],["name":"Feedback","Img": #imageLiteral(resourceName: "ic_feedback.pdf")],["name":"Rate PhoneDial","Img": #imageLiteral(resourceName: "ic_review_app.pdf")]]
+    var hederDetail = [[["name":"My Account","Img": #imageLiteral(resourceName: "ic_my_account.pdf")],["name":"Referral Points","Img": #imageLiteral(resourceName: "ic_referral.pdf")],["name":"Blocked Contact's","Img": #imageLiteral(resourceName: "ic_call_settings.pdf")],["name":"Invite Friends","Img": #imageLiteral(resourceName: "ic_setting_invite.pdf")],["name":"Vuetel Promo Code","Img": #imageLiteral(resourceName: "ic_redeem_voucher.pdf")]]
+                        ,[["name":"Suggest Features","Img": #imageLiteral(resourceName: "ic_suggestions.pdf")],["name":"Feedback","Img": #imageLiteral(resourceName: "ic_feedback.pdf")],["name":"Rate Vuetel","Img": #imageLiteral(resourceName: "ic_review_app.pdf")]]
                         ,[["name":"Terms of Service","Img": #imageLiteral(resourceName: "ic_terms_and_conditions.pdf")],["name":"Privacy Policy","Img": #imageLiteral(resourceName: "ic_terms_and_conditions.pdf")]]
                         ,[["name":"Social","Img": #imageLiteral(resourceName: "ic_setting_invite.pdf")]]]
     
@@ -41,6 +42,7 @@ class SettingVc: UIViewController {
         
         userBalance()
 
+        iconVW.layer.cornerRadius = iconVW.layer.bounds.height/2
         if #available(iOS 15.0, *) {
            tableView.sectionHeaderTopPadding = 20
         }
@@ -184,7 +186,7 @@ extension SettingVc:  UITableViewDataSource,UITableViewDelegate {
         let lbl = hederDetail[indexPath.section]
         let title = lbl[indexPath.row]["name"] as? String ?? ""
         
-        if title == "Rate PhoneDial" {
+        if title == "Rate Vuetel" {
             if let url = URL(string: "itms-apps://itunes.apple.com/app/id1498923143") {
                 UIApplication.shared.open(url)
             }
@@ -199,7 +201,7 @@ extension SettingVc:  UITableViewDataSource,UITableViewDelegate {
             let nextVC = UIStoryboard(name: "Setting", bundle: nil).instantiateViewController(withIdentifier: "InviteFriendsVc") as! InviteFriendsVc
             navigationController?.pushViewController(nextVC, animated: true)
         }
-        else if title == "PhoneDial Promo Code"{
+        else if title == "Vuetel Promo Code"{
             let nextVC = UIStoryboard(name: "Setting", bundle: nil).instantiateViewController(withIdentifier: "RedeemCouponVc") as! RedeemCouponVc
             navigationController?.pushViewController(nextVC, animated: true)
         }

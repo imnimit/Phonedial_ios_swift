@@ -12,6 +12,9 @@ import SDWebImage
 import ImageViewer_swift
 import AVKit
 import RealmSwift
+import IQKeyboardManagerSwift
+import SoundWave
+
 
 class ChatVc: UIViewController {
     @IBOutlet weak var tableView: UITableView!
@@ -22,11 +25,38 @@ class ChatVc: UIViewController {
     @IBOutlet weak var tabelVW: UIView!
     @IBOutlet weak var navigationVW: UIView!
     @IBOutlet weak var imageWithImageVW: UIImageView!
+    @IBOutlet weak var keybordAddVW: UIView!
+    
+    
+    @IBOutlet weak var audioRecodingMainVW: UIView!
+    @IBOutlet weak var hightOfAudioVW: NSLayoutConstraint!
+    
+    
+    @IBOutlet private var audioVisualizationView: AudioVisualizationView!
+    @IBOutlet weak var recodingWav: UIView!
+    @IBOutlet private var recordButton: UIButton!
+    @IBOutlet private var clearButton: UIButton!
+    @IBOutlet weak var lblDuration: UILabel!
+    @IBOutlet weak var btnSendRecoding: UIButton!
+    
+    private let viewModel = ViewModel()
+    var timer: Timer!
+    private var dateTimer: Date?
+    var recodingAfterPlay = false
+    var direactopenChat = false
+    
+    private var currentState: AudioRecodingState = .ready {
+        didSet {
+            self.recordButton.setImage(self.currentState.buttonImage, for: .normal)
+            self.audioVisualizationView.audioVisualizationMode = self.currentState.audioVisualizationMode
+        }
+    }
+    
+    private var chronometer: Chronometer?
     
     var playerViewController = AVPlayerViewController()
     var playerView = AVPlayer()
     var FistTimeKeyBordOpen = true
-//    let chatService = ChatService()
     var messageInputBar = InputBarAccessoryView()
     private var keyboardManager = KeyboardManager()
     private var heightKeyboard: CGFloat = 0
@@ -45,23 +75,19 @@ class ChatVc: UIViewController {
     var fromPhoneDialers = false
     var userImage = UIImage()
     var userContactImage:UIImage!
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+//        hideKeybordTappedAround()
         
-//        DispatchQueue.main.async {
-//            if self.userChatId == "" {
-//                self.SocketTimeConnected()
-//            }else{
-//                self.SocketTimeGetGroup()
-//            }
-//        }
         print(appDelegate.ChatGroupID)
         DispatchQueue.main.async {
             self.callInit()
         }
-        
+
         DispatchQueue.main.async { [self] in
-//            appDelegate.ChatGroupID = ""
+            appDelegate.ChatGroupID = ""
             
             if Name == "" {
                 navTitle.text = phoneNumber
@@ -70,18 +96,40 @@ class ChatVc: UIViewController {
             }
             last7Days = Date.getDates(forLastNDays: 7)
         }
-    }
-  
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        if isAudioScreenOpne == false {
-            LeaveChat()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.onSystemUpdatedContent(notification:)), name: Notification.Name("SocketInit"), object: nil)
+        IQKeyboardManager.shared.enable = false
+        
+        
+        hightOfAudioVW.constant = 0.0
+        recodingWav.layer.cornerRadius = recodingWav.layer.bounds.height/2
+        
+        
+        self.audioVisualizationView.meteringLevelBarWidth = 5.0
+        self.audioVisualizationView.meteringLevelBarInterItem = 1.0
+        self.audioVisualizationView.meteringLevelBarCornerRadius = 0.0
+        
+        self.viewModel.askAudioRecordingPermission()
+        
+        self.viewModel.audioMeteringLevelUpdate = { [weak self] meteringLevel in
+            guard let self = self, self.audioVisualizationView.audioVisualizationMode == .write else {
+                return
+            }
+            self.audioVisualizationView.add(meteringLevel: meteringLevel)
         }
-        isAudioScreenOpne = false
+        
+        self.viewModel.audioDidFinish = { [weak self] in
+            self?.currentState = .recorded
+            self?.audioVisualizationView.stop()
+            self?.timerStop()
+        }
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        IQKeyboardManager.shared.enable = false
         navigationController?.navigationBar.isHidden = true
         DispatchQueue.main.async { [self] in
             if isgroupchat == false {
@@ -94,6 +142,29 @@ class ChatVc: UIViewController {
                 SocketInit()
             }
         }
+    }
+    
+    @objc private func onSystemUpdatedContent(notification: Notification) {
+        SocketInit()
+    }
+    
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        IQKeyboardManager.shared.enable = true
+        if isAudioScreenOpne == false {
+            LeaveChat()
+        }
+        isAudioScreenOpne = false
+        NotificationCenter.default.removeObserver(self, name: Notification.Name("SocketInit"), object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+    }
+    
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
     }
     
     func LeaveChat() {
@@ -117,6 +188,8 @@ class ChatVc: UIViewController {
             navImage.isHidden = true
         }
   
+        appDelegate.chatService.establishConnection()
+        
         DispatchQueue.main.async {
             self.SocketEvent()
         }
@@ -134,7 +207,7 @@ class ChatVc: UIViewController {
         }
     }
     
-    func dataMange(ScallMove:Bool = true){
+    func dataMange(ScallMove:Bool = true) {
         groupedUserData.removeAll()
         indexLettersInContactsArray = [String]()
         if self.isgroupchat == true {
@@ -167,13 +240,12 @@ class ChatVc: UIViewController {
     // MARK: - Socket Init
     func SocketInit() {
 //        appDelegate.chatService.establishConnection()
-       
         let requestData : [String : String] = ["user_id":appDelegate.ChatTimeUserUserID,"room_id":appDelegate.ChatGroupID]
         appDelegate.chatService.mSocket.emit(ChatConstanct.EventListener.Joint, requestData)
+        
     }
     
     func SocketEvent() {
-        
         appDelegate.chatService.mSocket.off(ChatConstanct.EventListener.SendMSG)
         appDelegate.chatService.mSocket.on(ChatConstanct.EventListener.SendMSG) { [self] data, ack in
             print(data)
@@ -357,7 +429,7 @@ class ChatVc: UIViewController {
                         if fullNameArr.count > 0 {
                             if Date().string(format: "yyyy/dd/MM") == fullNameArr[0] {
                                 navTitleSec.text = "last seen today at " +  DataFormateSet(yourDataFormate: "yyyy/MM/dd HH:mm:ss", getDataFormat: "h:mm a", data: message["last_seen_time"] as? String ?? "")
-                            }else{
+                            } else {
                                 navTitleSec.text = "last seen at " +  DataFormateSet(yourDataFormate: "yyyy/MM/dd HH:mm:ss", getDataFormat: "h:mm a", data: message["last_seen_time"] as? String ?? "")
                             }
                         }
@@ -455,10 +527,10 @@ class ChatVc: UIViewController {
                 let indexPath = IndexPath(row: tableView.numberOfRows(inSection: 0) - 1, section: 0)
                 tableView.scrollToRow(at: indexPath, at: .bottom, animated: animated)
             }
-        }else{
+        } else {
             if (tableView.numberOfSections > 0 ) {
                 if tableView.numberOfRows(inSection: 0) - 1 != -1 {
-                    let indexPath = IndexPath(row: tableView.numberOfRows(inSection: 0) - 1, section: 0)
+                    let indexPath = IndexPath(row: tableView.numberOfRows(inSection: tableView.numberOfSections - 1 ) - 1, section: tableView.numberOfSections - 1)
                     tableView.scrollToRow(at: indexPath, at: .top, animated: animated)
                 }
             }
@@ -564,7 +636,7 @@ class ChatVc: UIViewController {
     
     func SocketTimeGetGroup() {
         let strReq = API_URL.SoketAPIURL + APISoketName.GetGroup
-        let requestData : [String : String] = ["user_id":(isgroupchat == true ? "\(userChatId)" : "\(appDelegate.ChatTimeUserUserID),\(userChatId)")]
+        let requestData : [String : String] = ["user_id":(isgroupchat == true ? "\(userChatId)" : "\(appDelegate.ChatTimeUserUserID),\(userChatId)"),"group_unique_id":""]
         APIsMain.apiCalling.callDataWithoutLoaderSoket(credentials: requestData,requstTag : strReq, withCompletionHandler: { [self] (result) in
             let diddata : [String: Any] = (result as! [String: Any])
             if diddata["status"] as! String == "Success" {
@@ -691,7 +763,7 @@ extension ChatVc: InputBarAccessoryViewDelegate {
     //-------------------------------------------------------------------------------------------------------------------------------------------
     func configureMessageInputBar() {
         
-        view.addSubview(messageInputBar)
+        keybordAddVW.addSubview(messageInputBar)
         
         keyboardManager.bind(inputAccessoryView: messageInputBar)
         keyboardManager.bind(to: tableView)
@@ -703,7 +775,7 @@ extension ChatVc: InputBarAccessoryViewDelegate {
         button.setSize(CGSize(width: 36, height: 36), animated: false)
         
         button.onKeyboardSwipeGesture { item, gesture in
-            if (gesture.direction == .left)     { item.inputBarAccessoryView?.setLeftStackViewWidthConstant(to: 0, animated: true) }
+            if (gesture.direction == .left)  { item.inputBarAccessoryView?.setLeftStackViewWidthConstant(to: 0, animated: true) }
             if (gesture.direction == .right) { item.inputBarAccessoryView?.setLeftStackViewWidthConstant(to: 36, animated: true) }
         }
         
@@ -756,7 +828,8 @@ extension ChatVc: InputBarAccessoryViewDelegate {
             ImagePicker.videoLibrary(self, edit: true)
         }
         let alertAudio = UIAlertAction(title: "Audio", style: .default) { action in
-            self.actionAudio()
+           // self.actionAudio()
+            self.recordButtonDidTouchDown()
         }
         let alertDoc = UIAlertAction(title: "Document", style: .default) { action in
             ImagePicker.documentLibrary(self)
@@ -840,9 +913,8 @@ extension ChatVc {
         print(time)
         let dic = DataModel(id: "\(RealmDatabaseeHelper.shared.getAllDataModel().count + 1)", chatID: "\(time)" ,userID: appDelegate.ChatTimeUserUserID,dateTime: Date().string(format: "yyyy/MM/dd HH:mm:ss") , msgType: ChatConstanct.FileTypes.TEXT_MESSAGE , message: text , isSentSuccessFully: "0", senderID: appDelegate.ChatTimeUserUserID, receiverID: (isgroupchat == true) ?  "0" : userChatId, groupID: appDelegate.ChatGroupID)
 
-        print("socket connected")
         let requestData : [String : String] = ["user_id":appDelegate.ChatTimeUserUserID,"room_id":appDelegate.ChatGroupID,"msg":text,"msg_type":ChatConstanct.FileTypes.TEXT_MESSAGE,"chat_unique_id": "\(time)","bs64_string":""]
-        appDelegate.chatService.mSocket.emit(ChatConstanct.EventListener.SendMSG, requestData)
+        appDelegate.chatService.mSocket.emit(ChatConstanct.EventListener.SendMSG, (requestData))
         RealmDatabaseeHelper.shared.saveDataModel(dataModel: dic)
         
         if fistTimeUserEntry == true {
@@ -855,10 +927,10 @@ extension ChatVc {
             }
             fistTimeUserEntry = false
         }
-        
         dataMange()
     }
 }
+
 // MARK: - AudioDelegate
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 extension ChatVc: AudioDelegate {
@@ -954,7 +1026,7 @@ extension ChatVc {
                 DispatchQueue.main.async {
                     let vidoImageData = imge!.pngData()
                     base64 = vidoImageData!.base64EncodedString()
-                    RealmDatabaseeHelper.shared.UpdateToBase64Key(key: rcmessage.chatID, Base64Key: base64,localUrl: videoURL.absoluteString)
+                    RealmDatabaseeHelper.shared.UpdateToBase64Key(key: rcmessage.chatID, Base64Key: base64,localUrl: "\(time).mp4")
                     let indexPathRow:Int = sender.tag
                     let indexPosition = IndexPath(row: indexPathRow, section: sectionValue!)
                     self.tableView.reloadRows(at: [indexPosition], with: .none)
@@ -1038,7 +1110,8 @@ extension ChatVc: UITableViewDataSource {
                
 
                 return cell
-            }else{
+            }
+            else{
                 let cell = tableView.dequeueReusableCell(withIdentifier: "TextReceiverCell", for: indexPath) as! TextReceiverCell
                 cell.lblMessage.text = rcmessage.message
                 let data =  DataFormateSet(yourDataFormate: "yyyy/MM/dd HH:mm:ss", getDataFormat: "yyyy/MM/dd h:mm a", data: rcmessage.dateTime)
@@ -1066,11 +1139,19 @@ extension ChatVc: UITableViewDataSource {
                     }
                     cell.btnVedioNotLoadTime.setTitle(String(format: "%@ %@ %@", String(indexPath.section) , String(indexPath.row), "false"), for:.disabled)
                     cell.btnVedioNotLoadTime.addTarget(self, action: #selector(self.imge64BaseKeyStore(_:)), for: .touchUpInside)
-                }else {
+                } else {
                     let dataDecoded:NSData = NSData(base64Encoded: imgData.isVedioImage64Encoding, options: NSData.Base64DecodingOptions(rawValue: 0))!
                     let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
                     cell.img.image = decodedimage
-//                    cell.img.setupImageViewer(url: URL(string: imgData.mediaURL)!,from: self)
+                    let url = URL(string: imgData.mediaURL);
+                    cell.img.setupImageViewer(
+                        urls: [url!],
+                        initialIndex: 0,
+                        options: [
+                            .theme(.dark)
+                        ],
+                        from: self)
+
                     cell.isRunning = false
                 }
                 
@@ -1087,7 +1168,6 @@ extension ChatVc: UITableViewDataSource {
                     cell.lblTime.text = fullNameArr[1] + " " + fullNameArr[2]
                 }
                 cell.selectionStyle = UITableViewCell.SelectionStyle.none
-
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ImgeReceiverSideCell", for: indexPath) as! ImgeReceiverSideCell
@@ -1108,6 +1188,14 @@ extension ChatVc: UITableViewDataSource {
                     cell.img.image = decodedimage
 //                    cell.img.setupImageViewer(url: URL(string: imgData.mediaURL)!,from: self)
                     cell.isRunning = false
+                    let url = URL(string: imgData.mediaURL);
+                    cell.img.setupImageViewer(
+                        urls: [url!],
+                        initialIndex: 0,
+                        options: [
+                            .theme(.dark)
+                        ],
+                        from: self)
                 }
  
                 cell.backSideVW.layer.cornerRadius = 10.0
@@ -1168,7 +1256,7 @@ extension ChatVc: UITableViewDataSource {
                 cell.btnVedioNotLoadTime.tag = indexPath.row
                 if videoData.isVedioImage64Encoding == "" {
                     cell.imageViewPlay.isHidden = true
-                    cell.img.image = #imageLiteral(resourceName: "ic_imge_defult.png")
+                    cell.img.image =  #imageLiteral(resourceName: "ic_imge_defult.png")
                     cell.LoaderActinoAction = {
                         cell.isRunning = true
                     }
@@ -1189,9 +1277,7 @@ extension ChatVc: UITableViewDataSource {
                 }
                 cell.backSideVW.layer.cornerRadius = 10.0
                 cell.img.layer.cornerRadius = 10.0
-                
                 cell.selectionStyle = UITableViewCell.SelectionStyle.none
-
                 return cell
             }
         }
@@ -1336,7 +1422,9 @@ extension ChatVc: UITableViewDelegate {
         let rcmessage =  groupedUserData[letter]![indexPath.row]
         if rcmessage.msgType == ChatConstanct.FileTypes.VIDEO_MESSAGE {
             let imgData = RealmDatabaseeHelper.shared.getMediaData(key: rcmessage.chatID)
-            playVideo(videoUrl: imgData.mediaURL)
+            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            let path = documentsDirectory.appendingPathComponent(imgData.localPath)
+            playVideo(videoUrl: path)
         }
         else if rcmessage.msgType == ChatConstanct.FileTypes.IMAGE_MESSAGE {
             let imgData = RealmDatabaseeHelper.shared.getMediaData(key: rcmessage.chatID)
@@ -1357,13 +1445,13 @@ extension ChatVc: UITableViewDelegate {
         }
     }
     
-    func playVideo(videoUrl: String) {
-        let url: URL = URL(string: videoUrl)!
-        playerView = AVPlayer(url: url)
+    func playVideo(videoUrl: URL) {
+//        let url: URL = URL(string: videoUrl)!
+        playerView = AVPlayer(url: videoUrl)
         playerViewController.player = playerView
-        
-        self.present(playerViewController, animated: true)
-        self.playerViewController.player?.play()
+        self.present(playerViewController, animated: true,completion: {
+            self.playerViewController.player?.play()
+        })
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -1373,7 +1461,6 @@ extension ChatVc: UITableViewDelegate {
                 cell.transform = CGAffineTransform.identity
             })
         }
-        
     }
     
     
@@ -1468,7 +1555,6 @@ extension ChatVc: UITableViewDelegate {
         }
     }
     
-    
     func ImgeShare(img: UIImage){
         let imageShare = [img]
         let activityViewController = UIActivityViewController(activityItems: imageShare , applicationActivities: nil)
@@ -1518,7 +1604,6 @@ extension ChatVc: UITableViewDelegate {
         }
         downloadTask.resume()
     }
-    
     
     func viedoShare(urlPath: String){
         DispatchQueue.main.async {
@@ -1590,7 +1675,7 @@ extension ChatVc: UIImagePickerControllerDelegate, UINavigationControllerDelegat
             
             if MessageType == ChatConstanct.FileTypes.VIDEO_MESSAGE {
                 
-                generateThumbnailVideo(path: URL(string: link!)!){ [self] (imge) in
+                generateThumbnailVideo(path: video!){ [self] (imge) in
                     if imge != nil {
                         let vidoImageData = imge!.pngData()
                         let imageString = vidoImageData?.base64EncodedString()
@@ -1611,7 +1696,6 @@ extension ChatVc: UIImagePickerControllerDelegate, UINavigationControllerDelegat
                 
             }
             else if MessageType == ChatConstanct.FileTypes.AUDIO_MESSAGE {
-                
                 let mp3URL = URL(string: link!)!
                 downloadAndConvertToBase64(mp3URL: mp3URL){ [self] (base64String) in
                     if let base64String = base64String {
@@ -1667,6 +1751,7 @@ extension ChatVc: UIImagePickerControllerDelegate, UINavigationControllerDelegat
     }
     
 }
+
 extension ChatVc: UIDocumentPickerDelegate {
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         let fileURL = urls[0]
@@ -1696,5 +1781,164 @@ extension ChatVc: UIDocumentPickerDelegate {
             })
         }
         
+    }
+}
+extension ChatVc {
+    enum AudioRecodingState {
+        case ready
+        case recording
+        case recorded
+        case playing
+        case paused
+        
+        var buttonImage: UIImage {
+            switch self {
+            case .ready, .recording:
+                return #imageLiteral(resourceName: "Pause-Button")
+            case .recorded, .paused:
+                return #imageLiteral(resourceName: "Play-Button")
+            case .playing:
+                return #imageLiteral(resourceName: "Pause-Button")
+            }
+        }
+        
+        var audioVisualizationMode: AudioVisualizationView.AudioVisualizationMode {
+            switch self {
+            case .ready, .recording:
+                return .write
+            case .paused, .playing, .recorded:
+                return .read
+            }
+        }
+    }
+    
+    @objc func updateProgress() {
+        if(recodingAfterPlay) {
+            updateTimeAfterRecoding()
+        } else{
+            let interval = Date().timeIntervalSince(dateTimer!)
+            let seconds = Int(interval) % 60
+            let minutes = Int(interval) / 60
+            lblDuration.text = String(format: "%02d:%02d", minutes, seconds)
+        }
+    }
+    
+    func timerStop() {
+        
+        timer?.invalidate()
+        timer = nil
+    }
+    
+    func timerReset() {
+        lblDuration.text = "00:00"
+    }
+    
+    func timerStart() {
+        dateTimer = Date()
+        timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { _ in
+            self.updateProgress()
+        }
+    }
+    
+    @objc func updateTimeAfterRecoding() {
+        let currentTime1 = Int((AudioPlayerManager.shared.audioPlayer?.currentTime)!)
+        let minutes = currentTime1/60
+        let seconds = currentTime1 - minutes * 60
+        lblDuration.text = NSString(format: "%02d:%02d", minutes,seconds) as String
+    }
+        
+    @IBAction func btnSendMp3(_ sender: UIButton) {
+        if(btnSendRecoding.alpha == 0.5){
+            return
+        }
+        
+        hightOfAudioVW.constant = 0.0
+        
+        messageSend(text: nil, photo: nil, video: nil, audio: self.viewModel.currentAudioRecord?.audioFilePathLocal?.absoluteString ?? "")
+    }
+    
+    
+    func recordButtonDidTouchDown() {
+        hightOfAudioVW.constant = 150
+        clearButton.alpha = 0.95
+        btnSendRecoding.alpha = 0.5
+        dateTimer = Date()
+        self.timerStart()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            if self.currentState == .ready {
+                self.viewModel.startRecording { [weak self] soundRecord, error in
+                    if let error = error {
+                        self?.showAlert(with: error)
+                        return
+                    }
+                    self?.currentState = .recording
+                    self?.chronometer = Chronometer()
+                    self?.chronometer?.start()
+                }
+            }
+        }
+    }
+    
+    
+    @IBAction private func clearButtonTapped(_ sender: AnyObject) {
+        if clearButton.alpha != 1 {
+            hightOfAudioVW.constant = 0.0
+            return
+        }
+        
+        do {
+            try self.viewModel.resetRecording()
+            self.audioVisualizationView.reset()
+            self.currentState = .ready
+        } catch {
+            self.showAlert(with: error)
+        }
+        hightOfAudioVW.constant = 0.0
+    }
+    
+    
+    @IBAction private func recordButtonDidTouchUpInside(_ sender: AnyObject) {
+        switch self.currentState {
+        case .recording:
+            self.timerStop()
+            recodingAfterPlay = false
+            self.chronometer?.stop()
+            self.chronometer = nil
+            clearButton.alpha = 1.0
+            btnSendRecoding.alpha = 1.0
+            self.viewModel.currentAudioRecord!.meteringLevels = self.audioVisualizationView.scaleSoundDataToFitScreen()
+            self.audioVisualizationView.audioVisualizationMode = .read
+            
+            do {
+                try self.viewModel.stopRecording()
+                self.currentState = .recorded
+            } catch {
+                self.currentState = .ready
+                self.showAlert(with: error)
+            }
+        case .recorded, .paused:
+            recodingAfterPlay = true
+            self.timerStart()
+            do {
+                let duration = try self.viewModel.startPlaying()
+                self.currentState = .playing
+                self.audioVisualizationView.meteringLevels = self.viewModel.currentAudioRecord!.meteringLevels
+                self.audioVisualizationView.play(for: duration)
+            } catch {
+                self.showAlert(with: error)
+            }
+        case .playing:
+            recodingAfterPlay = false
+            self.timerStop()
+            do {
+                try self.viewModel.pausePlaying()
+                self.currentState = .paused
+                self.audioVisualizationView.pause()
+            } catch {
+                self.showAlert(with: error)
+            }
+        default:
+            break
+        }
     }
 }

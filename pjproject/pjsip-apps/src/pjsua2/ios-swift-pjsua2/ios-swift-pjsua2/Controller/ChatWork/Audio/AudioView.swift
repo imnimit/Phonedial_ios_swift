@@ -42,12 +42,9 @@ class AudioView: UIViewController {
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------
 	override func viewDidLoad() {
-
 		super.viewDidLoad()
 		title = "Audio"
-
 		navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(actionDismiss))
-
 		updateButtonDetails()
 	}
 

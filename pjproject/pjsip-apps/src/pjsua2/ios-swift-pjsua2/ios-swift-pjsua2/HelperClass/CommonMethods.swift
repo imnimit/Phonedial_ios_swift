@@ -276,6 +276,15 @@ func getLastSyncTime(LastSyncTimeKey: String) -> String {
 //    return "2019/12/13 04:14:16 PM"
     return UserDefaults.standard.string(forKey: LastSyncTimeKey) ?? "2019/12/13 04:14:16 PM"
 }
+func storeUserID(ChatUserId: String) {
+    UserDefaults.standard.setValue(ChatUserId, forKey: "ChatUserId")
+}
+func getUserId(ChatUserId: String) -> String {
+//    return "2019/12/13 04:14:16 PM"
+    return UserDefaults.standard.string(forKey: ChatUserId) ?? ""
+}
+
+
 func secondsToHoursMinutesSeconds(_ seconds: Int) -> (Int, Int, Int) {
     return (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
 }
@@ -638,6 +647,8 @@ extension Date {
         return arrDates
     }
 }
+
+
 func textFildDataChek(TextFild: UITextField) -> Bool {
     if TextFild.text != "" {
         return true

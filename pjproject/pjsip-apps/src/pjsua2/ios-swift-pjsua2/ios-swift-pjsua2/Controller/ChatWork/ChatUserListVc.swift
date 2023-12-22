@@ -101,13 +101,14 @@ class ChatUserListVc: UIViewController {
         chatHistory.establishConnection()
         chat.establishConnection()
         
-
         chatHistory.mSocketH.off(ChatConstanct.EventListenerHistroy.HISTORY)
         chatHistory.mSocketH.on(ChatConstanct.EventListenerHistroy.HISTORY) { [self]  data, ack in
             let dicData = data as? [[String:Any]]
-            
+//            HelperClassAnimaion.showProgressHud()
             if FistTimeHistoyLoad == true && dicData?[0]["status"] as? String != "Fail" {
               //  ProgressHUD.show(interaction: false)
+//                HelperClassAnimaion.hideProgressHud()
+
             }
             let time = getLastSyncTime(LastSyncTimeKey: "last_sync_time")
             
@@ -162,39 +163,39 @@ class ChatUserListVc: UIViewController {
                                 RealmDatabaseeHelper.shared.saveUserModalUpdate(dataUserModal: dicForUser)
                                 storeLastSyncTime(LastSyncTime: historyArrry[0]["last_sync_time"] as? String ?? "")
                             }
-                            
                         }
-                        
                     }
                 }
                 DispatchQueue.main.async{ [self] in
                     ProgressHUD.dismiss()
+                    HelperClassAnimaion.hideProgressHud()
                     tableView.reloadData()
                     FistTimeHistoyLoad = false
                 }
             }
         }
         
-        chat.mSocket.off(ChatConstanct.EventListener.DELETEALL)
-        chat.mSocket.on(ChatConstanct.EventListener.DELETEALL) { [self] data, ack in
-         if let message = data[0] as? [String:Any]
-            {
-                if message["status"] as? String == "Fail"
-                {
-                    if  message["is_confirm_delete"] as? String  == "1"
-                    {
-                        let requestData : [String : String] = ["user_id":appDelegate.ChatTimeUserUserID,"room_id":RoomID]
-                        print(requestData)
-                        chat.mSocket.emit(ChatConstanct.EventListener.DELETEGROP, requestData)
-                    }
-                }
-            }
-        }
+//        chat.mSocket.off(ChatConstanct.EventListener.DELETEALL)
+//        chat.mSocket.on(ChatConstanct.EventListener.DELETEALL) { [self] data, ack in
+//         if let message = data[0] as? [String:Any]
+//            {
+//                if message["status"] as? String == "Fail"
+//                {
+//                    if  message["is_confirm_delete"] as? String  == "1"
+//                    {
+//                        let requestData : [String : String] = ["user_id":appDelegate.ChatTimeUserUserID,"room_id":RoomID]
+//                        print(requestData)
+//                        chat.mSocket.emit(ChatConstanct.EventListener.DELETEGROP, requestData)
+//                    }
+//                }
+//            }
+//        }
 
         chat.mSocket.off(ChatConstanct.EventListener.DELETEGROP)
         chat.mSocket.on(ChatConstanct.EventListener.DELETEGROP) { data, ack in
            print(data)
         }
+        
         ProgressHUD.dismiss()
     }
     
@@ -228,7 +229,6 @@ class ChatUserListVc: UIViewController {
         let strReq = API_URL.SoketAPIURL + APISoketName.Login
         print(strReq)
 
-    //    ProgressHUD.show(interaction: false)
 
         let requestData : [String : String] = ["device_token":appDelegate.notificationTokan,
                                                "mobile_no":User.sharedInstance.getContactNumber()]    //,"is_replace_token":"1"]

@@ -8,10 +8,12 @@ var appDelegate: AppDelegate {
 
 struct API_URL {
     //http://45.77.46.154:8089/
-    static let LIVE_URL = "https://phonedial.netcitrus.com/Dialer_API_23717/api.php?"    //"https://switch.nyerhosmobile.com/Dialer_API_23717/api.php"
+    static let LIVE_URL = "https://vuetel.netcitrus.com/DialerApi/api.php?"    //"https://switch.nyerhosmobile.com/Dialer_API_23717/api.php"
     static let BASEURL = LIVE_URL
     static let URLAUDIODOWNLOAD = "https://switch.nyerhosmobile.com/voicemail/"
-    static let SoketAPIURL = "http://192.168.1.76:7000/" //"http://socket.nyerhosmobile.com:7000/"
+    static let SoketAPIURL = "http://chat.voizcall.com:7000/"
+//    static let SoketAPIURL = "http://chat.voizcall.com:7000/"
+    
 }
 
 struct APISoketName {
@@ -44,22 +46,22 @@ class Constant: NSObject {
         static let POPUP_ALERT = "Alert"
         static let GOOGLE_API_KEY = "AIzaSyAOFFQ4jMVhXoAnam1hfzHLngCutNlbzY4"
         
-        static let SERVERNAME =  "phonedial.netcitrus.com" //"switch.nyerhosmobile.com"
-        static let PORT = "5081" //5060"
+        static let SERVERNAME =  "vuetel.netcitrus.com"//"phonedial.netcitrus.com" //"switch.nyerhosmobile.com"
+        static let PORT = "5082"//"5081" //5060"
         
         static let pushToken = "NXMPushToken"
         static let fromKeyPath = "nexmo.push_info.from_user.name"
         
         static let LinkApp =  "https://apps.apple.com/us/app/idxxxxxxxx?ls=1&mt=8"
         
-        static let TERMS_CONDITION_URL  =    "http://phonedial.io/pages/terms_conditions.html"
-        static let PRIVACY_POLICY_URL  =   "http://phonedial.io/pages/privacy.html"
+        static let TERMS_CONDITION_URL  =    "https://vuetel.ca/"
+        static let PRIVACY_POLICY_URL  =   "https://vuetel.ca/"
     }
     
     struct SocialMedia {
-        static let FACEBOOK_URL = "https://www.facebook.com/getphonedial"
-        static let INSTAGRAM_URL = "https://www.instagram.com/getphonedial"
-        static let TWITTER_URL = "https://twitter.com/getphonedial"
+        static let FACEBOOK_URL = "https://vuetel.ca/"
+        static let INSTAGRAM_URL = "https://vuetel.ca/"
+        static let TWITTER_URL = "https://vuetel.ca/"
     }
     
     struct AlertDiscretion {

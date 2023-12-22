@@ -112,13 +112,13 @@ class mp3SenderSideCell: UITableViewCell,AVAudioPlayerDelegate {
         lblDuration.text = "\(y.roundToDecimal(2))"
         progressBar.progress = (progress > 0.05) ? progress : 0
     }
-    
        
-    
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         timer.invalidate()
         btnPlaySound.isSelected = false
         progressBar.progress = 0
         lblDuration.text = "0"
     }
+    
+    
 }

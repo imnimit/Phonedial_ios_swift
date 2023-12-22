@@ -7,6 +7,8 @@
 
 import Foundation
 import SocketIO
+import Network
+import StoreKit
 
 class ChatService: NSObject {
     static let sharedInstance = ChatService()
@@ -34,11 +36,12 @@ class ChatService: NSObject {
     func sendMessage(message: String, withNickname nickname: String) {
         mSocket.emit("chatMessage", nickname, message)
     }
+    
 }
 
 class ChatHistory: NSObject {
     static let sharedInstance = ChatHistory()
-    let socketH = SocketManager(socketURL: URL(string: ChatConstanct.URLChat.SocketURL)!, config: [.log(true), .compress])
+    let socketH = SocketManager(socketURL: URL(string: ChatConstanct.URLChat.SocketURL)!, config: [.log(false), .compress])
     var mSocketH: SocketIOClient!
 
     override init() {

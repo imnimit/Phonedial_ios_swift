@@ -56,6 +56,9 @@ class CallingDisplayVc: UIViewController {
     @IBOutlet weak var btnRecord: UIButton!
     @IBOutlet weak var recodingAnimaion: LottieAnimationView!
     @IBOutlet weak var callAddTimeHigtht: NSLayoutConstraint!
+    @IBOutlet weak var appIconCallTime: UIImageView!
+    @IBOutlet weak var confrencetimeIcon: UIImageView!
+    @IBOutlet weak var incomingCallIcon: UIImageView!
     
     
     var phoneCode = ""
@@ -115,8 +118,9 @@ class CallingDisplayVc: UIViewController {
         recodingAnimaion.isHidden = true
         btncallinfo.isHidden = true
         
-
-        
+        appIconCallTime.layer.cornerRadius = appIconCallTime.layer.bounds.height/2
+        confrencetimeIcon.layer.cornerRadius = confrencetimeIcon.layer.bounds.height/2
+        incomingCallIcon.layer.cornerRadius = confrencetimeIcon.layer.bounds.height/2
     }
     
     override func viewDidDisappear(_ animated: Bool) {

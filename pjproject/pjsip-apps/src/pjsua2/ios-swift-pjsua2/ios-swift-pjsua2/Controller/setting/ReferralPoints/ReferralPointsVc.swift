@@ -60,11 +60,11 @@ class ReferralPointsVc: UIViewController {
     var dataForResponce = [String:Any]()
 
     var indexShowInfo = -1
-    var tblTitle = ["PhoneDial Basic Member","PhoneDial Silver Member","PhoneDial Platinum Member","PhoneDial Diamond Member"]
-    var tblDescription = [["text1": "Earn 100 PhoneDial reards points per referral.","text2":"You earn $5 PhoneDial credit rewards within 15 days when your referral adds a minimum of $5 to their wallet."],
-                          ["text1": "Earn 150 PhoneDial reards points per referral.","text2":"You earn $6 PhoneDial credit rewards within 15 days when your referral adds a minimum of $5 to their wallet."],
-                          ["text1": "Earn 200 PhoneDial reards points per referral.","text2":"You earn $8 PhoneDial credit rewards within 15 days when your referral adds a minimum of $5 to their wallet."],
-                          ["text1": "Earn 300 PhoneDial reards points per referral.","text2":"You earn $10 PhoneDial credit rewards within 15 days when your referral adds a minimum of $5 to their wallet."]]
+    var tblTitle = ["Vuetel Basic Member","Vuetel Silver Member","Vuetel Platinum Member","Vuetel Diamond Member"]
+    var tblDescription = [["text1": "Earn 100 Vuetel reards points per referral.","text2":"You earn $5 Vuetel credit rewards within 15 days when your referral adds a minimum of $5 to their wallet."],
+                          ["text1": "Earn 150 Vuetel reards points per referral.","text2":"You earn $6 Vuetel credit rewards within 15 days when your referral adds a minimum of $5 to their wallet."],
+                          ["text1": "Earn 200 Vuetel reards points per referral.","text2":"You earn $8 Vuetel credit rewards within 15 days when your referral adds a minimum of $5 to their wallet."],
+                          ["text1": "Earn 300 Vuetel reards points per referral.","text2":"You earn $10 Vuetel credit rewards within 15 days when your referral adds a minimum of $5 to their wallet."]]
     
     
     struct ReferlRewardPoint {

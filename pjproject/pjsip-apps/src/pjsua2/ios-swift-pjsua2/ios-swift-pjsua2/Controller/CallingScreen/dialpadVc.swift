@@ -23,6 +23,7 @@ class dialpadVc: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var addContactVw: UIView!
     @IBOutlet weak var btnRemoveNumber: UIButton!
     @IBOutlet weak var numberShowVW: UIView!
+    @IBOutlet weak var lblWalletBalence: UILabel!
     
     weak var cpvTextField: CountryPickerView!
     let cpvInternal = CountryPickerView()
@@ -51,11 +52,20 @@ class dialpadVc: UIViewController, UITextFieldDelegate {
         numberShowVW.layer.borderWidth = 1.5
         
         InitCall()
+        
+        
+        let extraChat = User.sharedInstance.getBalance().split(separator: " ")
+        if extraChat.count > 0 {
+            let balence = Double(extraChat[0]) ?? 0.00
+            lblWalletBalence.text = "$ " + "\(balence.roundToDecimal(2))"
+        }else{
+            lblWalletBalence.text = "$ " + "0.00"
+        }
+        
     }
     
     @objc func dialpadCallUpdata()  {
         addContactVw.isHidden = true
-        
         InitCall()
     }
     
@@ -76,7 +86,6 @@ class dialpadVc: UIViewController, UITextFieldDelegate {
     }
     
     func vidoeCall(){
-        
         if(CPPWrapper().registerStateInfoWrapper() != false) {
             CPPWrapper.clareAllData()
             AppDelegate.instance.counter = 0
@@ -135,7 +144,7 @@ class dialpadVc: UIViewController, UITextFieldDelegate {
         
         cpvMain.showCountryNameInView = true
         cpvMain.showCountryCodeInView = true
-        cpvMain.setCountryByCode(UserDefaults.standard.string(forKey: "CountrySet") ?? "phoneDial")
+        cpvMain.setCountryByCode(UserDefaults.standard.string(forKey: "CountrySet") ?? "Vuetel")
     }
   
     
@@ -194,12 +203,9 @@ class dialpadVc: UIViewController, UITextFieldDelegate {
             }
             UserDefaults.standard.removeObject(forKey: Constant.ValueStoreName.ContactNumber)
             UserDefaults.standard.setValue(dataContectInfo, forKey: Constant.ValueStoreName.ContactNumber)
-            
             tempContectInfo = dataContectInfo
-            
             tableView.reloadData()
         }
-        
     }
     
     
@@ -349,7 +355,7 @@ class dialpadVc: UIViewController, UITextFieldDelegate {
                 let number = dic["numbers"] as! [[String: Any]]
                 var Flage = ""
                 
-                if cpvMain.selectedCountry.name == "PhoneDial" {
+                if cpvMain.selectedCountry.name == "Vuetel" {
                     Flage = "onnet"
                 }else{
                     Flage = "offnet"

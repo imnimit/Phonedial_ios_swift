@@ -2,13 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIAppFonts</key>
-	<array>
-		<string>Poppins-Light.ttf</string>
-		<string>Poppins-Medium.ttf</string>
-		<string>Poppins-Regular.ttf</string>
-		<string>Poppins-SemiBold.ttf</string>
-	</array>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>com.example.fooBackgroundAppRefreshIdentifier</string>
@@ -23,7 +16,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Phone Dial</string>
+	<string> Vuetel</string>
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
@@ -56,7 +49,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) uses camera</string>
 	<key>NSContactsUsageDescription</key>
-	<string>Phonedial requires contacts for invite your friends and family</string>
+	<string>Vuetel requires contacts for invite your friends and family</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>calling</string>
 	<key>NSUserActivityTypes</key>
@@ -68,6 +61,13 @@
 	<string>$(PRODUCT_NAME) Bluetooth Peripheral use</string>
 	<key>REVERSED_CLIENT_ID</key>
 	<string>com.googleusercontent.apps.605463586430-l9l0lmfmr8tj0e0u3k91dste9m1pg0f6</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Poppins-Light.ttf</string>
+		<string>Poppins-Medium.ttf</string>
+		<string>Poppins-Regular.ttf</string>
+		<string>Poppins-SemiBold.ttf</string>
+	</array>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

@@ -17,7 +17,7 @@ class ContecsInfomationVc: UIViewController {
     let focusView = UnderlineFocusView()
     
     
-    let dataSource: [(menu: String, content: UIViewController)] = ["PERSONAL", "FAVORITE", "PHONEDIALERS"].map {
+    let dataSource: [(menu: String, content: UIViewController)] = ["PERSONAL", "FAVORITE", "VUETELDILERS"].map {
         let title = $0
         if title == "PERSONAL" {
             let nextVC = UIStoryboard(name: "Setting", bundle: nil).instantiateViewController(withIdentifier: "ContactsVc") as! ContactsVc
@@ -29,7 +29,7 @@ class ContecsInfomationVc: UIViewController {
         }else if title == "FAVORITE" {
             let nextVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "FavoriteListVc") as! FavoriteListVc
             return (menu: title, content: nextVC)
-        }else if title == "PHONEDIALERS" {
+        }else if title == "VUETELDILERS" {
             let nextVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PhoneDialUserListVc") as! PhoneDialUserListVc
             return (menu: title, content: nextVC)
         } else {

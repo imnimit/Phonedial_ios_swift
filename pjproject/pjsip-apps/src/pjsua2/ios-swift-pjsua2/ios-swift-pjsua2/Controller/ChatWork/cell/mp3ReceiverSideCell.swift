@@ -78,9 +78,6 @@ class mp3ReceiverSideCell: UITableViewCell ,AVAudioPlayerDelegate {
                 sender.isSelected = false
             }
         }
-       
-        
-
     }
     
     func PlayMusic(){

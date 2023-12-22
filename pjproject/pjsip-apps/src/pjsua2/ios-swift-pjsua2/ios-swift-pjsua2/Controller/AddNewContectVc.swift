@@ -60,6 +60,7 @@ class AddNewContectVc: UIViewController{
         Init()
         
         txtPhoneNumber.text = number
+      
     }
     
     func Init(){
@@ -80,6 +81,11 @@ class AddNewContectVc: UIViewController{
         
         submitVW.alpha = 0.5
     }
+    
+  
+    
+    
+    
 
     //MARK: - btn Click
     @IBAction func btnSubmit(_ sender: UIButton) {

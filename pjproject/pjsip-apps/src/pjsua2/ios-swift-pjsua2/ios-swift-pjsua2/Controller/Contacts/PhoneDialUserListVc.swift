@@ -89,8 +89,6 @@ class PhoneDialUserListVc: UIViewController {
             showToastMessage(message: "All number are sync")
             pullControl.endRefreshing()
         }
-        
-        
     }
     
     func listAllPhoneDialresContacts() {

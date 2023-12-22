@@ -56,11 +56,6 @@ class uploadImge: NSObject {
                 uploadAuth(pram, data, "application/\( document.pathExtension)",completion)
             }
         }
-        
-        
-        
-        
-        
     }
   
     func uploadAuth(_ auth: [String: String],_ data: Data, _ mimeType: String, _ completion: @escaping ([String: Any]?, String?, Error?) -> Void) {

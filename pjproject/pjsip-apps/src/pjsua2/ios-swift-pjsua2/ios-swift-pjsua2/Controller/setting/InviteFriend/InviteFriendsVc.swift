@@ -15,7 +15,7 @@ class InviteFriendsVc: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = Constant.ViewControllerTitle.InviteFriends
-        lblLink.text = User.sharedInstance.getrefurlUrl()
+        lblLink.text =  "google.com"//User.sharedInstance.getrefurlUrl()
         initCall()
     }
     

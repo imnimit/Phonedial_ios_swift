@@ -89,17 +89,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             }
         }
         
-        
-       if(isAlready) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
-                self.viewTabbarScreen()
-            })
-        } else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: { [self] in
-                self.LoginPage()
-                UserDefaults.standard.set("phoneDial", forKey: "CountrySet")
-            })
+        if(UserDefaults.standard.bool(forKey: "IntroScreenKey") == false) {
+            introScreen()
+            UserDefaults.standard.set("VoizCallOnNetCalls", forKey: "CountrySet")
+        }else{
+            if(isAlready) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
+                    self.viewTabbarScreen()
+                })
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: { [self] in
+                    self.LoginPage()
+                    UserDefaults.standard.set("phoneDial", forKey: "CountrySet")
+                })
+            }
         }
+        
+       
         registerForPushNotification()
         
         let notificationSettings  = UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil)
@@ -122,6 +128,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
 
         return true
     }
+    
+    func introScreen() {
+        let storyboard1 = UIStoryboard(name: "Main", bundle: nil)
+        let UINavigationController = storyboard1.instantiateViewController(withIdentifier: "Nav1") as! UINavigationController
+        self.window?.rootViewController = UINavigationController
+        
+        let rootNavCntrl : UINavigationController = self.window?.rootViewController as! UINavigationController
+        rootNavCntrl.setNavigationBarHidden(false, animated: false)
+        self.makeMyNavigationApperance(navigationCntrl: rootNavCntrl)
+        
+        UserDefaults.standard.set(true, forKey: "IntroScreenKey")
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let logInVctr = storyboard.instantiateViewController(withIdentifier: "OnboardingViewController") as! OnboardingViewController //ipjsuaLoginVc
+        rootNavCntrl.setViewControllers([logInVctr], animated: true)
+    }
+    
     
     func displayIncomingCall(
          uuid: UUID,
@@ -224,6 +246,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         self.window?.rootViewController = tabBarCntrl
         
         tabBarCntrl.selectedIndex = 2
+        
+        tabBarCntrl.viewControllers?.remove(at:3)
+
     }
     
     func LoginPage(){
@@ -269,7 +294,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         print("2")
         let requestData : [String : String] = ["user_id":appDelegate.ChatTimeUserUserID,"room_id":appDelegate.ChatGroupID]
         appDelegate.chatService.mSocket.emit(ChatConstanct.EventListener.LEAVE, requestData)
-        chatService.closeConnection()
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
@@ -283,11 +307,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     func applicationDidBecomeActive(_ application: UIApplication) {
         isCallOngoing = true
         print("4")
-//        chatService.establishConnection()
-//        chatService.mSocket.on(clientEvent: .connect){ [self]data, ack in
-//            print("socket connected")
-//          
-//        }
+        chatService.establishConnection()
+        chatService.mSocket.on(clientEvent: .connect){ data, ack in
+            print("socket connected")
+          
+        }
+        NotificationCenter.default.post(name: Notification.Name("SocketInit"), object: nil, userInfo: nil)
+
         
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
       
@@ -295,7 +321,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
 
     func applicationWillTerminate(_ application: UIApplication) {
         isCallOngoing = false
-        
+        let requestData : [String : String] = ["user_id":appDelegate.ChatTimeUserUserID,"room_id":appDelegate.ChatGroupID]
+        appDelegate.chatService.mSocket.emit(ChatConstanct.EventListener.LEAVE, requestData)
+        chatService.closeConnection()
         print("5")
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }

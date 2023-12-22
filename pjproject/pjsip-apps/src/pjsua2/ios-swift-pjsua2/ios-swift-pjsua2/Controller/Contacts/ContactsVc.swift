@@ -14,6 +14,78 @@ import AudioToolbox
 import ProgressHUD
 
 
+enum ContactsFilter {
+       case none
+       case mail
+       case message
+}
+@objc class MyContact: NSObject {
+
+    @objc var name: String?
+    @objc var avatarData: Data?
+    @objc var phoneNumber: [String] = [String]()
+    @objc  var email: [String] = [String]()
+    @objc var identifier : String?
+    @objc var isSelected: Bool = false
+    @objc  var isInvited = false
+
+    init(contact: CNContact) {
+        name        = contact.givenName + " " + contact.familyName
+        avatarData  = contact.thumbnailImageData
+        for phone in contact.phoneNumbers {
+            phoneNumber.append(phone.value.stringValue)
+        }
+        for mail in contact.emailAddresses {
+            email.append(mail.value as String)
+        }
+        identifier =  contact.identifier
+    }
+
+    override init() {
+        super.init()
+    }
+}
+
+
+class FetchPhoneContacts {
+
+    class func getContacts(filter: ContactsFilter = .none) -> [CNContact] { //  ContactsFilter is Enum find it below
+
+        let contactStore = CNContactStore()
+        let keysToFetch = [
+            CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
+            CNContactPhoneNumbersKey,
+            CNContactEmailAddressesKey,
+            CNContactThumbnailImageDataKey,
+            CNContactIdentifierKey
+        ] as [Any]
+
+        var allContainers: [CNContainer] = []
+        do {
+            allContainers = try contactStore.containers(matching: nil)
+        } catch {
+            print("Error fetching containers")
+        }
+
+        var results: [CNContact] = []
+
+        for container in allContainers {
+            let fetchPredicate = CNContact.predicateForContactsInContainer(withIdentifier: container.identifier)
+
+            do {
+                let containerResults = try contactStore.unifiedContacts(matching: fetchPredicate, keysToFetch: keysToFetch as! [CNKeyDescriptor])
+                results.append(contentsOf: containerResults)
+            } catch {
+                print("Error fetching containers")
+            }
+        }
+        return results
+    }
+}
+
+
+
+
 class ContactsVc: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -80,6 +152,10 @@ class ContactsVc: UIViewController {
     var iscallVideoAdd = false
     var isOnlayOneTimeMoveToKeyPed = false
     var buttonShow = false
+    var  myContacts =  [MyContact]()
+    
+    var chatExistingUser = [[String : Any]]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         emtyVW.isHidden = true
@@ -91,9 +167,10 @@ class ContactsVc: UIViewController {
         }
        
         heightOfNewGroup.constant = 0
-        if buttonShow == true {
-            heightOfNewGroup.constant = 55
-        }
+        
+//        if buttonShow == true {
+//            heightOfNewGroup.constant = 55
+//        }
         self.title = Constant.ViewControllerTitle.Contacts
         NotificationCenter.default.addObserver(self, selector: #selector(callListUpdata), name: Notification.Name("callListUpdata"), object: nil)
         
@@ -103,7 +180,12 @@ class ContactsVc: UIViewController {
         
         self.tableView.sectionIndexColor = #colorLiteral(red: 0.3333255053, green: 0.4644713998, blue: 0.7242901325, alpha: 1)
 
-        callListUpdata()
+        if(isAddToChatView == true) {
+            GETAllUser()
+        } else {
+            callListUpdata()
+        }
+       
 //        if isFistTimeShowAnimation == true {
 //            HelperClassAnimaion.showProgressHud()
 //        }
@@ -135,6 +217,7 @@ class ContactsVc: UIViewController {
             keypadUIGestureVW.addGestureRecognizer(tap)
         }
         
+     
         
         logPressBtn()
         
@@ -241,7 +324,6 @@ class ContactsVc: UIViewController {
             Favourite = DBManager().getAllFavorite()
             contactBook = KNContactBook(id: "allContacts")
             dataContectInfoOld = DBManager().getAllContact()
-
             self.ConteactNoSave()
         })
        
@@ -260,7 +342,9 @@ class ContactsVc: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        if(isAddToChatView == false ) {
             callListUpdata()
+        }
         
         navigationController?.navigationBar.isHidden = navigationBarnotShow
         
@@ -326,23 +410,43 @@ class ContactsVc: UIViewController {
     }
     
     
-    func contactGetInDataBase(){
+    func contactGetInDataBase() {
         if isShowTopNavigationBar == true {
             HelperClassAnimaion.showProgressHud()
         }
-
-        dataContectInfo = DBManager().getAllContact()
-        tempkeypadContectInfo = DBManager().getAllContact()
-
+        if(isAddToChatView == true) {
+            dataContectInfo.removeAll()
+//            let contact =  DBManager().getAllContact()
+//            for i in contact {
+//                print(i["phone"]  as? String ?? "")
+//                if((chatExistingUser.firstIndex(where: { dic in
+//                    dic["mobile_no"]  as? String == (i["phone"] as? String)?.digitsOnly
+//                })) != nil) {
+//                    dataContectInfo.append(i)
+//                }
+//            }
+            dataContectInfo = DBManager().getAllPhoneDialer()
+            tempkeypadContectInfo = dataContectInfo
+            if dataContectInfo.count == 0 {
+                showToastMessage(message: "VueTel User Not found")
+            }
+        } else {
+            dataContectInfo = DBManager().getAllContact()
+            tempkeypadContectInfo = DBManager().getAllContact()
+        }
+        
+        
+        
+        
+        
         if dataContectInfo.count > 0 {
             dataContectInfo.sort {
                 (($0 as! Dictionary<String, AnyObject>)["name"] as! String) < (($1 as! Dictionary<String, AnyObject>)["name"] as! String)
             }
-
-
+            
             UserDefaults.standard.removeObject(forKey: Constant.ValueStoreName.ContactNumber)
             UserDefaults.standard.setValue(dataContectInfo, forKey: Constant.ValueStoreName.ContactNumber)
-         
+            
             groupedUsers.removeAll()
             groupedUsers = Dictionary(grouping: dataContectInfo, by: firstCharOfFirstName)
             
@@ -350,8 +454,10 @@ class ContactsVc: UIViewController {
             createNameDictionary()
         }else{
             if requestAccess() {
-              //  ProgressHUD.show()
-                self.ConteactNoSave()
+                //  ProgressHUD.show()
+                if (isAddToChatView == false) {
+                    self.ConteactNoSave()
+                }
             }else{
                 emtyVW.isHidden = false
             }
@@ -365,47 +471,35 @@ class ContactsVc: UIViewController {
     func ConteactNoSave()  {
         
         DispatchQueue.main.async { [self] in
-            let keys = [CNContactGivenNameKey, CNContactMiddleNameKey, CNContactFamilyNameKey,
-                        CNContactEmailAddressesKey, CNContactBirthdayKey, CNContactPhoneNumbersKey,CNContactImageDataKey,CNContactImageDataAvailableKey,
-                        CNContactFormatter.descriptorForRequiredKeys(for: .fullName)] as! [CNKeyDescriptor]
-            
-            let requestForContacts = CNContactFetchRequest(keysToFetch: keys)
-            self.hideKeybordTappedAround()
-            // And then perform actions on KNContactBook
-            do {
-                try CNContactStore().enumerateContacts(with: requestForContacts) { (cnContact, _) in
-                    let knContact = KNContact(cnContact)
-                    self.contactBook.add(knContact)
-                }
-            } catch let error {
-                // Handle error somehow!
-                print(error)
-            }
-    //        print(contactBook)
-            
+            for contact in FetchPhoneContacts.getContacts(filter: .none) {
+                myContacts.append(MyContact(contact: contact))
+             }
+
             groupedUsers.removeAll()
             dataContectInfo.removeAll()
             tempContectInfo.removeAll()
 
-            for  i  in contactBook.contacts {
+            for  i  in myContacts {
                 var data = [String: Any]()
-                if i.fullName() != "" {
-                    if i.info.imageDataAvailable == true {
-                        data = ["name":i.fullName(),"phone":i.getFirstPhoneNumber().removeWhitespace(),"imageDataAvailable": i.info.imageDataAvailable,"imageData": i.info.imageData!,"Email":i.getFirstEmailAddress()]
+              
+                
+                if i.name != "" {
+                    if (i.avatarData != nil) {
+                        data = ["name":i.name ?? "","phone":i.phoneNumber[0].removeWhitespace(),"imageDataAvailable": true,"imageData": i.avatarData!,"Email": (i.email.count > 0) ? i.email[0] : ""]
                     }else {
-                        data = ["name":i.fullName(),"phone":i.getFirstPhoneNumber().removeWhitespace(),"imageDataAvailable": i.info.imageDataAvailable,"imageData":i.info.imageData ?? Data(),"Email":i.getFirstEmailAddress()]
+                        data = ["name":i.name ?? "", "phone":i.phoneNumber[0].removeWhitespace(),"imageDataAvailable": false,"imageData":i.avatarData ?? Data(),"Email":(i.email.count > 0) ? i.email[0] : ""]
                     }
                     
-                    if dataContectInfo.firstIndex(where: {$0["name"] as! String == i.fullName()}) != nil {
+                    if dataContectInfo.firstIndex(where: {($0["name"] as! String) == i.name}) != nil {
                     } else {
                         var strBase64  = ""
-                        if i.info.imageDataAvailable == true {
-                            let img = UIImage(data: i.info.imageData ?? Data())!
+                        if (i.avatarData != nil) {
+                            let img = UIImage(data: i.avatarData!)!
                             let vidoImageData = img.pngData()
                             strBase64 = vidoImageData!.base64EncodedString()
                         }
                         
-                        let dicContactData =  ["name": i.fullName(), "phone": i.getFirstPhoneNumber().removeWhitespace(), "imageDataAvailable": i.info.imageDataAvailable, "imageData64": strBase64, "Email": i.getFirstEmailAddress(), "phoneDialers":"0", "newContact":"0"] as [String : Any]
+                        let dicContactData =  ["name": i.name ?? "", "phone": i.phoneNumber[0].removeWhitespace(), "imageDataAvailable": (i.avatarData != nil) ? true : false , "imageData64": strBase64, "Email": (i.email.count > 0) ? i.email[0] : "", "phoneDialers":"0", "newContact":"0"] as [String : Any]
                         
                         if isRefreshContact == false {
                             DBManager().insertcontact(dicContact: dicContactData)
@@ -413,13 +507,6 @@ class ContactsVc: UIViewController {
                         else {
                             if dataContectInfoOld.firstIndex(where: {$0["name"] as! String == data["name"] as! String}) != nil {
                                 DBManager().updateContact(dicContact: dicContactData, phoneNumber: data["phone"] as! String)
-                            }
-                        }
-                        
-                        
-                        if i.info.phoneNumbers.count >= 2 {
-                            for j in i.info.phoneNumbers {
-//                                mulipleContact.append(j.value.stringValue)
                             }
                         }
 
@@ -480,8 +567,6 @@ class ContactsVc: UIViewController {
             tempContectInfo = dataContectInfo
             createNameDictionary()
             
-        //    ProgressHUD.showSucceed()
-//            ProgressHUD.dismiss()
             HelperClassAnimaion.hideProgressHud()
         }
               
@@ -573,12 +658,7 @@ class ContactsVc: UIViewController {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
-    
-//    func retrieveContacts(from store: CNContactStore) {
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
-//            self.ConteactNoSave()
-//        })
-//      }
+
     
     
     func DialCall(name:String,number:String){
@@ -781,15 +861,7 @@ class ContactsVc: UIViewController {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: { [self] in
                animShow(view: numberPadVW)
                 
-//                numberPadVW.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-//                UIView.animate(withDuration: 1.35, delay: 0,
-//                               usingSpringWithDamping: 0.25,
-//                               initialSpringVelocity: 5,
-//                               options: .curveEaseIn,
-//                               animations: {
-//                    self.numberPadVW.transform = .identity
-//                })
-                
+
                 var count = 0.02
                 for i in numbersView {
                     UIView.animate(withDuration: count, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .curveEaseIn, animations: {
@@ -858,6 +930,23 @@ class ContactsVc: UIViewController {
         Alert?.delegate = self
         self.present(Alert!, animated: false, completion: nil)
     }
+    
+    //MARK: - API Call
+    func GETAllUser() {
+        let strReq = API_URL.SoketAPIURL + "all_user"
+        let requestData : [String : String] = [:]
+        APIsMain.apiCalling.callDataWithoutLoaderSoket(credentials: requestData,requstTag : strReq, withCompletionHandler: { [self] (result) in
+            let diddata : [String: Any] = (result as! [String: Any])
+            if diddata["status"] as! String == "Success" {
+                let Response: [String: Any]  = (diddata["Response"] as! [String: Any])
+                chatExistingUser = Response["data"] as! [[String:Any]]
+                print(chatExistingUser)
+                callListUpdata()
+            } else {
+            }
+        })
+    }
+    
     
     
 }
@@ -934,7 +1023,6 @@ extension ContactsVc: UITableViewDataSource, UITableViewDelegate {
                     }
                     
                     cell.lblNameLetter.text = findNameFistORMiddleNameFistLetter(name: (findNumber["name"] as? String ?? ""))
-                    
 
                     cell.contactImage.layer.cornerRadius = cell.contactImage.layer.bounds.height/2
                     if findNumber["imageData64"] as! String != "" {

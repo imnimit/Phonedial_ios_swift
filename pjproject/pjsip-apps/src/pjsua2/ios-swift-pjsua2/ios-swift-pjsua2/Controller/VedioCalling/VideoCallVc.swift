@@ -109,7 +109,7 @@ class VideoCallVc: UIViewController {
         CPPWrapper().hangupCall();
     }
     
-    @objc func callVideoAdd(_ notification: NSNotification){
+    @objc func callVideoAdd(_ notification: NSNotification) {
         self.dismiss(animated: false,completion: { [self] in
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: { [self] in
                 let dictValue = UserDefaults.standard.value(forKey: "loginCheckKey") as? [String: Any]
@@ -124,7 +124,6 @@ class VideoCallVc: UIViewController {
             })
         })
     }
-    
     
     func updateVideo(vid_win: UIView!) {
         displayVW.addSubview(vid_win);
